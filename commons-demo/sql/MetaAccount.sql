@@ -1,0 +1,20 @@
+CREATE TABLE `meta_account` (
+`id` int(10) NOT NULL  COMMENT 'ID',
+`email` VARCHAR(32) NOT NULL  COMMENT '用户邮箱',
+`account_id` VARCHAR(80) NOT NULL  COMMENT 'Metaapi 用户ID',
+`profile_id` VARCHAR(80) NOT NULL  COMMENT 'Metaapi profile ID',
+`investor_password` VARCHAR(32) NOT NULL  COMMENT '投资密码只读',
+`login` VARCHAR(20) NOT NULL  COMMENT '交易账号',
+`password` VARCHAR(32) NOT NULL  COMMENT '交易密码',
+`group` VARCHAR(32) NOT NULL  COMMENT '服务器组',
+`leverage` int NOT NULL  COMMENT '杠杆比',
+`state` VARCHAR(10) DEFAULT NULL  COMMENT '状态',
+`lead_source` VARCHAR(20) DEFAULT NULL  COMMENT 'Lead source',
+`enabled` int(1) DEFAULT NULL  COMMENT '是否启用',
+`currency` VARCHAR(5) NOT NULL  COMMENT '货币',
+`created_at` datetime DEFAULT NULL  COMMENT '创建时间',
+`created_by` VARCHAR(32) DEFAULT NULL  COMMENT '创建者',
+`updated_at` datetime DEFAULT NULL  COMMENT '最后更新时间',
+`updated_by` VARCHAR(32) DEFAULT NULL  COMMENT '最后更新者',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='交易账户';

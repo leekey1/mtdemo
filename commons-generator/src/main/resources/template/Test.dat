@@ -1,0 +1,108 @@
+/* ---------------------------------------------------------------------------------------------------
+ * Copyright (C) 2014-2015 hyun.com.cn
+ *
+ * Title:        {EventName}Test.java
+ * Description:       {EventName}Test类定义
+ *         {EventName}的单元测试控制层
+ * Dependencies:
+ *        {PACKAGE_NAME}{DOMAIN}.Service.{EventName}Service
+ * History:
+ *     Date                 Modifier             Log
+ *     {date}             hyun auto          Created
+ *
+ * ---------------------------------------------------------------------------------------------------
+ */
+package {PACKAGE_NAME}{DOMAIN_TEST};
+
+import {PACKAGE_NAME}common.BaseTest;
+import {PACKAGE_NAME}backend.auth.common.CurrentEmployee;
+import {PACKAGE_NAME}{DOMAIN}.dto.{EventName}Dto;
+import {PACKAGE_NAME}{DOMAIN}.entity.{EventName};
+import {PACKAGE_NAME}{DOMAIN}.service.{EventName}Service;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MvcResult;
+import {PACKAGE_NAME}{DOMAIN}.dto.{EventName}Dto;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+/**
+ * {EventName}Test定义.
+ * <p>
+ *
+ *
+ * @author hyun auto
+ */
+
+public class {EventName}ControllerTest  extends BaseTest {
+
+
+    @Autowired
+    {EventName}Service {EventNameVar}Service;
+
+
+    @Test
+    @Rollback
+    public void add{EventName}Test() throws Exception {
+
+        {EventName}Dto {EventNameVar}Dto = new {EventName}Dto();
+        //{EventNameVar}Dto.setClassifyingLabel("personage");
+        String requestJson = Obj2Json({EventNameVar}Dto);
+
+        MvcResult mvcResult = mockMvc.perform(post("/v1/save{EventName}").param("token",token)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson)).andReturn();
+
+        Assert.assertTrue("目前返回 status = "+mvcResult.getResponse().getStatus()+" " +"错误，正确的返回值为200" , mvcResult.getResponse().getStatus() == 200);
+
+    }
+
+    @Test
+    public void update{EventName}Test() throws Exception {
+
+        {EventName}Dto {EventNameVar}Dto = new {EventName}Dto();
+
+        {EventNameVar}Dto.setId("ef01d86b141a40cfa7eeeb916f45831d");
+        String requestJson = Obj2Json({EventNameVar}Dto);
+        MvcResult mvcResult = mockMvc.perform(put("/v1/update{EventName}").param("token",token)
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson)).andReturn();
+
+        Assert.assertTrue("目前返回 status = "+mvcResult.getResponse().getStatus()+" " +"错误，正确的返回值为200" , mvcResult.getResponse().getStatus() == 200);
+        //Assert.assertTrue("数据一致", requestJson.equals(content));
+
+
+
+    }
+
+    @Test
+    public void get{EventName}InfoTest() throws Exception {
+
+        String id = "ef01d86b141a40cfa7eeeb916f45831d";
+        MvcResult mvcResult = mockMvc.perform(get("/v1/get{EventName}/" + id).param("token",token)
+                .contentType(MediaType.APPLICATION_JSON).content("")).andReturn();
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
+        Assert.assertTrue("目前返回 status = "+mvcResult.getResponse().getStatus()+" " +"错误，正确的返回值为200" , mvcResult.getResponse().getStatus() == 200);
+
+
+    }
+
+    @Test
+    public void get{EventName}InfoListTest() throws Exception {
+
+
+
+   }
+
+    @Test
+    public void delete{EventName}Test() throws Exception {
+
+
+
+    }
+
+
+}
+

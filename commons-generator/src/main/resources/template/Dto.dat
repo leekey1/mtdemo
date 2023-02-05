@@ -1,0 +1,36 @@
+/* ---------------------------------------------------------------------------------------------------
+ * Copyright (C) 2014-2015 hyun.com.cn
+ *
+ * Title:        {EventName}Dto.java
+ * Description:       实体{EventName}Dto类定义
+ *
+ * Dependencies:
+ * 
+ * History:
+ *     Date                   Modifier              Log
+ *     {date}             hyun auto             Created
+ *
+ * ---------------------------------------------------------------------------------------------------
+ */
+package {PACKAGE_NAME}{DOMAIN}.dto;
+
+import java.io.Serializable;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import java.util.Date;
+//--Import
+
+@Data
+public class {EventName}Dto implements Serializable {
+
+    /**
+     * SVU
+     */
+    private static final long serialVersionUID = 1L;
+
+//--Field|Primitive:private {FIELDTYPE} {FIELDNAME};
+
+    public {EventName}Dto() {
+
+    }
+}

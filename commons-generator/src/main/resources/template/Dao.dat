@@ -1,0 +1,89 @@
+/* ---------------------------------------------------------------------------------------------------
+ * Copyright (C) 2014-2015 hyun.com.cn
+ *
+ * Title:        {EventName}Dao.java
+ * Description:       {EventName}Dao类定义
+ *        实体 {EventName}的持久化处理
+ * Dependencies:
+ *        {PACKAGE_NAME}{DOMAIN}.entity.{EventName}
+ *        {PACKAGE_NAME}{DOMAIN}.mapper.{EventName}mapper.xml
+ * History:
+ *     Date                 Modifier             Log
+ *     {date}             hyun auto          Created
+ *
+ * ---------------------------------------------------------------------------------------------------
+ */
+package {PACKAGE_NAME}{DOMAIN}.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import {PACKAGE_NAME}{DOMAIN}.entity.{EventName};
+
+import {PACKAGE_NAME}{DOMAIN}.dto.{EventName}Dto;
+
+
+/**
+ * {EventName}Dao定义.
+ * <p>
+ * 数据访问层<{EventJpName}>的组件 : 供业务逻辑层调用的基本数据持久化类
+ * 
+ * @author hyun auto
+ */
+public interface {EventName}Dao {
+
+    /**
+     * 按主键进行查询，返回唯一一条记录
+     * <p>
+     * @param  {KEY}
+     * @return {EventName}Dto
+     */
+	public {EventName}Dto findOne(String {KEY});
+
+//--Method|mulitkey:    /**|     * 按业务主键进行查询，返回唯一一条记录|     * <p>|     * {PARAMKEYS}|     * @return {EventName}|     */|	public {EventName} find{EventName}ByKeys({BPKEYS});
+	
+//--Method|find:    /**|     * 按业务主键进行查询，返回唯一一条记录|     * <p>|     * @param   {BPKEY}|     * @return {EventName}|     */|	public {EventName} find{EventName}By{BPKEYM}(String {BPKEY});
+
+    /**
+     * 无条件检索，返回实体集合
+     * <p>
+     * @return List<{EventName}Dto>
+     */
+	public List<{EventName}Dto> findAll();
+    
+	
+	/**
+     * 插入一条新纪录，正确插入时返回值为 1
+     * <p>
+     * @param  {EventNameVar}
+     * @return 插入成功标志
+     */
+	public int insert({EventName} {EventNameVar});
+
+    /**
+     * 按主键进行动态更新，对Input数据对需要更新的字段进行设值
+     * <p>
+     * @param   {EventNameVar}
+     * @return 更新成功标志
+     */
+	public int dynamicUpdate({EventName} {EventNameVar});
+
+    /**
+     * 按主键进行更新，根据实体的实际属性值进行更新
+     * <p>
+     * @param   {EventNameVar}
+     * @return 更新成功标志
+     */
+	public int update({EventName} {EventNameVar});
+
+    /**
+     * 按主键进行删除，删除成功返回 1
+     * <p>
+     * @param  {KEY}
+     * @return 删除成功标志
+     */
+	public int delete(String {KEY});
+
+}
+

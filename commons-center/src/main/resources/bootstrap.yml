@@ -1,0 +1,5 @@
+spring.application.name: commons-center
+spring.profiles.active: dev
+#logging.config: classpath:logback-dev.xml
+
+

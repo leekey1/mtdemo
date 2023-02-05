@@ -1,0 +1,3173 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "AgiliumTrade MT manager REST API",
+    "version": "1.0.0"
+  },
+  "basePath": "/api/mt/clientvint",
+  "paths": {
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts": {
+      "post": {
+        "summary": "Creates MT4 account",
+        "description": "Creates MT4 account. Requires access to mt-manager-api:rest:public:mt4-account-management:createMT4Account method which is included into writer role. Requires access to mt-manager resource.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:createMT4Account",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for creating this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "account",
+            "description": "New account data",
+            "schema": {
+              "$ref": "#/definitions/Metatrader4AccountRequest"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Account created successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderAccount"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:createMT4Account method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts/{login}": {
+      "get": {
+        "summary": "Get account by login",
+        "description": "Get account by login. Requires access to mt-manager-api:rest:public:mt4-account-management:getMT4AccountByLogin method which is included into reader role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:getMT4AccountByLogin",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT4 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved account",
+            "schema": {
+              "$ref": "#/definitions/Metatrader4User"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:getMT4AccountByLogin method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts/{login}/enabled": {
+      "put": {
+        "summary": "Update MT4 account enabled property",
+        "description": "Update MT4 account enabled property. Requires access to mt-manager-api:rest:public:mt4-account-management:updateMT4AccountEnabled method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:updateMT4AccountEnabled",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for set enabled state this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT4 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "Request body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable or disable account"
+                }
+              }
+            },
+            "required": true,
+            "in": "body"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully change account enabled state"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:updateMT4AccountEnabled method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/groups": {
+      "get": {
+        "summary": "Get groups",
+        "description": "Get groups. Requires access to mt-manager-api:rest:public:mt4-account-management:getMT4Groups method which is included into reader role. Requires access to mt-manager, mt-group resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:getMT4Groups",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-group"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved group list",
+            "schema": {
+              "$ref": "#/definitions/Metatrader4Group"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:getMT4Groups method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/groups/{groupName}/accounts": {
+      "get": {
+        "summary": "Get accounts by group",
+        "description": "Get accounts by group. Requires access to mt-manager-api:rest:public:mt4-account-management:getMT4AccountsByGroup method which is included into reader role. Requires access to mt-manager, mt-group, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:getMT4AccountsByGroup",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-group",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "groupName",
+            "description": "group name",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved users by group",
+            "schema": {
+              "$ref": "#/definitions/Metatrader4User"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:getMT4AccountsByGroup method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/groups/{groupName}": {
+      "get": {
+        "summary": "Get group by name",
+        "description": "Get group by name. Requires access to mt-manager-api:rest:public:mt4-account-management:getMT4GroupByName method which is included into reader role. Requires access to mt-manager, mt-group resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:getMT4GroupByName",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-group"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "groupName",
+            "description": "group name",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved group",
+            "schema": {
+              "$ref": "#/definitions/Metatrader4Group"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:getMT4GroupByName method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Group not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts/{login}/balance-transactions": {
+      "post": {
+        "summary": "Conduct balance transaction",
+        "description": "Conduct balance transaction. Requires access to mt-manager-api:rest:dealing:mt4-dealing:createMT4BalanceTransaction method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:dealing:mt4-dealing:createMT4BalanceTransaction",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT4 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "balance",
+            "description": "New account data",
+            "schema": {
+              "$ref": "#/definitions/MT4BalanceTransaction "
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully conduct balance operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dealId": {
+                  "type": "number",
+                  "description": "The ID of the deal in which a balance operation was executed"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:dealing:mt4-dealing:createMT4BalanceTransaction method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts/{login}/password": {
+      "put": {
+        "summary": "Update account password",
+        "description": "Update account password. Requires access to mt-manager-api:rest:public:mt4-account-management:updateMT4AccountPassword method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:updateMT4AccountPassword",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT4 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "data",
+            "description": "Change account password data",
+            "schema": {
+              "$ref": "#/definitions/ChangeMT4UserPasswordRequest"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully change account password"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:updateMT4AccountPassword method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts/{login}/account-information": {
+      "get": {
+        "summary": "Get account information",
+        "description": "Get account information. Requires access to mt-manager-api:rest:public:mt4-account-management:getMT4AccountInformation method which is included into reader role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:getMT4AccountInformation",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT4 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully get account information",
+            "schema": {
+              "$ref": "#/definitions/AccountInformation"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:getMT4AccountInformation method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts/{login}/change-password-permission": {
+      "put": {
+        "summary": "Update change account password permission",
+        "description": "Update change account password permission. Requires access to mt-manager-api:rest:public:mt4-account-management:updateMT4AccountChangePasswordPermission method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:updateMT4AccountChangePasswordPermission",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT4 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "data",
+            "description": "Set change account password permission data",
+            "schema": {
+              "$ref": "#/definitions/SetChangeUserPasswordPermissionRequest"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully set change account password permission"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:updateMT4AccountChangePasswordPermission method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts/{login}/group": {
+      "put": {
+        "summary": "Update account group",
+        "description": "Update account group. Requires access to mt-manager-api:rest:public:mt4-account-management:updateMT4AccountGroup method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-account-management:updateMT4AccountGroup",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT4 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "Request body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "groupName": {
+                  "type": "string",
+                  "description": "group name"
+                }
+              }
+            },
+            "required": true,
+            "in": "body"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully change account group"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-account-management:updateMT4AccountGroup method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/accounts/{login}/authentication-logs": {
+      "get": {
+        "summary": "Get account authentication logs",
+        "description": "Get account authentication logs. Start date and end date should not differ by more than a month. It can take long time to execute this endpoint. Requires access to mt-manager-api:rest:public:mt4-logs:getMT4AccountAuthenticationLogs method which is included into reader role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-logs:getMT4AccountAuthenticationLogs",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT4 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "from",
+            "description": "The start date for requesting logs, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "to",
+            "description": "The end date for requesting logs, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully get server authentication logs",
+            "schema": {
+              "$ref": "#/definitions/ListOfMT4Log"
+            }
+          },
+          "202": {
+            "description": "Retrieval of authentication logs is in progress",
+            "schema": {
+              "$ref": "#/definitions/RetryLaterMessage"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-logs:getMT4AccountAuthenticationLogs method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too many requests error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt4/provisioning-profiles/{profileId}/authentication-logs": {
+      "get": {
+        "summary": "Get server authentication logs",
+        "description": "Get server authentication logs. Start date and end date should not differ by more than a day. It can take long time to execute this endpoint. Requires access to mt-manager-api:rest:public:mt4-logs:getMT4ServerAuthenticationLogs method which is included into reader role. Requires access to mt-manager resource.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt4-logs:getMT4ServerAuthenticationLogs",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "from",
+            "description": "The start date for requesting logs, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "to",
+            "description": "The end date for requesting logs, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully get server authentication logs",
+            "schema": {
+              "$ref": "#/definitions/ListOfMT4Log"
+            }
+          },
+          "202": {
+            "description": "Retrieval of authentication logs is in progress",
+            "schema": {
+              "$ref": "#/definitions/RetryLaterMessage"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt4-logs:getMT4ServerAuthenticationLogs method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too many requests error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts": {
+      "post": {
+        "summary": "Creates MT5 account",
+        "description": "Creates MT5 account. Requires access to mt-manager-api:rest:public:mt5-account-management:createMT5Account method which is included into writer role. Requires access to mt-manager resource.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:createMT5Account",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for creating this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "account",
+            "description": "New account data",
+            "schema": {
+              "$ref": "#/definitions/Metatrader5AccountRequest"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Account created successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderAccount"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:createMT5Account method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts/{login}": {
+      "delete": {
+        "summary": "Removes MT5 account",
+        "description": "Removes MT5 account. Requires access to mt-manager-api:rest:public:mt5-account-management:removeMT5Account method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:removeMT5Account",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for removing this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Account removed successfully"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:removeMT5Account method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts/{login}/enabled": {
+      "put": {
+        "summary": "Update MT5 account enabled property",
+        "description": "Update MT5 account enabled property. Requires access to mt-manager-api:rest:public:mt5-account-management:updateMT5AccountEnabled method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:updateMT5AccountEnabled",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "Request body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable or disable account"
+                }
+              }
+            },
+            "required": true,
+            "in": "body"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully change account enabled state"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:updateMT5AccountEnabled method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/groups": {
+      "get": {
+        "summary": "Get groups",
+        "description": "Get groups. Requires access to mt-manager-api:rest:public:mt5-account-management:getMT5Groups method which is included into reader role. Requires access to mt-manager, mt-group resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:getMT5Groups",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-group"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved group list",
+            "schema": {
+              "$ref": "#/definitions/Metatrader5Group"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:getMT5Groups method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/groups/{groupName}/accounts": {
+      "get": {
+        "summary": "Get accounts by group",
+        "description": "Get accounts by group. Requires access to mt-manager-api:rest:public:mt5-account-management:getMT5AccountsByGroup method which is included into reader role. Requires access to mt-manager, mt-group, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:getMT5AccountsByGroup",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-group",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "groupName",
+            "description": "group name",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved users by group",
+            "schema": {
+              "$ref": "#/definitions/Metatrader5User"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:getMT5AccountsByGroup method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/users/{login}": {
+      "get": {
+        "summary": "Get account by login",
+        "description": "Get account by login. Requires access to mt-manager-api:rest:public:mt5-account-management:getMT5AccountByLogin method which is included into reader role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:getMT5AccountByLogin",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved account",
+            "schema": {
+              "$ref": "#/definitions/Metatrader4User"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:getMT5AccountByLogin method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Group not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/groups/{groupName}": {
+      "get": {
+        "summary": "Get group by name",
+        "description": "Get group by name. Requires access to mt-manager-api:rest:public:mt5-account-management:getMT5GroupByName method which is included into reader role. Requires access to mt-manager, mt-group resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:getMT5GroupByName",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-group"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "groupName",
+            "description": "group name",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved group",
+            "schema": {
+              "$ref": "#/definitions/Metatrader5Group"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:getMT5GroupByName method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Group not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts/{login}/balance-transactions": {
+      "post": {
+        "summary": "Conduct balance transaction",
+        "description": "Conduct balance transaction. Requires access to mt-manager-api:rest:dealing:mt5-dealing:createMT5BalanceTransaction method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:dealing:mt5-dealing:createMT5BalanceTransaction",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "balance",
+            "description": "New account data",
+            "schema": {
+              "$ref": "#/definitions/MT5BalanceTransaction "
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully conduct balance operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dealId": {
+                  "type": "number",
+                  "description": "The ID of the deal in which a balance operation was executed"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:dealing:mt5-dealing:createMT5BalanceTransaction method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts/{login}/password": {
+      "put": {
+        "summary": "Update account password",
+        "description": "Update account password. Requires access to mt-manager-api:rest:public:mt5-account-management:updateMT5AccountPassword method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:updateMT5AccountPassword",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "data",
+            "description": "Change account password data",
+            "schema": {
+              "$ref": "#/definitions/ChangeMT5UserPasswordRequest"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully change account password"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:updateMT5AccountPassword method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts/{login}/account-information": {
+      "get": {
+        "summary": "Get account information",
+        "description": "Get account information. Requires access to mt-manager-api:rest:public:mt5-account-management:getMT5AccountInformation method which is included into reader role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:getMT5AccountInformation",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully get account information",
+            "schema": {
+              "$ref": "#/definitions/AccountInformation"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:getMT5AccountInformation method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts/{login}/change-password-permission": {
+      "put": {
+        "summary": "Update change account password permission",
+        "description": "Update change account password permission. Requires access to mt-manager-api:rest:public:mt5-account-management:updateMT5AccountChangePasswordPermission method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:updateMT5AccountChangePasswordPermission",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "data",
+            "description": "Set change account password permission data",
+            "schema": {
+              "$ref": "#/definitions/SetChangeUserPasswordPermissionRequest"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully set change account password permission"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:updateMT5AccountChangePasswordPermission method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts/{login}/group": {
+      "put": {
+        "summary": "Update account group",
+        "description": "Update account group. Requires access to mt-manager-api:rest:public:mt5-account-management:updateMT5AccountGroup method which is included into writer role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-account-management:updateMT5AccountGroup",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "Request body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "groupName": {
+                  "type": "string",
+                  "description": "group name"
+                }
+              }
+            },
+            "required": true,
+            "in": "body"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully change account group"
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-account-management:updateMT5AccountGroup method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/accounts/{login}/authentication-logs": {
+      "get": {
+        "summary": "Get account authentication logs",
+        "description": "Get account authentication logs. Start date and end date should not differ by more than a month. It can take long time to execute this endpoint. Requires access to mt-manager-api:rest:public:mt5-logs:getMT5AccountAuthenticationLogs method which is included into reader role. Requires access to mt-manager, mt-account resources.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-logs:getMT5AccountAuthenticationLogs",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager",
+            "mt-account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "login",
+            "description": "MT5 account login",
+            "type": "number",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "from",
+            "description": "The start date for requesting logs, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "to",
+            "description": "The end date for requesting logs, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully get server authentication logs",
+            "schema": {
+              "$ref": "#/definitions/ListOfMT5Log"
+            }
+          },
+          "202": {
+            "description": "Retrieval of authentication logs is in progress",
+            "schema": {
+              "$ref": "#/definitions/RetryLaterMessage"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-logs:getMT5AccountAuthenticationLogs method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too many requests error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/mt5/provisioning-profiles/{profileId}/authentication-logs": {
+      "get": {
+        "summary": "Get server authentication logs",
+        "description": "Get server authentication logs. Start date and end date should not differ by more than a day. It can take long time to execute this endpoint. Requires access to mt-manager-api:rest:public:mt5-logs:getMT5ServerAuthenticationLogs method which is included into reader role. Requires access to mt-manager resource.",
+        "x-authorization": {
+          "method": "mt-manager-api:rest:public:mt5-logs:getMT5ServerAuthenticationLogs",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "mt-manager"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "profileId",
+            "description": "Id of the provisioning profile that will be used as the basis for enabling this account",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          },
+          {
+            "name": "from",
+            "description": "The start date for requesting logs, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "to",
+            "description": "The end date for requesting logs, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully get server authentication logs",
+            "schema": {
+              "$ref": "#/definitions/ListOfMT5Log"
+            }
+          },
+          "202": {
+            "description": "Retrieval of authentication logs is in progress",
+            "schema": {
+              "$ref": "#/definitions/RetryLaterMessage"
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to mt-manager-api:rest:public:mt5-logs:getMT5ServerAuthenticationLogs method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "429": {
+            "description": "Too many requests error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/adm/tasks": {
+      "get": {
+        "summary": "Returns a list of scheduled and recent tasks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response with tasks",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SchedulerTask"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets": {
+      "get": {
+        "summary": "Returns a list of registered UAT data sets",
+        "description": "Returns a list of registered UAT data sets",
+        "x-authorization": {
+          "custom": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result contains UAT data sets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DataSet"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets/{id}/apply": {
+      "post": {
+        "summary": "Applies a registered UAT data set with an id specified",
+        "description": "Applies a registered UAT data set with an id specified",
+        "x-authorization": {
+          "custom": true
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "data set id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "params",
+            "description": "optional data set parameters",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DataSetParams"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "data set successfully applied"
+          },
+          "404": {
+            "description": "data set not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/redis/statistics": {
+      "get": {
+        "summary": "Returns redis traffic statistics",
+        "description": "Returns redis traffic statistics. Requires access to express-microservice:rest:private:default:getRedisStatistics method.",
+        "x-authorization": {
+          "method": "express-microservice:rest:private:default:getRedisStatistics"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token required if authorization is enabled",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Redis traffic statistics",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to express-microservice:rest:private:default:getRedisStatistics method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Executes health checks",
+        "description": "Executes health checks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "health checks passed",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HealthCheckResult"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Metatrader4AccountRequest": {
+      "type": "object",
+      "required": [
+        "email",
+        "leverage",
+        "group"
+      ],
+      "properties": {
+        "address": {
+          "description": "Account holder's address",
+          "type": "string"
+        },
+        "city": {
+          "description": "Account holder's city",
+          "type": "string"
+        },
+        "country": {
+          "description": "Account holder's country",
+          "type": "string"
+        },
+        "email": {
+          "description": "Account holder's email",
+          "type": "string"
+        },
+        "group": {
+          "description": "A group of accounts in accordance with the hierarchy of* groups in the trading platform",
+          "type": "string"
+        },
+        "leverage": {
+          "description": "Account leverage",
+          "type": "number"
+        },
+        "name": {
+          "description": "Account holder's name",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Account holder's phone",
+          "type": "string"
+        },
+        "state": {
+          "description": "Account holder's state",
+          "type": "string"
+        },
+        "zip": {
+          "description": "Zip address",
+          "type": "string"
+        },
+        "leadSource": {
+          "description": "Lead source",
+          "type": "string"
+        },
+        "enabled": {
+          "description": "Is account enabled. Default is true",
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "Metatrader4Group": {
+      "type": "object",
+      "required": [
+        "group",
+        "company",
+        "enable"
+      ],
+      "properties": {
+        "group": {
+          "description": "Group name",
+          "type": "string"
+        },
+        "company": {
+          "description": "Company name",
+          "type": "string"
+        },
+        "enable": {
+          "description": "Enable group",
+          "type": "number"
+        }
+      }
+    },
+    "Metatrader4User": {
+      "type": "object",
+      "required": [
+        "login",
+        "address",
+        "balance",
+        "city",
+        "country",
+        "email",
+        "group",
+        "leverage",
+        "name",
+        "phone",
+        "state",
+        "zip",
+        "leadSource"
+      ],
+      "properties": {
+        "login": {
+          "description": "Account login",
+          "type": "number"
+        },
+        "address": {
+          "description": "Account holder's address",
+          "type": "string"
+        },
+        "balance": {
+          "description": "Account balance",
+          "type": "number"
+        },
+        "city": {
+          "description": "Account holder's city",
+          "type": "string"
+        },
+        "country": {
+          "description": "Account holder's country",
+          "type": "string"
+        },
+        "email": {
+          "description": "Account holder's email",
+          "type": "string"
+        },
+        "group": {
+          "description": "A group of accounts in accordance with the hierarchy of* groups in the trading platform",
+          "type": "string"
+        },
+        "leverage": {
+          "description": "Account leverage",
+          "type": "number"
+        },
+        "name": {
+          "description": "Account holder's name",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Account holder's phone",
+          "type": "string"
+        },
+        "state": {
+          "description": "Account holder's state",
+          "type": "string"
+        },
+        "zip": {
+          "description": "Zip address",
+          "type": "string"
+        },
+        "leadSource": {
+          "description": "Lead source",
+          "type": "string"
+        }
+      }
+    },
+    "MT4BalanceTransaction": {
+      "type": "object",
+      "required": [
+        "amount",
+        "type",
+        "comment"
+      ],
+      "properties": {
+        "amount": {
+          "description": "The amount to add or subtract from an account. In order to deposit to the account, specify a positive value; to withdraw, specify a negative value",
+          "type": "number"
+        },
+        "type": {
+          "description": "Type of the balance operation",
+          "type": "string",
+          "enum": [
+            "OP_BALANCE",
+            "OP_CREDIT"
+          ]
+        },
+        "comment": {
+          "description": "A comment to a balance operation",
+          "type": "string"
+        }
+      }
+    },
+    "ChangeMT4UserPasswordRequest": {
+      "type": "object",
+      "required": [
+        "password"
+      ],
+      "properties": {
+        "password": {
+          "description": "New account password",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type of a password to change. master - The master password, investor - The investor password. By default is master",
+          "type": "string",
+          "enum": [
+            "master",
+            "investor"
+          ]
+        }
+      }
+    },
+    "MT4Log": {
+      "type": "object",
+      "required": [
+        "code",
+        "time",
+        "ip",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "description": "log code",
+          "type": "number"
+        },
+        "time": {
+          "description": "log time",
+          "type": "string"
+        },
+        "ip": {
+          "description": "log ip",
+          "type": "string"
+        },
+        "message": {
+          "description": "log message",
+          "type": "string"
+        }
+      }
+    },
+    "ListOfMT4Log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/MT4Log"
+      }
+    },
+    "Metatrader5AccountRequest": {
+      "type": "object",
+      "required": [
+        "email",
+        "leverage",
+        "group"
+      ],
+      "properties": {
+        "address": {
+          "description": "Account holder's address",
+          "type": "string"
+        },
+        "city": {
+          "description": "Account holder's city",
+          "type": "string"
+        },
+        "country": {
+          "description": "Account holder's country",
+          "type": "string"
+        },
+        "email": {
+          "description": "Account holder's email",
+          "type": "string"
+        },
+        "group": {
+          "description": "A group of accounts in accordance with the hierarchy of* groups in the trading platform",
+          "type": "string"
+        },
+        "leverage": {
+          "description": "Account leverage",
+          "type": "number"
+        },
+        "firstName": {
+          "description": "Account holder's first name",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Account holder's last name",
+          "type": "string"
+        },
+        "middleName": {
+          "description": "Account holder's middle name",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Account holder's phone",
+          "type": "string"
+        },
+        "state": {
+          "description": "Account holder's state",
+          "type": "string"
+        },
+        "zip": {
+          "description": "Zip address",
+          "type": "string"
+        },
+        "leadSource": {
+          "description": "Lead source",
+          "type": "string"
+        },
+        "leadCampaign": {
+          "description": "Lead campaign",
+          "type": "string"
+        },
+        "clientId": {
+          "description": "Client ID",
+          "type": "string"
+        },
+        "enabled": {
+          "description": "Is account enabled. Default is true",
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "Metatrader5Group": {
+      "type": "object",
+      "required": [
+        "group",
+        "company"
+      ],
+      "properties": {
+        "group": {
+          "description": "Group name",
+          "type": "string"
+        },
+        "company": {
+          "description": "Company name",
+          "type": "string"
+        }
+      }
+    },
+    "Metatrader5User": {
+      "type": "object",
+      "required": [
+        "login",
+        "address",
+        "balance",
+        "city",
+        "country",
+        "email",
+        "group",
+        "leverage",
+        "name",
+        "phone",
+        "state",
+        "zip",
+        "leadSource",
+        "leadCampaign",
+        "clientId"
+      ],
+      "properties": {
+        "login": {
+          "description": "Account login",
+          "type": "number"
+        },
+        "address": {
+          "description": "Account holder's address",
+          "type": "string"
+        },
+        "balance": {
+          "description": "Account balance",
+          "type": "number"
+        },
+        "city": {
+          "description": "Account holder's city",
+          "type": "string"
+        },
+        "country": {
+          "description": "Account holder's country",
+          "type": "string"
+        },
+        "email": {
+          "description": "Account holder's email",
+          "type": "string"
+        },
+        "group": {
+          "description": "A group of accounts in accordance with the hierarchy of* groups in the trading platform",
+          "type": "string"
+        },
+        "leverage": {
+          "description": "Account leverage",
+          "type": "number"
+        },
+        "name": {
+          "description": "Account holder's name",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Account holder's phone",
+          "type": "string"
+        },
+        "state": {
+          "description": "Account holder's state",
+          "type": "string"
+        },
+        "zip": {
+          "description": "Zip address",
+          "type": "string"
+        },
+        "leadSource": {
+          "description": "Lead source",
+          "type": "string"
+        },
+        "leadCampaign": {
+          "description": "Lead campaign",
+          "type": "string"
+        },
+        "clientId": {
+          "description": "Client ID",
+          "type": "number"
+        }
+      }
+    },
+    "MT5BalanceTransaction": {
+      "type": "object",
+      "required": [
+        "amount",
+        "type",
+        "comment"
+      ],
+      "properties": {
+        "amount": {
+          "description": "The amount to add or subtract from an account. In order to deposit to the account, specify a positive value; to withdraw, specify a negative value",
+          "type": "number"
+        },
+        "type": {
+          "description": "Type of the balance operation",
+          "type": "string",
+          "enum": [
+            "DEAL_BALANCE",
+            "DEAL_CREDIT"
+          ]
+        },
+        "comment": {
+          "description": "A comment to a balance operation",
+          "type": "string"
+        }
+      }
+    },
+    "ChangeMT5UserPasswordRequest": {
+      "type": "object",
+      "required": [
+        "password"
+      ],
+      "properties": {
+        "password": {
+          "description": "New account password",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type of a password to change. master - The master password, investor - The investor password, api - API password. By default is master",
+          "type": "string",
+          "enum": [
+            "master",
+            "investor",
+            "api"
+          ]
+        }
+      }
+    },
+    "MT5Log": {
+      "type": "object",
+      "required": [
+        "code",
+        "type",
+        "flags",
+        "datetimeInSeconds",
+        "datetimeInMilliseconds",
+        "source",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "description": "Log message type. -1 - folder, 0 - information message, 1 - warning, 2 - error message, 3 - critical error message, 4 - system login message",
+          "type": "number"
+        },
+        "type": {
+          "description": "Event type. 0 - All types of events, 1 - Events of configuration changes, 2 - System events, 3 - Events related to the network activity, 4 - Events associated with price data, 5 - Events associated with users, 6 - Trade events, 7 - Events associated with the Server API, 16 - Events associated with the Live Update service, 17 - Events associated with email.",
+          "type": "number"
+        },
+        "flags": {
+          "description": "Log entry flags. 0 - The log does not have flags, 1 - The log has an invalid checksum (damaged or changed from outside).",
+          "type": "number"
+        },
+        "datetimeInSeconds": {
+          "description": "Date and time of a message in seconds that have elapsed since 01.01.1970.",
+          "type": "number"
+        },
+        "datetimeInMilliseconds": {
+          "description": "Date and time of a message in milliseconds that have elapsed since 01.01.1970.",
+          "type": "number"
+        },
+        "source": {
+          "description": "Source of the message",
+          "type": "string"
+        },
+        "message": {
+          "description": "Message text",
+          "type": "string"
+        }
+      }
+    },
+    "ListOfMT5Log": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/MT5Log"
+      }
+    },
+    "MetatraderAccount": {
+      "type": "object",
+      "required": [
+        "investorPassword",
+        "login",
+        "password"
+      ],
+      "properties": {
+        "investorPassword": {
+          "description": "Inverstor password",
+          "type": "string"
+        },
+        "login": {
+          "description": "Account login",
+          "type": "string"
+        },
+        "password": {
+          "description": "Account password",
+          "type": "string"
+        }
+      }
+    },
+    "AccountInformation": {
+      "type": "object",
+      "required": [
+        "platform",
+        "broker",
+        "currency",
+        "balance",
+        "equity",
+        "margin",
+        "freeMargin",
+        "leverage",
+        "marginLevel",
+        "tradeAllowed",
+        "marginMode",
+        "name",
+        "login",
+        "credit"
+      ],
+      "properties": {
+        "platform": {
+          "description": "Platform id",
+          "type": "string",
+          "enum": [
+            "mt4",
+            "mt5"
+          ]
+        },
+        "broker": {
+          "description": "Broker name",
+          "type": "string"
+        },
+        "currency": {
+          "description": "Account base currency",
+          "type": "string"
+        },
+        "balance": {
+          "description": "Account balance",
+          "type": "number"
+        },
+        "equity": {
+          "description": "Account liquidation value",
+          "type": "number"
+        },
+        "margin": {
+          "description": "Margin used",
+          "type": "number"
+        },
+        "freeMargin": {
+          "description": "Free margin",
+          "type": "number"
+        },
+        "leverage": {
+          "description": "Account leverage",
+          "type": "number"
+        },
+        "marginLevel": {
+          "description": "Margin level calculated as % of equity/margin",
+          "type": "number"
+        },
+        "tradeAllowed": {
+          "description": "Flag indicating that trading is allowed",
+          "type": "boolean"
+        },
+        "marginMode": {
+          "description": "Margin calculation mode",
+          "type": "string",
+          "enum": [
+            "ACCOUNT_MARGIN_MODE_EXCHANGE",
+            "ACCOUNT_MARGIN_MODE_RETAIL_NETTING",
+            "ACCOUNT_MARGIN_MODE_RETAIL_HEDGING"
+          ]
+        },
+        "name": {
+          "description": "Account owner name",
+          "type": "string"
+        },
+        "login": {
+          "description": "Account login",
+          "type": "number"
+        },
+        "credit": {
+          "description": "Account credit in the deposit currency",
+          "type": "number"
+        }
+      }
+    },
+    "SetChangeUserPasswordPermissionRequest": {
+      "type": "object",
+      "required": [
+        "changePasswordPermission"
+      ],
+      "properties": {
+        "changePasswordPermission": {
+          "description": "Change password permission",
+          "type": "boolean"
+        }
+      }
+    },
+    "RetryLaterMessage": {
+      "type": "object",
+      "description": "Retry later message",
+      "required": [
+        "message",
+        "retryAfter"
+      ],
+      "properties": {
+        "message": {
+          "description": "Response message with recommended retry time",
+          "type": "string"
+        },
+        "retryAfter": {
+          "description": "Recommended retry time in seconds",
+          "type": "number"
+        }
+      }
+    },
+    "SchedulerTask": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "$ref": "#/definitions/TaskStatus"
+        }
+      }
+    },
+    "TaskStatus": {
+      "type": "object",
+      "required": [
+        "status",
+        "startedAt",
+        "completedAt",
+        "progress"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "type": "string"
+        },
+        "startedAt": {
+          "description": "Task started date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "description": "Task completed date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "progress": {
+          "description": "Task progress",
+          "type": "object"
+        }
+      }
+    },
+    "DataSet": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "data set id",
+          "type": "string"
+        },
+        "description": {
+          "description": "human-readable description",
+          "type": "string"
+        }
+      }
+    },
+    "DataSetParams": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "HealthCheckResult": {
+      "type": "object",
+      "required": [
+        "id",
+        "output"
+      ],
+      "properties": {
+        "check": {
+          "description": "id of the health check",
+          "type": "string"
+        },
+        "output": {
+          "description": "health check output",
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "id",
+        "error",
+        "message"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "error": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional information about error",
+          "type": "object"
+        },
+        "code": {
+          "description": "Error code, used for i18n",
+          "type": "string"
+        },
+        "arguments": {
+          "description": "Error message arguments, used for i18n",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "TooManyRequestsError": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "message",
+        "metadata"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "period",
+            "requestsPerPeriodAllowed",
+            "recommendedRetryTime"
+          ],
+          "properties": {
+            "periodInMinutes": {
+              "description": "rate limiting period in minutes",
+              "type": "number"
+            },
+            "requestsPerPeriodAllowed": {
+              "description": "allowed number of requests per period",
+              "type": "number"
+            },
+            "recommendedRetryTime": {
+              "description": "recommended time to retry request",
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      }
+    }
+  }
+}

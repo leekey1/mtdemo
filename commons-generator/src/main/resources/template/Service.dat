@@ -1,0 +1,119 @@
+/* ---------------------------------------------------------------------------------------------------
+ * Copyright (C) 2014-2015 hyun.com.cn
+ *
+ * Title:        {EventName}Service.java
+ * Description:       {EventName}Service类定义
+ *        实体 {EventName}的逻辑处理
+ * Dependencies:
+ *        {PACKAGE_NAME}{DOMAIN}.entity.{EventName}
+ *        {PACKAGE_NAME}{DOMAIN}.mapper.{EventName}mapper.xml
+ * History:
+ *     Date                 Modifier             Log
+ *     {date}             hyun auto          Created
+ *
+ * ---------------------------------------------------------------------------------------------------
+ */
+package {PACKAGE_NAME}{DOMAIN}.service;
+
+import java.util.List;
+import java.util.Map;
+import {PACKAGE_NAME}common.auth.CurrentEmployee;
+import {PACKAGE_NAME}{DOMAIN}.service.{EventName}Service;
+import {PACKAGE_NAME}common.BaseService;
+import {PACKAGE_NAME}framework.utils.DateUtils;
+import {PACKAGE_NAME}configuration.ApplicationConfiguration;
+import {PACKAGE_NAME}{DOMAIN}.validator.{EventName}Validator;
+import {PACKAGE_NAME}{DOMAIN}.entity.{EventName};
+import {PACKAGE_NAME}{DOMAIN}.dto.{EventName}Dto;
+import {PACKAGE_NAME}{DOMAIN}.dao.{EventName}Dao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.BeanUtils;
+import static org.apache.commons.lang.math.NumberUtils.INTEGER_ZERO;
+import org.springframework.beans.BeanUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * {EventName}Service定义.
+ * <p>
+ *
+ *
+ * @author hyun auto
+ */
+@Service
+public class {EventName}Service extends BaseService {
+
+    @Autowired
+    {EventName}Dao {EventNameVar}Dao;
+
+
+    @Transactional(value = ApplicationConfiguration.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED,
+    isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+    public Map<String, Object> {SAVE}({EventName}Dto {EventNameVar}Dto) {
+        {EventName}Validator.validate({EventNameVar}Dto);
+        {EventName} {EventNameVar} = new {EventName}();
+        BeanUtils.copyProperties({EventNameVar}Dto,{EventNameVar});
+        {EventNameVar}.setCreatedAt(DateUtils.now());
+        {EventNameVar}.setCreatedBy(getEmp().getEmpName());
+
+
+        int result = INTEGER_ZERO;
+        result = {EventNameVar}Dao.insert({EventNameVar});
+        if (result > INTEGER_ZERO) {
+            return successState();
+        } else {
+            return failState();
+        }
+    }
+
+
+    @Transactional(value = ApplicationConfiguration.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED,
+    isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+    public Map<String, Object> {UPDATE}({EventName}Dto {EventNameVar}Dto) {
+        {EventName}Validator.validate({EventNameVar}Dto);
+        {EventName} {EventNameVar} = new {EventName}();
+        BeanUtils.copyProperties({EventNameVar}Dto,{EventNameVar});
+        {EventNameVar}.setUpdatedAt(DateUtils.now());
+        {EventNameVar}.setUpdatedBy(getEmp().getEmpName());
+        int result = {EventNameVar}Dao.dynamicUpdate({EventNameVar});
+        if (result > INTEGER_ZERO) {
+            return successState();
+        } else {
+            return failState();
+        }
+    }
+
+
+    @Transactional(value = ApplicationConfiguration.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED,
+    isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+    public Map<String, Object> {DELETE}(String {KEY}) {
+        int result = {EventNameVar}Dao.delete({KEY});
+        if (result > INTEGER_ZERO) {
+            return successState();
+        } else {
+            return failState();
+        }
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public {EventName}Dto {GET}(String {KEY}) {
+        {EventName}Dto {EventNameVar}Dto = {EventNameVar}Dao.findOne({KEY});
+         return {EventNameVar}Dto;
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<{EventName}Dto> {LIST}() {
+        List<{EventName}Dto> {EventNameVar}DtoList = {EventNameVar}Dao.findAll();
+        return {EventNameVar}DtoList;
+    }
+
+
+}
+

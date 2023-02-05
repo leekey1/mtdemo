@@ -1,0 +1,1786 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "AgiliumTrade metastats REST API",
+    "version": "1.0.0"
+  },
+  "basePath": "/api/mt/metastats",
+  "paths": {
+    "/users/current/accounts/{accountId}/metrics": {
+      "get": {
+        "summary": "Returns metrics for a trading account",
+        "description": "Returns a trading account metrics. This API call is billable. Requires access to metastats-api:rest:public:default:getMetrics method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metastats-api:rest:public:default:getMetrics",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "auth-token",
+            "type": "string",
+            "description": "MetaApi account access token or auth token",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "includeOpenPositions",
+            "type": "boolean",
+            "description": "indicates the inclusion of open positions in the calculation",
+            "required": false
+          },
+          {
+            "in": "path",
+            "name": "accountId",
+            "type": "string",
+            "description": "Trading account id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "metrics for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "object",
+              "required": [
+                "metrics"
+              ],
+              "properties": {
+                "metrics": {
+                  "description": "metrics for the specific MetaTrader account",
+                  "$ref": "#/definitions/Metrics"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "metrics for the specified MetaTrader account in processing",
+            "schema": {
+              "type": "object",
+              "required": [
+                "state",
+                "message"
+              ],
+              "properties": {
+                "state": {
+                  "description": "process state for the specified MetaTrader account",
+                  "type": "string",
+                  "enum": [
+                    "processing"
+                  ]
+                },
+                "message": {
+                  "description": "additional comment to the state",
+                  "type": "string"
+                }
+              }
+            },
+            "headers": {
+              "retry-after": {
+                "description": "interval in seconds to retry",
+                "type": "integer"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metastats-api:rest:public:default:getMetrics method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/historical-trades/{startTime}/{endTime}": {
+      "get": {
+        "summary": "Returns historical trades by time range for a trading account",
+        "description": "Returns historical trades by range for a trading account. Updates the historical trades data and the API call will be counted towards billable MetaStats API calls by default. Not billed if updateHistory parameter is false. Requires access to metastats-api:rest:public:default:getTrades method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metastats-api:rest:public:default:getTrades",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "auth-token",
+            "type": "string",
+            "description": "MetaApi account access token or auth token",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "accountId",
+            "type": "string",
+            "description": "Trading account id",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "startTime",
+            "type": "string",
+            "description": "start of time range, inclusive, in broker timezone, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "endTime",
+            "type": "string",
+            "description": "end of time range, exclusive, in broker timezone, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "description": "pagination limit",
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "type": "integer",
+            "description": "pagination offset",
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "updateHistory",
+            "type": "boolean",
+            "default": true,
+            "description": "update historical trades before returning results. If set to true,the API call will be counted towards billable MetaStats API calls. If set to false,the API call is not billable. Default is true"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical trades with requested time range for a specifiedMetaTrader account returned successfully",
+            "schema": {
+              "type": "object",
+              "required": [
+                "trades"
+              ],
+              "properties": {
+                "trades": {
+                  "description": "trades for the specific MetaTrader account",
+                  "$ref": "#/definitions/Trades"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "metrics for the specified MetaTrader account in processing",
+            "schema": {
+              "type": "object",
+              "required": [
+                "state",
+                "message"
+              ],
+              "properties": {
+                "state": {
+                  "description": "process state for the specified MetaTrader account",
+                  "type": "string",
+                  "enum": [
+                    "processing"
+                  ]
+                },
+                "message": {
+                  "description": "additional comment to the state",
+                  "type": "string"
+                }
+              }
+            },
+            "headers": {
+              "retry-after": {
+                "description": "interval in seconds to retry",
+                "type": "integer"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metastats-api:rest:public:default:getTrades method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/open-trades": {
+      "get": {
+        "summary": "Returns open trades for a trading account",
+        "description": "Returns open trades for a trading account. This API call is not billable. Requires access to metastats-api:rest:public:default:getOpenTrades method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metastats-api:rest:public:default:getOpenTrades",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "auth-token",
+            "type": "string",
+            "description": "MetaApi account access token or auth token",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "accountId",
+            "type": "string",
+            "description": "Trading account id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Open trades for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "object",
+              "required": [
+                "openTrades"
+              ],
+              "properties": {
+                "openTrades": {
+                  "description": "open trades for the specific MetaTrader account",
+                  "$ref": "#/definitions/OpenTrades"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metastats-api:rest:public:default:getOpenTrades method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/adm/tasks": {
+      "get": {
+        "summary": "Returns a list of scheduled and recent tasks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response with tasks",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SchedulerTask"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets": {
+      "get": {
+        "summary": "Returns a list of registered UAT data sets",
+        "description": "Returns a list of registered UAT data sets",
+        "x-authorization": {
+          "custom": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result contains UAT data sets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DataSet"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets/{id}/apply": {
+      "post": {
+        "summary": "Applies a registered UAT data set with an id specified",
+        "description": "Applies a registered UAT data set with an id specified",
+        "x-authorization": {
+          "custom": true
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "data set id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "params",
+            "description": "optional data set parameters",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DataSetParams"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "data set successfully applied"
+          },
+          "404": {
+            "description": "data set not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/redis/statistics": {
+      "get": {
+        "summary": "Returns redis traffic statistics",
+        "description": "Returns redis traffic statistics. Requires access to express-microservice:rest:private:default:getRedisStatistics method.",
+        "x-authorization": {
+          "method": "express-microservice:rest:private:default:getRedisStatistics"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token required if authorization is enabled",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Redis traffic statistics",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to express-microservice:rest:private:default:getRedisStatistics method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Executes health checks",
+        "description": "Executes health checks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "health checks passed",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HealthCheckResult"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Metrics": {
+      "type": "object",
+      "required": [
+        "balance",
+        "equity",
+        "profit",
+        "deposits",
+        "trades"
+      ],
+      "properties": {
+        "inclusive": {
+          "description": "indicates whether open positions are included in the metrics, \"false\" means that there are no open positions. Only for a request with includeOpenPositions=\"true\"",
+          "type": "boolean"
+        },
+        "balance": {
+          "description": "[balance](https://www.investopedia.com/terms/a/accountbalance.asp) - money on the account, not accounting for the results of currently [open positions](https://www.investopedia.com/terms/o/open-position.asp)",
+          "type": "number"
+        },
+        "highestBalanceDate": {
+          "description": "date of maximum [balance](https://www.investopedia.com/terms/a/accountbalance.asp) that have ever been on the account, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "highestBalance": {
+          "description": "maximum [balance](https://www.investopedia.com/terms/a/accountbalance.asp) that have ever been on the account",
+          "type": "number"
+        },
+        "equity": {
+          "description": "[equity](https://www.investopedia.com/terms/e/equity.asp) is the result (current amount) of all [positions](https://www.investopedia.com/terms/p/position.asp), including [opened](https://www.investopedia.com/terms/o/open-position.asp)",
+          "type": "number"
+        },
+        "trades": {
+          "description": "total number of [closed positions](https://www.investopedia.com/terms/c/closeposition.asp) on the account",
+          "type": "integer"
+        },
+        "withdrawals": {
+          "description": "total amount [withdrawn](https://www.investopedia.com/terms/w/withdrawal.asp) from the [deposit](https://www.investopedia.com/terms/d/deposit.asp)",
+          "type": "number"
+        },
+        "averageTradeLengthInMilliseconds": {
+          "description": "average [trade length](https://www.investopedia.com/terms/h/holdingperiod.asp) (time from [open](https://www.investopedia.com/terms/o/open-position.asp) to [close](https://www.investopedia.com/terms/c/closeposition.asp)) in milliseconds",
+          "type": "number"
+        },
+        "bestTrade": {
+          "description": "the best [profit](https://www.investopedia.com/terms/p/profit.asp) from one [trade](https://www.investopedia.com/terms/p/position.asp) that has ever been on the account",
+          "type": "number"
+        },
+        "worstTrade": {
+          "description": "the worst [profit](https://www.investopedia.com/terms/p/profit.asp) from one [trade](https://www.investopedia.com/terms/p/position.asp) that has ever been on the account",
+          "type": "number"
+        },
+        "bestTradePips": {
+          "description": "the best [pips](https://www.investopedia.com/terms/p/pip.asp) from one [trade](https://www.investopedia.com/terms/p/position.asp) that have ever been on the account",
+          "type": "number"
+        },
+        "worstTradePips": {
+          "description": "the worst [pips](https://www.investopedia.com/terms/p/pip.asp) from one [trade](https://www.investopedia.com/terms/p/position.asp) that have ever been on the account",
+          "type": "number"
+        },
+        "bestTradeDate": {
+          "description": "date of the best [profit](https://www.investopedia.com/terms/p/profit.asp) from one [trade](https://www.investopedia.com/terms/p/position.asp) that have ever been on the account, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "bestTradePipsDate": {
+          "description": "date of the best [pips](https://www.investopedia.com/terms/p/pip.asp) from one [trade](https://www.investopedia.com/terms/p/position.asp) that have ever been on the account, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "worstTradeDate": {
+          "description": "date of the worst [profit](https://www.investopedia.com/terms/p/profit.asp) from one [trade](https://www.investopedia.com/terms/p/position.asp) that have ever been on the account, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "worstTradePipsDate": {
+          "description": "date of the worst [pips](https://www.investopedia.com/terms/p/pip.asp) from one [trade](https://www.investopedia.com/terms/p/position.asp) that have ever been on the account, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "commissions": {
+          "description": "[commissions](https://www.investopedia.com/terms/c/commission.asp) charged by the broker for the entire period",
+          "type": "number"
+        },
+        "dailyGain": {
+          "description": "[compound daily rate of return](https://www.investopedia.com/terms/c/cagr.asp)",
+          "type": "number"
+        },
+        "monthlyGain": {
+          "description": "[compound monthly rate of return](https://www.investopedia.com/terms/c/cagr.asp)",
+          "type": "number"
+        },
+        "equityPercent": {
+          "description": "percentage of current [equity](https://www.investopedia.com/terms/e/equity.asp) to [balance](https://www.investopedia.com/terms/a/accountbalance.asp)",
+          "type": "number"
+        },
+        "expectancy": {
+          "description": "the average [expected profitability](https://www.investopedia.com/terms/e/expectedreturn.asp) of one [trade](https://www.investopedia.com/terms/p/position.asp) in basic currency",
+          "type": "number"
+        },
+        "expectancyPips": {
+          "description": "the average [expected profitability](https://www.investopedia.com/terms/e/expectedreturn.asp) of one [trade](https://www.investopedia.com/terms/p/position.asp) in [pips](https://www.investopedia.com/terms/p/pip.asp)",
+          "type": "number"
+        },
+        "gain": {
+          "description": "[time-weighted rate of return](https://www.investopedia.com/terms/t/time-weightedror.asp)",
+          "type": "number"
+        },
+        "geometricHoldingPeriodReturn": {
+          "description": "[geometric holding period return](https://www.investopedia.com/terms/g/geometricmean.asp)",
+          "type": "number"
+        },
+        "interest": {
+          "description": "cumulative [interest](https://www.investopedia.com/terms/i/interest.asp) and [swap](https://www.investopedia.com/terms/s/swap.asp) for the entire period",
+          "type": "number"
+        },
+        "longTrades": {
+          "description": "the number of [long trades](https://www.investopedia.com/terms/l/long.asp)",
+          "type": "integer"
+        },
+        "shortTrades": {
+          "description": "the number of [short trades](https://www.investopedia.com/terms/s/short.asp)",
+          "type": "integer"
+        },
+        "longWonTrades": {
+          "description": "the number of [long](https://www.investopedia.com/terms/l/long.asp) winning trades",
+          "type": "integer"
+        },
+        "shortWonTrades": {
+          "description": "the number of [short](https://www.investopedia.com/terms/s/short.asp) winning trades",
+          "type": "integer"
+        },
+        "longWonTradesPercent": {
+          "description": "percentage of [long](https://www.investopedia.com/terms/l/long.asp) winning trades",
+          "type": "number"
+        },
+        "shortWonTradesPercent": {
+          "description": "percentage of [short](https://www.investopedia.com/terms/s/short.asp) winning trades",
+          "type": "number"
+        },
+        "maxDrawdown": {
+          "description": "percentage of [maximum drawdown](https://www.investopedia.com/terms/m/maximum-drawdown-mdd.asp) of [balance](https://www.investopedia.com/terms/a/accountbalance.asp)  during the entire trading history",
+          "type": "number"
+        },
+        "lots": {
+          "description": "total [volume](https://www.investopedia.com/terms/s/standard-lot.asp) of [trades](https://www.investopedia.com/terms/p/position.asp)",
+          "type": "number"
+        },
+        "pips": {
+          "description": "cumulative [price units](https://www.investopedia.com/terms/p/pip.asp)",
+          "type": "number"
+        },
+        "profit": {
+          "description": "[profit](https://www.investopedia.com/terms/p/profit.asp) is the total yield of [closed positions](https://www.investopedia.com/terms/c/closeposition.asp) for the entire period (total result)",
+          "type": "number"
+        },
+        "deposits": {
+          "description": "cumulative [deposit](https://www.investopedia.com/terms/d/deposit.asp) for the entire period",
+          "type": "number"
+        },
+        "absoluteGain": {
+          "description": "[absolute gain](https://www.investopedia.com/terms/a/absolutereturn.asp) is a simple [deposit](https://www.investopedia.com/terms/d/deposit.asp) increase without regard to reinvestment",
+          "type": "number"
+        },
+        "profitFactor": {
+          "description": "the amount yielded by winning [trades](https://www.investopedia.com/terms/p/position.asp) divided by the amount of losses yielded by losing ones [(read more)](https://www.investopedia.com/articles/fundamental-analysis/10/strategy-performance-reports.asp). Result in range 0 - Infinity means: `0` - only loss, `1` - profit equals to loss, `Infinity` - only profit.",
+          "type": "number"
+        },
+        "sharpeRatio": {
+          "description": "[sharpe ratio](https://www.investopedia.com/terms/s/sharperatio.asp) is the average return earned in excess of the risk-free rate per unit of volatility. It is calculated if there are at least 30 closed deals in the history",
+          "type": "number"
+        },
+        "sortinoRatio": {
+          "description": "[sortino ratio](hhttps://www.investopedia.com/terms/s/sortinoratio.asp) differentiates harmful volatility from total overall volatility. It is calculated if there are at least 30 closed deals in the history",
+          "type": "number"
+        },
+        "standardDeviationProfit": {
+          "description": "a statistical measure of volatility shows how much variation or dispersion there is from the mean profit in basic currency [(read more)](https://www.investopedia.com/terms/s/standarddeviation.asp). It is calculated if there are at least 30 closed deals in the history",
+          "type": "number"
+        },
+        "kurtosisProfit": {
+          "description": "profit [kurtosis](https://www.investopedia.com/terms/k/kurtosis.asp) is a statistical measure that is used to describe [profit](https://www.investopedia.com/terms/p/profit.asp) distribution. It is calculated if there are at least 30 closed deals in the history",
+          "type": "number"
+        },
+        "averageHoldingPeriodReturn": {
+          "description": "average [holding period return](https://www.investopedia.com/terms/h/holdingperiodreturn-yield.asp). It is calculated if there are at least 30 closed deals in the history",
+          "type": "number"
+        },
+        "averageWin": {
+          "description": "[average win](https://www.investopedia.com/terms/a/averagereturn.asp) in basic currency",
+          "type": "number"
+        },
+        "averageWinPips": {
+          "description": "[average win](https://www.investopedia.com/terms/a/averagereturn.asp) in [pips](https://www.investopedia.com/terms/p/pip.asp)",
+          "type": "number"
+        },
+        "averageLoss": {
+          "description": "[average loss](https://www.investopedia.com/terms/a/averagereturn.asp) in basic currency",
+          "type": "number"
+        },
+        "averageLossPips": {
+          "description": "[average loss](https://www.investopedia.com/terms/a/averagereturn.asp) in [pips](https://www.investopedia.com/terms/p/pip.asp)",
+          "type": "number"
+        },
+        "wonTradesPercent": {
+          "description": "percentage of [winning trades](https://www.investopedia.com/articles/fundamental-analysis/10/strategy-performance-reports.asp)",
+          "type": "number"
+        },
+        "lostTradesPercent": {
+          "description": "percentage of [losing trades](https://www.investopedia.com/articles/fundamental-analysis/10/strategy-performance-reports.asp)",
+          "type": "number"
+        },
+        "zScore": {
+          "description": "[zScore](https://www.investopedia.com/articles/fundamental/04/021104.asp) - the ability of a trading system to generate [wins and losses](https://www.investopedia.com/terms/p/position.asp) in streaks. It is calculated if there are at least 30 closed deals in the history",
+          "type": "number"
+        },
+        "probability": {
+          "description": "[probability](https://en.wikipedia.org/wiki/Error_function) that a [profit](https://www.investopedia.com/terms/p/position.asp) will be followed by a profit and a [loss](https://www.investopedia.com/terms/p/position.asp) by a loss",
+          "type": "number"
+        },
+        "daysSinceTradingStarted": {
+          "description": "the number of days that have passed since the opening of the first trade",
+          "type": "number"
+        },
+        "currencySummary": {
+          "description": "[currency trading](https://www.investopedia.com/financial-edge/0412/the-basics-of-currency-trading.aspx) summary provides statistics on winning and losing trades indicating the amount in the context of long and short positions. Statistics is given for all currency pairs, for which positions were opened.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CurrencySummaryMetrics"
+          }
+        },
+        "dailyGrowth": {
+          "description": "daily [growth](https://www.investopedia.com/terms/g/growthrates.asp) shows the profitability of the trading account. It shows each profit received from the volume of trade and changes in balance, total accumulated income and existing account drawdown [by day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "array",
+          "items": {
+            "description": "[trading day](https://en.wikipedia.org/wiki/Trading_day) statistics",
+            "$ref": "#/definitions/DailyGrowthMetrics"
+          }
+        },
+        "monthlyAnalytics": {
+          "description": "monthly [analysis of trading on this account](https://www.investopedia.com/terms/a/account-analysis.asp)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MonthlyAnalyticMetrics"
+          }
+        },
+        "closeTradesByWeekDay": {
+          "description": "[closing deals](https://www.investopedia.com/terms/o/open-position.asp) by days of the week",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TradeByTimeMetrics"
+          }
+        },
+        "openTradesByHour": {
+          "description": "[opening deals](https://www.investopedia.com/terms/o/open-position.asp) by hour of the day",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TradeByTimeMetrics"
+          }
+        },
+        "periods": {
+          "description": "there are trading stats for today, this week, this month, this year compared to the results for the previous period",
+          "$ref": "#/definitions/Periods"
+        },
+        "riskOfRuin": {
+          "description": "[risk of ruin](https://www.investopedia.com/terms/r/risk-of-ruin.asp) of [balance](https://www.investopedia.com/terms/a/accountbalance.asp)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RiskOfRuinMetrics"
+          }
+        },
+        "tradeDuration": {
+          "description": "metrics for each [duration](https://www.investopedia.com/terms/t/term.asp) of [trades](https://www.investopedia.com/terms/p/position.asp)",
+          "$ref": "#/definitions/TradeDurationMetrics"
+        },
+        "tradeDurationDiagram": {
+          "description": "list of information columns about the [duration](https://www.investopedia.com/terms/t/term.asp) of [trades](https://www.investopedia.com/terms/p/position.asp) for the diagram",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TradeDurationDiagramColumnMetrics"
+          }
+        },
+        "totalTradeMarketValue": {
+          "description": "Total market value of all trades on the account",
+          "type": "number"
+        }
+      }
+    },
+    "Periods": {
+      "type": "object",
+      "properties": {
+        "today": {
+          "description": "trade information for today",
+          "$ref": "#/definitions/PeriodMetrics"
+        },
+        "thisWeek": {
+          "description": "trade information for this week",
+          "$ref": "#/definitions/PeriodMetrics"
+        },
+        "thisMonth": {
+          "description": "trade information for this month",
+          "$ref": "#/definitions/PeriodMetrics"
+        },
+        "thisYear": {
+          "description": "trade information for this year",
+          "$ref": "#/definitions/PeriodMetrics"
+        }
+      }
+    },
+    "CurrencySummaryMetrics": {
+      "type": "object",
+      "required": [
+        "currency",
+        "history",
+        "total"
+      ],
+      "properties": {
+        "currency": {
+          "description": "trading [currency pair](https://www.investopedia.com/terms/c/currencypair.asp)",
+          "type": "string"
+        },
+        "history": {
+          "description": "profit from trading a currency pair on long and short positions in [one trading day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CurrencySummaryHistoryDayMetrics"
+          }
+        },
+        "total": {
+          "description": "General data (such as profit, number of trades) about trading a specific currency pair",
+          "$ref": "#/definitions/CurrencySummaryTotalMetrics"
+        },
+        "short": {
+          "description": "profit and number of trades of [short trades](https://www.investopedia.com/terms/s/short.asp) in a specific currency",
+          "$ref": "#/definitions/CurrencySummaryTradeMetrics"
+        },
+        "long": {
+          "description": "profit and number of trades of [long trades](https://www.investopedia.com/terms/l/long.asp) in a specific currency",
+          "$ref": "#/definitions/CurrencySummaryTradeMetrics"
+        }
+      }
+    },
+    "CurrencySummaryHistoryDayMetrics": {
+      "type": "object",
+      "required": [
+        "date",
+        "totalProfit"
+      ],
+      "properties": {
+        "date": {
+          "description": "date of [trading day](https://en.wikipedia.org/wiki/Trading_day), in broker timezone, YYYY-MM-DD format",
+          "type": "string",
+          "format": "date"
+        },
+        "totalProfit": {
+          "description": "the value of the total [profit](https://www.investopedia.com/terms/p/profit.asp) at the end of the day",
+          "type": "number"
+        },
+        "totalPips": {
+          "description": "the value of the total [pips](https://www.investopedia.com/terms/p/pip.asp) at the end of the day",
+          "type": "number"
+        },
+        "shortProfit": {
+          "description": "total [profit](https://www.investopedia.com/terms/p/profit.asp) of [short trades](https://www.investopedia.com/terms/s/short.asp) per [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        },
+        "longProfit": {
+          "description": "total [profit](https://www.investopedia.com/terms/p/profit.asp) of [long trades](https://www.investopedia.com/terms/l/long.asp)  per [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        },
+        "shortPips": {
+          "description": "total [pips](https://www.investopedia.com/terms/p/pip.asp) of [short trades](https://www.investopedia.com/terms/s/short.asp) per [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        },
+        "longPips": {
+          "description": "total [pips](https://www.investopedia.com/terms/p/pip.asp) of [long trades](https://www.investopedia.com/terms/l/long.asp) per [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        }
+      }
+    },
+    "CurrencySummaryTotalMetrics": {
+      "type": "object",
+      "required": [
+        "profit",
+        "trades"
+      ],
+      "properties": {
+        "wonTrades": {
+          "description": "the number of [winning trades](https://www.investopedia.com/terms/p/position.asp) with this currency",
+          "type": "integer"
+        },
+        "lostTrades": {
+          "description": "the number of [losing trades](https://www.investopedia.com/terms/p/position.asp) with this currency",
+          "type": "integer"
+        },
+        "trades": {
+          "description": "the number of all [trades](https://www.investopedia.com/terms/c/closeposition.asp) with this currency",
+          "type": "integer"
+        },
+        "profit": {
+          "description": "cumulative [profit](https://www.investopedia.com/terms/p/profit.asp) of this currency trading",
+          "type": "number"
+        },
+        "pips": {
+          "description": "cumulative [pips](https://www.investopedia.com/terms/p/pip.asp) of this currency trading",
+          "type": "number"
+        },
+        "wonTradesPercent": {
+          "description": "[percentage of winning trades](https://www.investopedia.com/articles/fundamental-analysis/10/strategy-performance-reports.asp) with this currency",
+          "type": "number"
+        },
+        "lostTradesPercent": {
+          "description": "[percentage of losing trades](https://www.investopedia.com/articles/fundamental-analysis/10/strategy-performance-reports.asp) with this currency",
+          "type": "number"
+        }
+      }
+    },
+    "CurrencySummaryTradeMetrics": {
+      "type": "object",
+      "required": [
+        "profit",
+        "trades"
+      ],
+      "properties": {
+        "trades": {
+          "description": "the number of all [trades](https://www.investopedia.com/terms/c/closeposition.asp) with this currency",
+          "type": "integer"
+        },
+        "profit": {
+          "description": "cumulative [profit](https://www.investopedia.com/terms/p/profit.asp) of this currency trading",
+          "type": "number"
+        },
+        "pips": {
+          "description": "cumulative [pips](https://www.investopedia.com/terms/p/pip.asp) of this currency trading",
+          "type": "number"
+        }
+      }
+    },
+    "RiskOfRuinMetrics": {
+      "type": "object",
+      "required": [
+        "lossSize",
+        "probabilityOfLoss",
+        "consecutiveLosingTrades"
+      ],
+      "properties": {
+        "lossSize": {
+          "description": "loss size of [balance](https://www.investopedia.com/terms/a/accountbalance.asp)",
+          "type": "number"
+        },
+        "probabilityOfLoss": {
+          "description": "[probability of loss](https://www.investopedia.com/terms/r/risk-of-ruin.asp) shows the risk of losing a particular part of the [balance](https://www.investopedia.com/terms/a/accountbalance.asp)",
+          "type": "number"
+        },
+        "consecutiveLosingTrades": {
+          "description": "the number of [losing trades](https://www.investopedia.com/terms/p/position.asp) that must be entered sequentially in order for this part of the [balance](https://www.investopedia.com/terms/a/accountbalance.asp) to be lost",
+          "type": "number"
+        }
+      }
+    },
+    "DailyGrowthMetrics": {
+      "type": "object",
+      "required": [
+        "totalProfit",
+        "totalGains",
+        "balance",
+        "date"
+      ],
+      "properties": {
+        "date": {
+          "description": "date of [trading day](https://en.wikipedia.org/wiki/Trading_day), in broker timezone, YYYY-MM-DD format",
+          "type": "string",
+          "format": "date"
+        },
+        "profit": {
+          "description": "cumulative [profit](https://www.investopedia.com/terms/p/profit.asp) per [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        },
+        "pips": {
+          "description": "cumulative [pips](https://www.investopedia.com/terms/p/pip.asp) per [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        },
+        "lots": {
+          "description": "cumulative [lots](https://www.investopedia.com/terms/s/standard-lot.asp) per [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        },
+        "gains": {
+          "description": "cumulative [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) per [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        },
+        "totalProfit": {
+          "description": "total [profit](https://www.investopedia.com/terms/p/profit.asp) in this [day](https://en.wikipedia.org/wiki/Trading_day) end",
+          "type": "number"
+        },
+        "totalGains": {
+          "description": "total [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) in this [day](https://en.wikipedia.org/wiki/Trading_day) end",
+          "type": "number"
+        },
+        "balance": {
+          "description": "[balance](https://www.investopedia.com/terms/a/accountbalance.asp) in this [day](https://en.wikipedia.org/wiki/Trading_day) end",
+          "type": "number"
+        },
+        "drawdownPercentage": {
+          "description": "percentage of [balance drawdown](https://www.investopedia.com/terms/d/drawdown.asp) in this [day](https://en.wikipedia.org/wiki/Trading_day) end",
+          "type": "number"
+        },
+        "drawdownProfit": {
+          "description": "maximum registered [balance drawdown](https://www.investopedia.com/terms/d/drawdown.asp) in basic currency during this [day](https://en.wikipedia.org/wiki/Trading_day)",
+          "type": "number"
+        }
+      }
+    },
+    "PeriodMetrics": {
+      "type": "object",
+      "properties": {
+        "profit": {
+          "description": "[profit](https://www.investopedia.com/terms/p/profit.asp) of this period",
+          "type": "number"
+        },
+        "pips": {
+          "description": "cumulative [pips](https://www.investopedia.com/terms/p/pip.asp) of this period",
+          "type": "number"
+        },
+        "lots": {
+          "description": "cumulative [lots](https://www.investopedia.com/terms/s/standard-lot.asp) of this period",
+          "type": "number"
+        },
+        "gain": {
+          "description": "percentage gain ([rate of return](https://www.investopedia.com/terms/r/rateofreturn.asp)) of this period",
+          "type": "number"
+        },
+        "trades": {
+          "description": "the number of [trades](https://www.investopedia.com/terms/p/position.asp) of this period",
+          "type": "integer"
+        },
+        "wonTradesPercent": {
+          "description": "[percentage of winning trades](https://www.investopedia.com/articles/fundamental-analysis/10/strategy-performance-reports.asp) of this period",
+          "type": "number"
+        },
+        "profitDifference": {
+          "description": "difference in [profit](https://www.investopedia.com/terms/p/profit.asp) with the previous period",
+          "type": "number"
+        },
+        "pipsDifference": {
+          "description": "difference in [pips](https://www.investopedia.com/terms/p/pip.asp) with the previous period",
+          "type": "number"
+        },
+        "lotsDifference": {
+          "description": "difference in [lots](https://www.investopedia.com/terms/s/standard-lot.asp) with the previous period",
+          "type": "number"
+        },
+        "gainDifference": {
+          "description": "difference in [percentage gain](https://www.investopedia.com/terms/r/rateofreturn.asp) with the previous period",
+          "type": "number"
+        },
+        "tradesDifference": {
+          "description": "difference in the number of [trades](https://www.investopedia.com/terms/p/position.asp) with the previous period",
+          "type": "integer"
+        },
+        "wonTradesPercentDifference": {
+          "description": "difference in [percentage of winning trades](https://www.investopedia.com/articles/fundamental-analysis/10/strategy-performance-reports.asp) with the previous period",
+          "type": "number"
+        }
+      }
+    },
+    "MonthlyAnalyticMetrics": {
+      "type": "object",
+      "required": [
+        "date"
+      ],
+      "properties": {
+        "date": {
+          "description": "date of trading month, in broker timezone, YYYY-MM format",
+          "type": "string"
+        },
+        "profit": {
+          "description": "cumulative [profit](https://www.investopedia.com/terms/p/profit.asp) per month",
+          "type": "number"
+        },
+        "pips": {
+          "description": "cumulative [pips](https://www.investopedia.com/terms/p/pip.asp) per month",
+          "type": "number"
+        },
+        "lots": {
+          "description": "cumulative [lots](https://www.investopedia.com/terms/s/standard-lot.asp) per month",
+          "type": "number"
+        },
+        "gains": {
+          "description": "cumulative [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) per month",
+          "type": "number"
+        },
+        "trades": {
+          "description": "the number of [trades](https://www.investopedia.com/terms/p/position.asp) of this month",
+          "type": "integer"
+        },
+        "currencies": {
+          "description": "[currency pair](https://www.investopedia.com/terms/c/currencypair.asp) trading information for monthly analysis",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MonthlyAnalyticCurrencyMetrics"
+          }
+        }
+      }
+    },
+    "MonthlyAnalyticCurrencyMetrics": {
+      "type": "object",
+      "required": [
+        "currency",
+        "rewardToRiskRatio",
+        "popularityPercent"
+      ],
+      "properties": {
+        "currency": {
+          "description": "[currency pair](https://www.investopedia.com/terms/c/currencypair.asp)",
+          "type": "string"
+        },
+        "averageHoldingTimeLongsInMilliseconds": {
+          "description": "average [holding time](https://www.investopedia.com/terms/h/holdingperiod.asp) of [long trades](https://www.investopedia.com/terms/l/long.asp)",
+          "type": "number"
+        },
+        "averageHoldingTimeShortsInMilliseconds": {
+          "description": "average [holding time](https://www.investopedia.com/terms/h/holdingperiod.asp) of [short trades](https://www.investopedia.com/terms/s/short.asp)",
+          "type": "number"
+        },
+        "rewardToRiskRatio": {
+          "description": "[reward to risk ratio](https://www.investopedia.com/terms/r/riskrewardratio.asp) - the difference between reward and risk, where the lesser is always one. So 0 means reward:risk=1:1, 2 means 3:1, -0.5 means 1:1.5",
+          "type": "number"
+        },
+        "popularityPercent": {
+          "description": "the percentage of [popularity](https://www.investopedia.com/articles/forex/11/popular-currencies-and-why-theyre-traded.asp) of this currency this month",
+          "type": "number"
+        }
+      }
+    },
+    "TradeDurationDiagramColumnMetrics": {
+      "type": "object",
+      "required": [
+        "durations",
+        "name",
+        "trades",
+        "minDurationInSeconds"
+      ],
+      "properties": {
+        "durations": {
+          "description": "the number of [durations](https://www.investopedia.com/terms/t/term.asp) in this column",
+          "type": "integer"
+        },
+        "trades": {
+          "description": "the number of [trades](https://www.investopedia.com/terms/p/position.asp) in this column",
+          "type": "integer"
+        },
+        "name": {
+          "description": "name of this column",
+          "type": "string",
+          "enum": [
+            "seconds",
+            "minutes",
+            "hours",
+            "days",
+            "weeks",
+            "months"
+          ]
+        },
+        "minDurationInSeconds": {
+          "description": "minimum trade [duration](https://www.investopedia.com/terms/t/term.asp) in this column in seconds",
+          "type": "integer"
+        },
+        "maxDurationInSeconds": {
+          "description": "maximum trade [duration](https://www.investopedia.com/terms/t/term.asp) in this column in seconds",
+          "type": "integer"
+        },
+        "won": {
+          "description": "collection of metrics of winning [trades](https://www.investopedia.com/terms/p/position.asp) in this column",
+          "$ref": "#/definitions/TradeDurationDiagramColumnCollectionMetrics"
+        },
+        "lost": {
+          "description": "collection of metrics of losing [trades](https://www.investopedia.com/terms/p/position.asp) in this column",
+          "$ref": "#/definitions/TradeDurationDiagramColumnCollectionMetrics"
+        }
+      }
+    },
+    "TradeDurationDiagramColumnCollectionMetrics": {
+      "type": "object",
+      "required": [
+        "gains",
+        "profits",
+        "lots"
+      ],
+      "properties": {
+        "gains": {
+          "description": "list of [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp)",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "profits": {
+          "description": "list of [profits](https://www.investopedia.com/terms/p/profit.asp)",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "lots": {
+          "description": "list of [lots](https://www.investopedia.com/terms/s/standard-lot.asp)",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "pips": {
+          "description": "list of [pips](https://www.investopedia.com/terms/p/pip.asp)",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "TradeDurationMetrics": {
+      "type": "object",
+      "properties": {
+        "won": {
+          "description": "metrics of winning [trades](https://www.investopedia.com/terms/p/position.asp)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OneTradeDurationMetrics"
+          }
+        },
+        "lost": {
+          "description": "metrics of losing [trades](https://www.investopedia.com/terms/p/position.asp)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OneTradeDurationMetrics"
+          }
+        }
+      }
+    },
+    "OneTradeDurationMetrics": {
+      "type": "object",
+      "required": [
+        "gains",
+        "profits",
+        "lots"
+      ],
+      "properties": {
+        "gains": {
+          "description": "list of [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) for this [duration](https://www.investopedia.com/terms/t/term.asp)",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "profits": {
+          "description": "list of [profits](https://www.investopedia.com/terms/p/profit.asp) for this [duration](https://www.investopedia.com/terms/t/term.asp)",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "lots": {
+          "description": "list of [lots](https://www.investopedia.com/terms/s/standard-lot.asp) for this [duration](https://www.investopedia.com/terms/t/term.asp)",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "pips": {
+          "description": "list of [pips](https://www.investopedia.com/terms/p/pip.asp) for this [duration](https://www.investopedia.com/terms/t/term.asp)",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "durationInMinutes": {
+          "description": "[duration](https://www.investopedia.com/terms/t/term.asp) of the [trade](https://www.investopedia.com/terms/p/position.asp) in minutes",
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "TradeByTimeMetrics": {
+      "type": "object",
+      "required": [
+        "profit",
+        "gains",
+        "lots",
+        "trades"
+      ],
+      "properties": {
+        "profit": {
+          "description": "the total [profit](https://www.investopedia.com/terms/p/profit.asp) of the [trades](https://www.investopedia.com/terms/o/open-position.asp) at this time",
+          "type": "number"
+        },
+        "shortProfit": {
+          "description": "the total [profit](https://www.investopedia.com/terms/p/profit.asp) of [short trades](https://www.investopedia.com/terms/s/short.asp) at this time",
+          "type": "number"
+        },
+        "longProfit": {
+          "description": "the total [profit](https://www.investopedia.com/terms/p/profit.asp) of [long trades](https://www.investopedia.com/terms/l/long.asp) at this time",
+          "type": "number"
+        },
+        "wonProfit": {
+          "description": "the total [profit](https://www.investopedia.com/terms/p/profit.asp) of [winning trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "lostProfit": {
+          "description": "the total [profit](https://www.investopedia.com/terms/p/profit.asp) of [losing trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "pips": {
+          "description": "the total [pips](https://www.investopedia.com/terms/p/pip.asp) of [trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "shortPips": {
+          "description": "the total [pips](https://www.investopedia.com/terms/p/pip.asp) of [short trades](https://www.investopedia.com/terms/s/short.asp) at this time",
+          "type": "number"
+        },
+        "longPips": {
+          "description": "the total [pips](https://www.investopedia.com/terms/p/pip.asp) of [long trades](https://www.investopedia.com/terms/l/long.asp) at this time",
+          "type": "number"
+        },
+        "wonPips": {
+          "description": "the total [pips](https://www.investopedia.com/terms/p/pip.asp) of [winning trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "lostPips": {
+          "description": "the total [pips](https://www.investopedia.com/terms/p/pip.asp) of [losing trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "lots": {
+          "description": "cumulative [lots](https://www.investopedia.com/terms/s/standard-lot.asp) of [trades](https://www.investopedia.com/terms/o/open-position.asp) at this time",
+          "type": "number"
+        },
+        "gains": {
+          "description": "cumulative [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) of [trades](https://www.investopedia.com/terms/o/open-position.asp) at this time",
+          "type": "number"
+        },
+        "shortGains": {
+          "description": "cumulative [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) of [short trades](https://www.investopedia.com/terms/s/short.asp) at this time",
+          "type": "number"
+        },
+        "longGains": {
+          "description": "cumulative [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) of [long trades](https://www.investopedia.com/terms/l/long.asp) at this time",
+          "type": "number"
+        },
+        "wonGains": {
+          "description": "cumulative [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) of [winning trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "lostGains": {
+          "description": "cumulative [percentage gains](https://www.investopedia.com/terms/r/rateofreturn.asp) of [losing trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "trades": {
+          "description": "the number of all [trades](https://www.investopedia.com/terms/o/open-position.asp) at this time",
+          "type": "integer"
+        },
+        "shortTrades": {
+          "description": "the number of [short trades](https://www.investopedia.com/terms/s/short.asp) at this time",
+          "type": "integer"
+        },
+        "longTrades": {
+          "description": "the number of [long trades](https://www.investopedia.com/terms/l/long.asp) at this time",
+          "type": "integer"
+        },
+        "wonTrades": {
+          "description": "the number of [winning trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "integer"
+        },
+        "lostTrades": {
+          "description": "the number of [losing trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "integer"
+        },
+        "shortTradesPercent": {
+          "description": "percentage of [short trades](https://www.investopedia.com/terms/s/short.asp) at this time",
+          "type": "number"
+        },
+        "longTradesPercent": {
+          "description": "percentage of [long trades](https://www.investopedia.com/terms/l/long.asp) at this time",
+          "type": "number"
+        },
+        "wonTradesPercent": {
+          "description": "percentage of [winning trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "lostTradesPercent": {
+          "description": "percentage of [losing trades](https://www.investopedia.com/terms/p/position.asp) at this time",
+          "type": "number"
+        },
+        "hour": {
+          "type": "integer",
+          "description": "day hour (only for by hour case)",
+          "minimum": 0,
+          "maximum": 23
+        },
+        "day": {
+          "type": "integer",
+          "description": "weekday number (only for by day case)",
+          "minimum": 0,
+          "maximum": 6
+        }
+      }
+    },
+    "Trades": {
+      "type": "object",
+      "required": [
+        "_id",
+        "accountId",
+        "volume",
+        "durationInMinutes",
+        "profit",
+        "gain",
+        "success",
+        "openTime",
+        "type"
+      ],
+      "properties": {
+        "_id": {
+          "description": "historical trade id",
+          "type": "string"
+        },
+        "accountId": {
+          "description": "MetaApi account id",
+          "type": "string"
+        },
+        "positionId": {
+          "description": "trade position id",
+          "type": "string"
+        },
+        "volume": {
+          "description": "trade volume",
+          "type": "number"
+        },
+        "durationInMinutes": {
+          "description": "trade duration in minutes",
+          "type": "number"
+        },
+        "profit": {
+          "description": "trade [profit](https://www.investopedia.com/terms/p/profit.asp)",
+          "type": "number"
+        },
+        "gain": {
+          "description": "trade gain",
+          "type": "number"
+        },
+        "success": {
+          "description": "trade success",
+          "type": "string",
+          "enum": [
+            "won",
+            "lost"
+          ]
+        },
+        "openTime": {
+          "description": "time the trade was opened at in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "type": {
+          "description": "trade type",
+          "type": "string",
+          "enum": [
+            "DEAL_TYPE_BUY",
+            "DEAL_TYPE_SELL",
+            "DEAL_TYPE_BALANCE"
+          ]
+        },
+        "symbol": {
+          "description": "symbol the trade relates to",
+          "type": "string"
+        },
+        "closeTime": {
+          "description": "time the trade was closed at in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "openPrice": {
+          "description": "trade opening price",
+          "type": "number"
+        },
+        "closePrice": {
+          "description": "trade closing price",
+          "type": "number"
+        },
+        "pips": {
+          "description": "the number of pips ([price units](https://www.investopedia.com/terms/p/pip.asp)) earned (positive)or lost (negative) in this trade",
+          "type": "number"
+        },
+        "riskInBalancePercent": {
+          "description": "trade risk in % of balance",
+          "type": "number"
+        },
+        "riskInPips": {
+          "description": "trade risk in pips",
+          "type": "number"
+        },
+        "comment": {
+          "description": "trade comment",
+          "type": "string"
+        },
+        "marketValue": {
+          "description": " Trade market value",
+          "type": "number"
+        }
+      }
+    },
+    "OpenTrades": {
+      "type": "object",
+      "required": [
+        "_id",
+        "accountId",
+        "volume",
+        "profit",
+        "openTime",
+        "type",
+        "symbol",
+        "openPrice",
+        "durationInMinutes",
+        "gain",
+        "success",
+        "pips",
+        "marketValue"
+      ],
+      "properties": {
+        "_id": {
+          "description": "historical trade id",
+          "type": "string"
+        },
+        "accountId": {
+          "description": "MetaApi account id",
+          "type": "string"
+        },
+        "positionId": {
+          "description": "trade position id",
+          "type": "string"
+        },
+        "volume": {
+          "description": "trade volume",
+          "type": "number"
+        },
+        "durationInMinutes": {
+          "description": "trade duration in minutes",
+          "type": "number"
+        },
+        "profit": {
+          "description": "trade [profit](https://www.investopedia.com/terms/p/profit.asp)",
+          "type": "number"
+        },
+        "gain": {
+          "description": "trade gain",
+          "type": "number"
+        },
+        "success": {
+          "description": "trade success",
+          "type": "string",
+          "enum": [
+            "won",
+            "lost"
+          ]
+        },
+        "openTime": {
+          "description": "time the trade was opened at in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "type": {
+          "description": "trade type",
+          "type": "string",
+          "enum": [
+            "POSITION_TYPE_BUY",
+            "POSITION_TYPE_SELL"
+          ]
+        },
+        "symbol": {
+          "description": "symbol the trade relates to",
+          "type": "string"
+        },
+        "openPrice": {
+          "description": "trade opening price",
+          "type": "number"
+        },
+        "pips": {
+          "description": "the number of pips ([price units](https://www.investopedia.com/terms/p/pip.asp)) earned (positive)or lost (negative) in this trade",
+          "type": "number"
+        },
+        "riskInBalancePercent": {
+          "description": "trade risk in % of balance",
+          "type": "number"
+        },
+        "riskInPips": {
+          "description": "trade risk in pips",
+          "type": "number"
+        },
+        "comment": {
+          "description": "trade comment",
+          "type": "string"
+        },
+        "marketValue": {
+          "description": " Trade market value",
+          "type": "number"
+        }
+      }
+    },
+    "SchedulerTask": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "$ref": "#/definitions/TaskStatus"
+        }
+      }
+    },
+    "TaskStatus": {
+      "type": "object",
+      "required": [
+        "status",
+        "startedAt",
+        "completedAt",
+        "progress"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "type": "string"
+        },
+        "startedAt": {
+          "description": "Task started date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "description": "Task completed date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "progress": {
+          "description": "Task progress",
+          "type": "object"
+        }
+      }
+    },
+    "DataSet": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "data set id",
+          "type": "string"
+        },
+        "description": {
+          "description": "human-readable description",
+          "type": "string"
+        }
+      }
+    },
+    "DataSetParams": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "HealthCheckResult": {
+      "type": "object",
+      "required": [
+        "id",
+        "output"
+      ],
+      "properties": {
+        "check": {
+          "description": "id of the health check",
+          "type": "string"
+        },
+        "output": {
+          "description": "health check output",
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "id",
+        "error",
+        "message"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "error": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional information about error",
+          "type": "object"
+        },
+        "code": {
+          "description": "Error code, used for i18n",
+          "type": "string"
+        },
+        "arguments": {
+          "description": "Error message arguments, used for i18n",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "TooManyRequestsError": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "message",
+        "metadata"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "period",
+            "requestsPerPeriodAllowed",
+            "recommendedRetryTime"
+          ],
+          "properties": {
+            "periodInMinutes": {
+              "description": "rate limiting period in minutes",
+              "type": "number"
+            },
+            "requestsPerPeriodAllowed": {
+              "description": "allowed number of requests per period",
+              "type": "number"
+            },
+            "recommendedRetryTime": {
+              "description": "recommended time to retry request",
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,4115 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "AgiliumTrade MetaTrader client REST API",
+    "version": "1.0.0"
+  },
+  "basePath": "/api/mt/client",
+  "paths": {
+    "/usage-statistics": {
+      "get": {
+        "summary": "Returns usage statistics breakdown by account",
+        "description": "Returns usage statistics breakdown by account. Requires access to metaapi-api:rest:usageStatistics:default:getStats method.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:usageStatistics:default:getStats"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns usage statistics breakdown by account",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:usageStatistics:default:getStats method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/calculate-margin": {
+      "post": {
+        "summary": "Calculates margin required to open a trade on a trading account",
+        "description": "Calculates margin required to open a trade on a trading account. Requires access to metaapi-api:rest:public:trade:calculateMargin method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:trade:calculateMargin",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "description": "order to calculate margin for",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MarginOrder"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Margin for the specified trading account returned successfully",
+            "schema": {
+              "$ref": "#/definitions/Margin"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:trade:calculateMargin method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Trading account not found or not provisioned yet or symbol not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/server-time": {
+      "get": {
+        "summary": "Returns current server time for a trading account",
+        "description": "Returns current server time for a trading account. Requires access to metaapi-api:rest:public:terminal-state:getServerTime method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:terminal-state:getServerTime",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Server time for a specified MetaTrader account returned successfully",
+            "schema": {
+              "$ref": "#/definitions/ServerTime"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:terminal-state:getServerTime method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/hashing-ignored-field-lists": {
+      "get": {
+        "summary": "Returns hashing ignored field lists to be used by SDK",
+        "description": "Returns hashing ignored field lists to be used by SDK. Requires access to metaapi-api:rest:public:default:getHashingIgnoredFieldLists method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:default:getHashingIgnoredFieldLists",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hashing ignored field lists returned successfully",
+            "schema": {
+              "$ref": "#/definitions/HashingIgnoredFieldLists"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:default:getHashingIgnoredFieldLists method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/account-information": {
+      "get": {
+        "summary": "Returns account information for a trading account",
+        "description": "Returns account information for a trading account. Requires access to metaapi-api:rest:public:terminal-state:getAccountInformation method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:terminal-state:getAccountInformation",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account information for a specified MetaTrader account returned successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderAccountInformation"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:terminal-state:getAccountInformation method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/positions": {
+      "get": {
+        "summary": "Returns positions for a trading account",
+        "description": "Returns positions for a trading account. Requires access to metaapi-api:rest:public:terminal-state:getPositions method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:terminal-state:getPositions",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Positions for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderPosition"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:terminal-state:getPositions method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/positions/{positionId}": {
+      "get": {
+        "summary": "Returns specific position for a trading account",
+        "description": "Returns specific position for a trading account. Requires access to metaapi-api:rest:public:terminal-state:getPosition method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:terminal-state:getPosition",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "positionId",
+            "description": "position id (ticket number)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Position for a specified MetaTrader account returned successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderPosition"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:terminal-state:getPosition method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet or requested position does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/orders": {
+      "get": {
+        "summary": "Returns open orders for a trading account",
+        "description": "Returns open orders for a trading account. Requires access to metaapi-api:rest:public:terminal-state:getOrders method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:terminal-state:getOrders",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Open orders for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderOrder"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:terminal-state:getOrders method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/orders/{orderId}": {
+      "get": {
+        "summary": "Returns specific open order for a trading account",
+        "description": "Returns specific open order for a trading account. Requires access to metaapi-api:rest:public:terminal-state:getOrder method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:terminal-state:getOrder",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orderId",
+            "description": "order id (ticket number)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order for a specified MetaTrader account returned successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderOrder"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:terminal-state:getOrder method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet or requested order does not exist",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/history-orders/ticket/{ticket}": {
+      "get": {
+        "summary": "Returns history orders by ticket for a trading account",
+        "description": "Returns history orders by ticket for a trading account. Requires access to metaapi-api:rest:public:trade-history:getHistoryOrdersByTicket method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:trade-history:getHistoryOrdersByTicket",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ticket",
+            "description": "ticket number (order id)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "History orders with requested ticket number for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderOrder"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:trade-history:getHistoryOrdersByTicket method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/history-orders/position/{positionId}": {
+      "get": {
+        "summary": "Returns history orders by position id for a trading account",
+        "description": "Returns history orders by position id for a trading account. Requires access to metaapi-api:rest:public:trade-history:getHistoryOrdersByPosition method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:trade-history:getHistoryOrdersByPosition",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "positionId",
+            "description": "position id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "History orders with requested position id for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderOrder"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:trade-history:getHistoryOrdersByPosition method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/history-orders/time/{startTime}/{endTime}": {
+      "get": {
+        "summary": "Returns history orders by time range for a trading account",
+        "description": "Returns history orders by time range for a trading account. Requires access to metaapi-api:rest:public:trade-history:getHistoryOrdersByTimeRange method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:trade-history:getHistoryOrdersByTimeRange",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "description": "start of time range, inclusive, in ISO format",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "endTime",
+            "description": "end of time range, exclusive",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "limit",
+            "description": "pagination limit",
+            "in": "query",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000
+          },
+          {
+            "name": "offset",
+            "description": "pagination offset",
+            "in": "query",
+            "type": "integer",
+            "minimum": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "History orders with requested time range for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderOrder"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:trade-history:getHistoryOrdersByTimeRange method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/history-deals/ticket/{ticket}": {
+      "get": {
+        "summary": "Returns history deals by ticket for a trading account",
+        "description": "Returns history deals by ticket for a trading account. Requires access to metaapi-api:rest:public:trade-history:getDealsByTicket method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:trade-history:getDealsByTicket",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ticket",
+            "description": "ticket number (deal id for MT5 or order id for MT4)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "History deals with requested ticket number for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderDeal"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:trade-history:getDealsByTicket method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/history-deals/position/{positionId}": {
+      "get": {
+        "summary": "Returns history deals by position id for a trading account",
+        "description": "Returns history deals by position id for a trading account. Requires access to metaapi-api:rest:public:trade-history:getDealsByPosition method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:trade-history:getDealsByPosition",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "positionId",
+            "description": "position id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "History deals with requested position id for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderDeal"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:trade-history:getDealsByPosition method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/history-deals/time/{startTime}/{endTime}": {
+      "get": {
+        "summary": "Returns history deals by time range for a trading account",
+        "description": "Returns history deals by time range for a trading account. Requires access to metaapi-api:rest:public:trade-history:getDealsByTimeRange method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:trade-history:getDealsByTimeRange",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "description": "start of time range, inclusive, in ISO format",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "endTime",
+            "description": "end of time range, exclusive",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "limit",
+            "description": "pagination limit",
+            "in": "query",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000
+          },
+          {
+            "name": "offset",
+            "description": "pagination offset",
+            "in": "query",
+            "type": "integer",
+            "minimum": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "History deals with requested time range for a specified MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderDeal"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:trade-history:getDealsByTimeRange method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/trade": {
+      "post": {
+        "summary": "Execute a trade on a trading account",
+        "description": "Execute a trade on a trading account. Requires access to metaapi-api:rest:public:trade:trade method which is included into writer role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:trade:trade",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "trade",
+            "description": "MetaTrader trade command",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MetatraderTrade"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trade executed successfully for a specified MetaTrader account",
+            "schema": {
+              "$ref": "#/definitions/MetatraderTradeResponse"
+            }
+          },
+          "400": {
+            "description": "Payload is not valid",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:trade:trade method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/symbols": {
+      "get": {
+        "summary": "Returns all symbols available on a trading account",
+        "description": "Returns all symbols available on a trading account. Requires access to metaapi-api:rest:public:terminal-state:getSymbols method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:terminal-state:getSymbols",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Symbols returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:terminal-state:getSymbols method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/symbols/{symbol}/specification": {
+      "get": {
+        "summary": "Returns symbol specification for a symbol on a trading account",
+        "description": "Returns symbol specification for a symbol on a trading account. Requires access to metaapi-api:rest:public:terminal-state:getSymbolSpecification method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:terminal-state:getSymbolSpecification",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "description": "symbol (e.g. currency pair or an index)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Symbol specification returned successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderSymbolSpecification"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:terminal-state:getSymbolSpecification method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet or symbol is not defined for this broker",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/symbols/{symbol}/current-price": {
+      "get": {
+        "summary": "Returns current price for a symbol on a trading account",
+        "description": "Returns current price for a symbol on a trading account. Requires access to metaapi-api:rest:public:real-time-market-data:getSymbolPrice method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:real-time-market-data:getSymbolPrice",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "description": "symbol (e.g. currency pair or an index)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keepSubscription",
+            "description": "if set to true, the account will get a long-term subscription to symbol market data. Long-term subscription means that on subsequent calls you will get updated value faster.If set to false or not set, the subscription will be set to expire in 12 minutes.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current price returned successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderSymbolPrice"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:real-time-market-data:getSymbolPrice method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet or symbol is not defined for this broker",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/symbols/{symbol}/current-candles/{timeframe}": {
+      "get": {
+        "summary": "Returns current candle for a symbol and timeframe on a trading account",
+        "description": "Returns current candle for a symbol and timeframe on a trading account. Requires access to metaapi-api:rest:public:real-time-market-data:getCandle method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:real-time-market-data:getCandle",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "description": "symbol (e.g. currency pair or an index)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "timeframe",
+            "description": "defines the timeframe according to which the candle must be generated. Allowed values for MT5 are 1m, 2m, 3m, 4m, 5m, 6m, 10m, 12m, 15m, 20m, 30m, 1h, 2h, 3h, 4h, 6h, 8h, 12h, 1d, 1w, 1mn. Allowed values for MT4 are 1m, 5m, 15m 30m, 1h, 4h, 1d, 1w, 1mn",
+            "enum": [
+              "1m",
+              "2m",
+              "3m",
+              "4m",
+              "5m",
+              "6m",
+              "10m",
+              "12m",
+              "15m",
+              "20m",
+              "30m",
+              "1h",
+              "2h",
+              "3h",
+              "4h",
+              "6h",
+              "8h",
+              "12h",
+              "1d",
+              "1w",
+              "1mn"
+            ],
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keepSubscription",
+            "description": "if set to true, the account will get a long-term subscription to symbol market data. Long-term subscription means that on subsequent calls you will get updated value faster.If set to false or not set, the subscription will be set to expire in 12 minutes.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current candle returned successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderCandle"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:real-time-market-data:getCandle method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet or symbol is not defined for this broker",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/symbols/{symbol}/current-tick": {
+      "get": {
+        "summary": "Returns current tick for a symbol on a trading account",
+        "description": "Returns current tick for a symbol on a trading account. MT4 G1 accounts do not support this API. Requires access to metaapi-api:rest:public:real-time-market-data:getTick method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:real-time-market-data:getTick",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "description": "symbol (e.g. currency pair or an index)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keepSubscription",
+            "description": "if set to true, the account will get a long-term subscription to symbol market data. Long-term subscription means that on subsequent calls you will get updated value faster.If set to false or not set, the subscription will be set to expire in 12 minutes.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current tick returned successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderTick"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:real-time-market-data:getTick method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet or symbol is not defined for this broker",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/symbols/{symbol}/current-book": {
+      "get": {
+        "summary": "Returns current order book for a symbol on a trading account",
+        "description": "Returns current order book for a symbol on a trading account. MT4 accounts do not support this API. Requires access to metaapi-api:rest:public:real-time-market-data:getBook method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:real-time-market-data:getBook",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "description": "symbol (e.g. currency pair or an index)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keepSubscription",
+            "description": "if set to true, the account will get a long-term subscription to symbol market data. Long-term subscription means that on subsequent calls you will get updated value faster.If set to false or not set, the subscription will be set to expire in 12 minutes.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current order book returned successfully",
+            "schema": {
+              "$ref": "#/definitions/MetatraderBook"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:real-time-market-data:getBook method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet or symbol is not defined for this broker",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/symbols/{symbol}/unsubscribe": {
+      "post": {
+        "summary": "Unsubscribes from a symbol real-time market data on a trading account",
+        "description": "Unsubscribes from a symbol real-time market data on a trading account. Requires access to metaapi-api:rest:public:real-time-market-data:unsubscribeFromMarketData method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:real-time-market-data:unsubscribeFromMarketData",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "description": "symbol (e.g. currency pair or an index)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Unsubscription request processed successfully"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:real-time-market-data:unsubscribeFromMarketData method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet or symbol is not defined for this broker",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/wait-synchronized": {
+      "get": {
+        "summary": "Waits until history orders and history deals will be processed on the server side for a trading account",
+        "description": "Waits until history orders and history deals will be processed on the server side for a trading account. Requires access to metaapi-api:rest:public:default:waitSynchronized method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:default:waitSynchronized",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flag indicating if syncronization has completed",
+            "schema": {
+              "$ref": "#/definitions/SynchronizationStatus"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:default:waitSynchronized method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/active": {
+      "get": {
+        "summary": "Returns a list of ID of active users",
+        "description": "Returns a list of ID of users which have last activity field at least one of their accounts later than specified number of days from now (i.e. last activity > now - specified number of days). Requires lastActivity.read permission. Requires access to metaapi-api:rest:private:default:getActiveUserIds method.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:private:default:getActiveUserIds"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "lastActivityDays",
+            "description": "Number of days from now. Default value is 30",
+            "type": "number",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of ID of active users returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:private:default:getActiveUserIds method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}/last-activity": {
+      "put": {
+        "summary": "Sets last activity date for account. For tests only.",
+        "description": "Sets last activity date for account. Requires account.test permission. For tests only. Requires access to metaapi-api:rest:private:default:setLastActivity method. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:private:default:setLastActivity",
+          "resources": [
+            "account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "lastActivity",
+            "description": "New last activity date",
+            "schema": {
+              "$ref": "#/definitions/LastActivity"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Last activity field was successfully changed"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:private:default:setLastActivity method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account with specified id not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/credits": {
+      "get": {
+        "summary": "Returns CPU credits for user and a trading account",
+        "description": "Returns CPU credits for user and a trading account. Requires access to metaapi-api:rest:public:monitoring:getUserAndAccountCredits method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:monitoring:getUserAndAccountCredits",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Trading account id",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with data about credits for user and account",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfCreditsByPeriod"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:monitoring:getUserAndAccountCredits method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/adm/tasks": {
+      "get": {
+        "summary": "Returns a list of scheduled and recent tasks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response with tasks",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SchedulerTask"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets": {
+      "get": {
+        "summary": "Returns a list of registered UAT data sets",
+        "description": "Returns a list of registered UAT data sets",
+        "x-authorization": {
+          "custom": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result contains UAT data sets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DataSet"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets/{id}/apply": {
+      "post": {
+        "summary": "Applies a registered UAT data set with an id specified",
+        "description": "Applies a registered UAT data set with an id specified",
+        "x-authorization": {
+          "custom": true
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "data set id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "params",
+            "description": "optional data set parameters",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DataSetParams"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "data set successfully applied"
+          },
+          "404": {
+            "description": "data set not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/redis/statistics": {
+      "get": {
+        "summary": "Returns redis traffic statistics",
+        "description": "Returns redis traffic statistics. Requires access to express-microservice:rest:private:default:getRedisStatistics method.",
+        "x-authorization": {
+          "method": "express-microservice:rest:private:default:getRedisStatistics"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token required if authorization is enabled",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Redis traffic statistics",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to express-microservice:rest:private:default:getRedisStatistics method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Executes health checks",
+        "description": "Executes health checks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "health checks passed",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HealthCheckResult"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "MetatraderAccountInformation": {
+      "type": "object",
+      "required": [
+        "platform",
+        "broker",
+        "currency",
+        "server",
+        "balance",
+        "equity",
+        "margin",
+        "freeMargin",
+        "leverage",
+        "tradeAllowed",
+        "marginMode",
+        "name",
+        "login",
+        "credit",
+        "accountCurrencyExchangeRate"
+      ],
+      "properties": {
+        "platform": {
+          "type": "string",
+          "description": "platform id (mt4 or mt5)",
+          "enum": [
+            "mt4",
+            "mt5"
+          ]
+        },
+        "broker": {
+          "type": "string",
+          "description": "broker name"
+        },
+        "currency": {
+          "type": "string",
+          "description": "account base currency"
+        },
+        "server": {
+          "type": "string",
+          "description": "broker server name"
+        },
+        "balance": {
+          "type": "number",
+          "description": "account balance"
+        },
+        "equity": {
+          "type": "number",
+          "description": "account liquidation value"
+        },
+        "margin": {
+          "type": "number",
+          "description": "margin used"
+        },
+        "freeMargin": {
+          "type": "number",
+          "description": "free margin"
+        },
+        "leverage": {
+          "type": "number",
+          "description": "account leverage"
+        },
+        "marginLevel": {
+          "type": "number",
+          "description": "margin level calculated as % of equity/margin"
+        },
+        "tradeAllowed": {
+          "type": "boolean",
+          "description": "flag indicating that trading is allowed"
+        },
+        "investorMode": {
+          "type": "boolean",
+          "description": "flag indicating that investor password was used (supported for g2 only)"
+        },
+        "marginMode": {
+          "type": "string",
+          "enum": [
+            "ACCOUNT_MARGIN_MODE_EXCHANGE",
+            "ACCOUNT_MARGIN_MODE_RETAIL_NETTING",
+            "ACCOUNT_MARGIN_MODE_RETAIL_HEDGING"
+          ],
+          "description": "margin calculation mode"
+        },
+        "name": {
+          "type": "string",
+          "description": "Account owner name"
+        },
+        "login": {
+          "type": "number",
+          "description": "Account login"
+        },
+        "credit": {
+          "type": "number",
+          "description": "Account credit in the deposit currency"
+        },
+        "accountCurrencyExchangeRate": {
+          "type": "number",
+          "description": "current exchange rate of account currency into USD"
+        }
+      }
+    },
+    "MetatraderPosition": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "symbol",
+        "magic",
+        "time",
+        "brokerTime",
+        "updateTime",
+        "openPrice",
+        "currentPrice",
+        "volume",
+        "swap",
+        "profit",
+        "currentTickValue",
+        "commission",
+        "reason",
+        "unrealizedProfit",
+        "realizedProfit",
+        "unrealizedSwap",
+        "realizedSwap",
+        "unrealizedCommission",
+        "realizedCommission"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "position id (ticket)"
+        },
+        "type": {
+          "type": "string",
+          "description": "position type",
+          "enum": [
+            "POSITION_TYPE_BUY",
+            "POSITION_TYPE_SELL"
+          ]
+        },
+        "symbol": {
+          "type": "string",
+          "description": "position symbol"
+        },
+        "magic": {
+          "type": "number",
+          "format": "integer",
+          "description": "position magic number, identifies the EA which opened the position"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "time position was opened at, in ISO format"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "time position was opened at, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "updateTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "last position modification time, in ISO format"
+        },
+        "openPrice": {
+          "type": "number",
+          "description": "position open price"
+        },
+        "currentPrice": {
+          "type": "number",
+          "description": "current price"
+        },
+        "currentTickValue": {
+          "type": "number",
+          "description": "current tick value"
+        },
+        "stopLoss": {
+          "type": "number",
+          "description": "optional position stop loss price"
+        },
+        "takeProfit": {
+          "type": "number",
+          "description": "optional position take profit price"
+        },
+        "trailingStopLoss": {
+          "$ref": "#/definitions/TrailingStopLoss",
+          "description": "distance trailing stop loss configuration"
+        },
+        "volume": {
+          "type": "number",
+          "description": "position volume"
+        },
+        "swap": {
+          "type": "number",
+          "description": "position cumulative swap, including both swap from currently open position part (unrealized swap) and swap from partially closed position part (realized swap)"
+        },
+        "unrealizedSwap": {
+          "type": "number",
+          "description": "swap resulting from currently open position part"
+        },
+        "realizedSwap": {
+          "type": "number",
+          "description": "swap from partially closed position part"
+        },
+        "profit": {
+          "type": "number",
+          "description": "position cumulative profit, including unrealized profit resulting from currently open position part (except swap and commissions) and realized profit resulting from partially closed position part and including swap and commissions"
+        },
+        "unrealizedProfit": {
+          "type": "number",
+          "description": "profit of the part of the position which is not yet closed, excluding swap and commissions"
+        },
+        "realizedProfit": {
+          "type": "number",
+          "description": "profit of the already closed part, including commissions and swap (realized and unrealized)"
+        },
+        "commission": {
+          "type": "number",
+          "description": "total position commissions, resulting both from currently open and closed position parts"
+        },
+        "realizedCommission": {
+          "type": "number",
+          "description": "position realized commission, resulting from partially closed position part"
+        },
+        "unrealizedCommission": {
+          "type": "number",
+          "description": "position unrealized commission, resulting from currently open position part"
+        },
+        "comment": {
+          "type": "string",
+          "description": "optional position comment"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "optional client-assigned position id. For more information see https://metaapi.cloud/docs/client/clientIdUsage/"
+        },
+        "reason": {
+          "type": "string",
+          "description": "position opening reason. See https://www.mql5.com/en/docs/constants/tradingconstants/positionproperties#enum_position_reason",
+          "enum": [
+            "POSITION_REASON_CLIENT",
+            "POSITION_REASON_EXPERT",
+            "POSITION_REASON_MOBILE",
+            "POSITION_REASON_WEB",
+            "POSITION_REASON_UNKNOWN"
+          ]
+        },
+        "accountCurrencyExchangeRate": {
+          "type": "number",
+          "description": "current exchange rate of account currency into USD"
+        },
+        "brokerComment": {
+          "type": "string",
+          "description": "optional, current comment value on broker side (possibly overriden by the broker)"
+        }
+      }
+    },
+    "MetatraderOrder": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "state",
+        "magic",
+        "time",
+        "brokerTime",
+        "symbol",
+        "openPrice",
+        "volume",
+        "currentVolume",
+        "positionId",
+        "platform",
+        "reason",
+        "fillingMode",
+        "expirationType"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "order id (ticket)"
+        },
+        "type": {
+          "type": "string",
+          "description": "order type",
+          "enum": [
+            "ORDER_TYPE_SELL",
+            "ORDER_TYPE_BUY",
+            "ORDER_TYPE_BUY_LIMIT",
+            "ORDER_TYPE_SELL_LIMIT",
+            "ORDER_TYPE_BUY_STOP",
+            "ORDER_TYPE_SELL_STOP"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "description": "order state",
+          "enum": [
+            "ORDER_STATE_STARTED",
+            "ORDER_STATE_PLACED",
+            "ORDER_STATE_CANCELED",
+            "ORDER_STATE_PARTIAL",
+            "ORDER_STATE_FILLED",
+            "ORDER_STATE_REJECTED",
+            "ORDER_STATE_EXPIRED",
+            "ORDER_STATE_REQUEST_ADD",
+            "ORDER_STATE_REQUEST_MODIFY",
+            "ORDER_STATE_REQUEST_CANCEL"
+          ]
+        },
+        "magic": {
+          "type": "number",
+          "format": "integer",
+          "description": "order magic number, identifies the EA which created the order"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "time order was created at, in ISO format"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "time order was created at, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "doneTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "optional time order was executed or canceled at, in ISO format. Will be specified for completed orders only"
+        },
+        "doneBrokerTime": {
+          "type": "string",
+          "description": "optional time order was executed or canceled at, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format. Will be specified for completed orders only"
+        },
+        "symbol": {
+          "type": "string",
+          "description": "order symbol"
+        },
+        "openPrice": {
+          "type": "number",
+          "description": "order open price (market price for market orders, limit price for limit orders or stop price for stop orders)"
+        },
+        "stopLimitPrice": {
+          "type": "number",
+          "description": "the Limit order price for the StopLimit order"
+        },
+        "currentPrice": {
+          "type": "number",
+          "description": "current price. Filled for pending orders only. Not filled for history orders."
+        },
+        "stopLoss": {
+          "type": "number",
+          "description": "optional order stop loss price"
+        },
+        "takeProfit": {
+          "type": "number",
+          "description": "optional order take profit price"
+        },
+        "trailingStopLoss": {
+          "$ref": "#/definitions/TrailingStopLoss",
+          "description": "distance trailing stop loss configuration"
+        },
+        "volume": {
+          "type": "number",
+          "description": "order requested quantity"
+        },
+        "currentVolume": {
+          "type": "number",
+          "description": "order remaining quantity, i.e. requested quantity - filled quantity"
+        },
+        "positionId": {
+          "type": "string",
+          "description": "order position id. Present only if the order has a position attached to it"
+        },
+        "comment": {
+          "type": "string",
+          "description": "optional order comment"
+        },
+        "brokerComment": {
+          "type": "string",
+          "description": "optional, current comment value on broker side (possibly overriden by the broker)"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "optional client-assigned order id. For more information see https://metaapi.cloud/docs/client/clientIdUsage/"
+        },
+        "platform": {
+          "type": "string",
+          "description": "platform id (mt4 or mt5)",
+          "enum": [
+            "mt4",
+            "mt5"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "description": "order opening reason. See https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_reason",
+          "enum": [
+            "ORDER_REASON_CLIENT",
+            "ORDER_REASON_MOBILE",
+            "ORDER_REASON_WEB",
+            "ORDER_REASON_EXPERT",
+            "ORDER_REASON_SL",
+            "ORDER_REASON_TP",
+            "ORDER_REASON_SO",
+            "ORDER_REASON_UNKNOWN"
+          ]
+        },
+        "fillingMode": {
+          "type": "string",
+          "description": "order filling mode. See https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type_filling",
+          "enum": [
+            "ORDER_FILLING_FOK",
+            "ORDER_FILLING_IOC",
+            "ORDER_FILLING_RETURN"
+          ]
+        },
+        "expirationType": {
+          "type": "string",
+          "description": "order expiration type. See https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type_time",
+          "enum": [
+            "ORDER_TIME_GTC",
+            "ORDER_TIME_DAY",
+            "ORDER_TIME_SPECIFIED",
+            "ORDER_TIME_SPECIFIED_DAY"
+          ]
+        },
+        "expirationTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "optional order expiration time"
+        },
+        "accountCurrencyExchangeRate": {
+          "type": "number",
+          "description": "current exchange rate of account currency into USD"
+        },
+        "closeByPositionId": {
+          "type": "string",
+          "description": "identifier of an opposite position used for closing by order ORDER_TYPE_CLOSE_BY"
+        }
+      }
+    },
+    "MetatraderDeal": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "time",
+        "brokerTime",
+        "profit",
+        "platform"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "history deal id (ticket)"
+        },
+        "type": {
+          "type": "string",
+          "description": "deal type",
+          "enum": [
+            "DEAL_TYPE_BUY",
+            "DEAL_TYPE_SELL",
+            "DEAL_TYPE_BALANCE",
+            "DEAL_TYPE_CREDIT",
+            "DEAL_TYPE_CHARGE",
+            "DEAL_TYPE_CORRECTION",
+            "DEAL_TYPE_BONUS",
+            "DEAL_TYPE_COMMISSION",
+            "DEAL_TYPE_COMMISSION_DAILY",
+            "DEAL_TYPE_COMMISSION_MONTHLY",
+            "DEAL_TYPE_COMMISSION_AGENT_DAILY",
+            "DEAL_TYPE_COMMISSION_AGENT_MONTHLY",
+            "DEAL_TYPE_INTEREST",
+            "DEAL_TYPE_BUY_CANCELED",
+            "DEAL_TYPE_SELL_CANCELED",
+            "DEAL_DIVIDEND",
+            "DEAL_DIVIDEND_FRANKED",
+            "DEAL_TAX"
+          ]
+        },
+        "entryType": {
+          "type": "string",
+          "description": "deal entry type",
+          "enum": [
+            "DEAL_ENTRY_IN",
+            "DEAL_ENTRY_OUT",
+            "DEAL_ENTRY_INOUT",
+            "DEAL_ENTRY_OUT_BY"
+          ]
+        },
+        "symbol": {
+          "type": "string",
+          "description": "optional symbol deal relates to"
+        },
+        "magic": {
+          "type": "number",
+          "format": "integer",
+          "description": "optional deal magic number, identifies the EA which initiated the deal"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "time the deal was conducted at, in ISO format"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "time the deal was conducted at, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "volume": {
+          "type": "number",
+          "description": "optional deal quantity"
+        },
+        "price": {
+          "type": "number",
+          "description": "optional, the price the deal was conducted at"
+        },
+        "commission": {
+          "type": "number",
+          "description": "optional deal commission"
+        },
+        "swap": {
+          "type": "number",
+          "description": "optional deal swap"
+        },
+        "profit": {
+          "type": "number",
+          "description": "deal profit"
+        },
+        "positionId": {
+          "type": "string",
+          "description": "optional id of position the deal relates to"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "optional id of order the deal relates to"
+        },
+        "comment": {
+          "type": "string",
+          "description": "optional deal comment"
+        },
+        "brokerComment": {
+          "type": "string",
+          "description": "optional, current deal comment value on broker side (possibly overriden by the broker)"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "optional client-assigned deal id. For more information see https://metaapi.cloud/docs/client/clientIdUsage/"
+        },
+        "platform": {
+          "type": "string",
+          "description": "platform id (mt4 or mt5)",
+          "enum": [
+            "mt4",
+            "mt5"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "description": "optional deal execution reason. See https://www.mql5.com/en/docs/constants/tradingconstants/dealproperties#enum_deal_reason",
+          "enum": [
+            "DEAL_REASON_CLIENT",
+            "DEAL_REASON_MOBILE",
+            "DEAL_REASON_WEB",
+            "DEAL_REASON_EXPERT",
+            "DEAL_REASON_SL",
+            "DEAL_REASON_TP",
+            "DEAL_REASON_SO",
+            "DEAL_REASON_ROLLOVER",
+            "DEAL_REASON_VMARGIN",
+            "DEAL_REASON_SPLIT",
+            "DEAL_REASON_UNKNOWN"
+          ]
+        },
+        "accountCurrencyExchangeRate": {
+          "type": "number",
+          "description": "current exchange rate of account currency into USD"
+        },
+        "stopLoss": {
+          "type": "number",
+          "description": "deal stop loss. For MT5 opening deal this is the SL of the order opening the position. For MT4 deals or MT5 closing deal this is the last known position SL."
+        },
+        "takeProfit": {
+          "type": "number",
+          "description": "deal take profit. For MT5 opening deal this is the TP of the order opening the position. For MT4 deals or MT5 closing deal this is the last known position TP."
+        }
+      }
+    },
+    "MetatraderTrade": {
+      "type": "object",
+      "required": [
+        "actionType"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "optional symbol to trade"
+        },
+        "actionType": {
+          "type": "string",
+          "description": "trade type",
+          "enum": [
+            "ORDER_TYPE_SELL",
+            "ORDER_TYPE_BUY",
+            "ORDER_TYPE_BUY_LIMIT",
+            "ORDER_TYPE_SELL_LIMIT",
+            "ORDER_TYPE_BUY_STOP",
+            "ORDER_TYPE_SELL_STOP",
+            "POSITION_MODIFY",
+            "POSITION_PARTIAL",
+            "POSITION_CLOSE_ID",
+            "POSITIONS_CLOSE_SYMBOL",
+            "ORDER_MODIFY",
+            "ORDER_CANCEL",
+            "POSITION_CLOSE_BY",
+            "ORDER_TYPE_BUY_STOP_LIMIT",
+            "ORDER_TYPE_SELL_STOP_LIMIT"
+          ]
+        },
+        "volume": {
+          "type": "number",
+          "description": "optional order volume"
+        },
+        "openPrice": {
+          "type": "number",
+          "description": "optional order limit or stop price"
+        },
+        "stopLimitPrice": {
+          "type": "number",
+          "description": "optional price at which the StopLimit order will be placed. Required for stop limit orders"
+        },
+        "stopLoss": {
+          "type": "number",
+          "description": "optional stop loss price"
+        },
+        "takeProfit": {
+          "type": "number",
+          "description": "optional take profit price"
+        },
+        "stopLossUnits": {
+          "type": "string",
+          "enum": [
+            "ABSOLUTE_PRICE",
+            "RELATIVE_PRICE",
+            "RELATIVE_POINTS",
+            "RELATIVE_PIPS",
+            "RELATIVE_CURRENCY",
+            "RELATIVE_BALANCE_PERCENTAGE"
+          ],
+          "description": "stop loss units. ABSOLUTE_PRICE means the that the value of stopLoss field is a final stop loss value. RELATIVE_* means that the stopLoss field value contains relative stop loss expressed either in price, points, pips, account currency or balance percentage. Default is ABSOLUTE_PRICE"
+        },
+        "takeProfitUnits": {
+          "type": "string",
+          "enum": [
+            "ABSOLUTE_PRICE",
+            "RELATIVE_PRICE",
+            "RELATIVE_POINTS",
+            "RELATIVE_PIPS",
+            "RELATIVE_CURRENCY",
+            "RELATIVE_BALANCE_PERCENTAGE"
+          ],
+          "description": "take profit units. ABSOLUTE_PRICE means the that the value of takeProfit field is a final take profit value. RELATIVE_* means that the takeProfit field value contains relative take profit expressed either in price, points, pips, account currency or balance percentage. Default is ABSOLUTE_PRICE"
+        },
+        "stopPriceBase": {
+          "type": "string",
+          "enum": [
+            "CURRENT_PRICE",
+            "OPEN_PRICE",
+            "STOP_PRICE"
+          ],
+          "description": "defined the base price to calculate SL/TP relative to for *_MODIFY and pending order requests. STOP_PRICE means the SL/TP is relative to previous SL/TP value. Default is OPEN_PRICE."
+        },
+        "openPriceUnits": {
+          "type": "string",
+          "enum": [
+            "ABSOLUTE_PRICE",
+            "RELATIVE_PRICE",
+            "RELATIVE_POINTS",
+            "RELATIVE_PIPS",
+            "RELATIVE_CURRENCY",
+            "RELATIVE_BALANCE_PERCENTAGE"
+          ],
+          "description": "open price units. ABSOLUTE_PRICE means the that the value of openPrice field is a final open price value. RELATIVE_* means that the openPrice field value contains relative open price expressed either in price, points, pips, account currency or balance percentage. Default is ABSOLUTE_PRICE"
+        },
+        "openPriceBase": {
+          "type": "string",
+          "enum": [
+            "CURRENT_PRICE",
+            "OPEN_PRICE",
+            "STOP_LIMIT_PRICE"
+          ],
+          "description": "defined the base price to calculate open price relative to for ORDER_MODIFY and pending order requests. Default is CURRENT_PRICE for pending orders or STOP_LIMIT_PRICE for stop limit orders."
+        },
+        "stopLimitPriceUnits": {
+          "type": "string",
+          "enum": [
+            "ABSOLUTE_PRICE",
+            "RELATIVE_PRICE",
+            "RELATIVE_POINTS",
+            "RELATIVE_PIPS",
+            "RELATIVE_CURRENCY",
+            "RELATIVE_BALANCE_PERCENTAGE"
+          ],
+          "description": "stop limit price units. ABSOLUTE_PRICE means the that the value of stopLimitPrice field is a final stop limit price value. RELATIVE_* means that the stopLimitPrice field value contains relative stop limit price expressed either in price, points, pips, account currency or balance percentage. Default is ABSOLUTE_PRICE"
+        },
+        "stopLimitPriceBase": {
+          "type": "string",
+          "enum": [
+            "CURRENT_PRICE",
+            "STOP_LIMIT_PRICE"
+          ],
+          "description": "defined the base price to calculate stop limit price relative to for ORDER_MODIFY requests."
+        },
+        "trailingStopLoss": {
+          "$ref": "#/definitions/TrailingStopLoss",
+          "description": "distance trailing stop loss configuration"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "optional order id, must be specified for order modification commands"
+        },
+        "positionId": {
+          "type": "string",
+          "description": "optional position id, must be specified for position modification commands"
+        },
+        "closeByPositionId": {
+          "type": "string",
+          "description": "identifier of an opposite position used for closing by order, required in case actionType is POSITION_CLOSE_BY"
+        },
+        "comment": {
+          "type": "string",
+          "description": "optional comment"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "optional client-assigned order id. For more information see https://metaapi.cloud/docs/client/clientIdUsage/"
+        },
+        "magic": {
+          "type": "number",
+          "format": "integer",
+          "description": "magic value (expert adviser id)"
+        },
+        "slippage": {
+          "type": "number",
+          "format": "integer",
+          "description": "slippage in points. Should be greater or equal to zero. In not set, default value specified in account entity will be used. Slippage is ignored on position modification, order modification and order cancellation calls. Slippage is also ignored if execution mode set in symbol specification is SYMBOL_TRADE_EXECUTION_MARKET"
+        },
+        "fillingModes": {
+          "description": "allowed filling modes in the order of priority. Default is to allow all filling modes and prefer ORDER_FILLING_FOK over ORDER_FILLING_IOC. See https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type_filling for extra explanation",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ORDER_FILLING_FOK",
+              "ORDER_FILLING_IOC"
+            ]
+          }
+        },
+        "expiration": {
+          "description": "pending order expiration settings",
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "description": "pending order expiration type. See https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type_time for the list of possible options. MetaTrader4 platform supports only ORDER_TIME_SPECIFIED expiration type",
+              "type": "string",
+              "enum": [
+                "ORDER_TIME_GTC",
+                "ORDER_TIME_DAY",
+                "ORDER_TIME_SPECIFIED",
+                "ORDER_TIME_SPECIFIED_DAY"
+              ]
+            },
+            "time": {
+              "description": "pending order expiration time. Ignored if expiration type is not one of ORDER_TIME_DAY or ORDER_TIME_SPECIFIED",
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      }
+    },
+    "TrailingStopLoss": {
+      "type": "object",
+      "description": "trailing stop loss configuration",
+      "properties": {
+        "distance": {
+          "$ref": "#/definitions/DistanceTrailingStopLoss",
+          "description": "distance trailing stop loss configuration. If both distance and threshold TSL are set, then the resulting SL will be the one which is closest to the current price"
+        },
+        "threshold": {
+          "$ref": "#/definitions/ThresholdTrailingStopLoss",
+          "description": "threshold trailing stop loss configuration. If both distance and threshold TSL are set, then the resulting SL will be the one which is closest to the current price"
+        }
+      }
+    },
+    "DistanceTrailingStopLoss": {
+      "type": "object",
+      "description": "distance trailing stop loss configuration",
+      "required": [
+        "distance"
+      ],
+      "properties": {
+        "distance": {
+          "type": "number",
+          "description": "SL distance relative to current price, interpreted according to units field value"
+        },
+        "units": {
+          "type": "string",
+          "enum": [
+            "RELATIVE_PRICE",
+            "RELATIVE_POINTS",
+            "RELATIVE_PIPS",
+            "RELATIVE_CURRENCY",
+            "RELATIVE_BALANCE_PERCENTAGE"
+          ],
+          "description": "distance trailing stop loss units. RELATIVE_* means that the distance field value contains relative stop loss expressed either in price, points, pips, account currency or balance percentage. Default is RELATIVE_PRICE"
+        }
+      }
+    },
+    "ThresholdTrailingStopLoss": {
+      "type": "object",
+      "description": "threshold trailing stop loss configuration",
+      "required": [
+        "thresholds"
+      ],
+      "properties": {
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StopLossThreshold"
+          },
+          "description": "stop loss thresholds"
+        },
+        "units": {
+          "type": "string",
+          "enum": [
+            "ABSOLUTE_PRICE",
+            "RELATIVE_PRICE",
+            "RELATIVE_POINTS",
+            "RELATIVE_PIPS",
+            "RELATIVE_CURRENCY",
+            "RELATIVE_BALANCE_PERCENTAGE"
+          ],
+          "description": "threshold stop loss units. ABSOLUTE_PRICE means the that the value of stop loss threshold fields contain a final threshold & stop loss value. RELATIVE_* means that the threshold fields value contains relative threshold & stop loss values, expressed either in price, points, pips, account currency or balance percentage. Default is ABSOLUTE_PRICE"
+        },
+        "stopPriceBase": {
+          "type": "string",
+          "enum": [
+            "CURRENT_PRICE",
+            "OPEN_PRICE"
+          ],
+          "description": "defined the base price to calculate SL relative to for POSITION_MODIFY requests. Default is OPEN_PRICE."
+        }
+      }
+    },
+    "StopLossThreshold": {
+      "type": "object",
+      "description": "configuration of a single threshold stop loss",
+      "required": [
+        "threshold",
+        "stopLoss"
+      ],
+      "properties": {
+        "threshold": {
+          "type": "number",
+          "description": "price threshold relative to position open price, interpreted according to units field value"
+        },
+        "stopLoss": {
+          "type": "number",
+          "description": "stop loss value, interpreted according to units and basePrice field values"
+        }
+      }
+    },
+    "MetatraderTradeResponse": {
+      "type": "object",
+      "required": [
+        "numericCode",
+        "stringCode",
+        "message"
+      ],
+      "properties": {
+        "numericCode": {
+          "type": "number",
+          "description": "numeric response code, see https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes and https://book.mql4.com/appendix/errors. Response codes which indicate success are 0, 10008-10010, 10025. The rest codes are errors."
+        },
+        "stringCode": {
+          "type": "string",
+          "description": "string response code, see https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes and https://book.mql4.com/appendix/errors. Response codes which indicate success are ERR_NO_ERROR, TRADE_RETCODE_PLACED, TRADE_RETCODE_DONE, TRADE_RETCODE_DONE_PARTIAL, TRADE_RETCODE_NO_CHANGES. The rest codes are errors."
+        },
+        "message": {
+          "type": "string",
+          "description": "human-readable error message"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "optional, id of the order created or modified by the trade"
+        },
+        "positionId": {
+          "type": "string",
+          "description": "optional, id of the position created or modified by the trade"
+        }
+      }
+    },
+    "MetatraderSymbolSpecification": {
+      "type": "object",
+      "required": [
+        "symbol",
+        "tickSize",
+        "minVolume",
+        "maxVolume",
+        "volumeStep",
+        "fillingModes",
+        "executionMode",
+        "contractSize",
+        "quoteSessions",
+        "tradeSessions",
+        "initialMargin",
+        "maintenanceMargin",
+        "hedgedMargin",
+        "priceCalculationMode",
+        "marginCurrency",
+        "baseCurrency",
+        "swapMode",
+        "allowedExpirationModes",
+        "allowedOrderTypes",
+        "digits",
+        "point",
+        "description",
+        "stopsLevel",
+        "freezeLevel"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "symbol (e.g. currency pair or an index)"
+        },
+        "tickSize": {
+          "type": "number",
+          "description": "tick size"
+        },
+        "minVolume": {
+          "type": "number",
+          "description": "minimum order volume for the symbol"
+        },
+        "maxVolume": {
+          "type": "number",
+          "description": "maximum order volume for the symbol"
+        },
+        "volumeStep": {
+          "type": "number",
+          "description": "order volume step for the symbol"
+        },
+        "fillingModes": {
+          "type": "array",
+          "description": "list of allowed order filling modes. See https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type_filling for extra explanation.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ORDER_FILLING_FOK",
+              "ORDER_FILLING_IOC"
+            ]
+          }
+        },
+        "executionMode": {
+          "type": "string",
+          "description": "deal execution mode",
+          "enum": [
+            "SYMBOL_TRADE_EXECUTION_REQUEST",
+            "SYMBOL_TRADE_EXECUTION_INSTANT",
+            "SYMBOL_TRADE_EXECUTION_MARKET",
+            "SYMBOL_TRADE_EXECUTION_EXCHANGE"
+          ]
+        },
+        "contractSize": {
+          "type": "number",
+          "description": "trade contract size"
+        },
+        "quoteSessions": {
+          "$ref": "#/definitions/MetatraderSessions",
+          "description": "quote sessions, indexed by day of week"
+        },
+        "tradeSessions": {
+          "$ref": "#/definitions/MetatraderSessions",
+          "description": "trade sessions, indexed by day of week"
+        },
+        "tradeMode": {
+          "type": "string",
+          "description": "order execution type. See https://www.mql5.com/en/docs/constants/environment_state/marketinfoconstants#enum_symbol_trade_mode",
+          "enum": [
+            "SYMBOL_TRADE_MODE_DISABLED",
+            "SYMBOL_TRADE_MODE_LONGONLY",
+            "SYMBOL_TRADE_MODE_SHORTONLY",
+            "SYMBOL_TRADE_MODE_CLOSEONLY",
+            "SYMBOL_TRADE_MODE_FULL"
+          ]
+        },
+        "bondAccruedInterest": {
+          "type": "number",
+          "description": "accrued interest – accumulated coupon interest, i.e. part of the coupon interest calculated in proportion to the number of days since the coupon bond issuance or the last coupon interest payment"
+        },
+        "bondFaceValue": {
+          "type": "number",
+          "description": "face value – initial bond value set by the issuer"
+        },
+        "optionStrike": {
+          "type": "number",
+          "description": "the strike price of an option. The price at which an option buyer can buy (in a Call option) or sell (in a Put option) the underlying asset, and the option seller is obliged to sell or buy the appropriate amount of the underlying asset."
+        },
+        "optionPriceSensivity": {
+          "type": "number",
+          "description": "option/warrant sensitivity shows by how many points the price of the option's underlying asset should change so that the price of the option changes by one point"
+        },
+        "liquidityRate": {
+          "type": "number",
+          "description": "liquidity Rate is the share of the asset that can be used for the margin"
+        },
+        "initialMargin": {
+          "type": "number",
+          "description": "initial margin means the amount in the margin currency required for opening a position with the volume of one lot. It is used for checking a client's assets when he or she enters the market"
+        },
+        "maintenanceMargin": {
+          "type": "number",
+          "description": "the maintenance margin. If it is set, it sets the margin amount in the margin currency of the symbol, charged from one lot. It is used for checking a client's assets when his/her account state changes. If the maintenance margin is equal to 0, the initial margin is used"
+        },
+        "hedgedMargin": {
+          "type": "number",
+          "description": "contract size or margin value per one lot of hedged positions (oppositely directed positions of one symbol). Two margin calculation methods are possible for hedged positions. The calculation method is defined by the broker"
+        },
+        "hedgedMarginUsesLargerLeg": {
+          "type": "boolean",
+          "description": "calculating hedging margin using the larger leg (Buy or Sell)"
+        },
+        "priceCalculationMode": {
+          "type": "string",
+          "description": "contract price calculation mode (see https://www.mql5.com/en/docs/constants/environment_state/marketinfoconstants#enum_symbol_calc_mode)",
+          "enum": [
+            "SYMBOL_CALC_MODE_UNKNOWN",
+            "SYMBOL_CALC_MODE_FOREX",
+            "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE",
+            "SYMBOL_CALC_MODE_FUTURES",
+            "SYMBOL_CALC_MODE_CFD",
+            "SYMBOL_CALC_MODE_CFDINDEX",
+            "SYMBOL_CALC_MODE_CFDLEVERAGE",
+            "SYMBOL_CALC_MODE_EXCH_STOCKS",
+            "SYMBOL_CALC_MODE_EXCH_FUTURES",
+            "SYMBOL_CALC_MODE_EXCH_FUTURES_FORTS",
+            "SYMBOL_CALC_MODE_EXCH_BONDS",
+            "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX",
+            "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX",
+            "SYMBOL_CALC_MODE_SERV_COLLATERAL"
+          ]
+        },
+        "marginCurrency": {
+          "type": "string",
+          "description": "margin currency"
+        },
+        "baseCurrency": {
+          "type": "string",
+          "description": "base currency"
+        },
+        "profitCurrency": {
+          "type": "string",
+          "description": "profit currency"
+        },
+        "swapMode": {
+          "type": "string",
+          "description": "swap calculation model. See https://www.mql5.com/en/docs/constants/environment_state/marketinfoconstants#enum_symbol_swap_mode",
+          "enum": [
+            "SYMBOL_SWAP_MODE_DISABLED",
+            "SYMBOL_SWAP_MODE_POINTS",
+            "SYMBOL_SWAP_MODE_CURRENCY_SYMBOL",
+            "SYMBOL_SWAP_MODE_CURRENCY_MARGIN",
+            "SYMBOL_SWAP_MODE_CURRENCY_DEPOSIT",
+            "SYMBOL_SWAP_MODE_INTEREST_CURRENT",
+            "SYMBOL_SWAP_MODE_INTEREST_OPEN",
+            "SYMBOL_SWAP_MODE_REOPEN_CURRENT",
+            "SYMBOL_SWAP_MODE_REOPEN_BID"
+          ]
+        },
+        "swapLong": {
+          "type": "number",
+          "description": "long swap value"
+        },
+        "swapShort": {
+          "type": "number",
+          "description": "short swap value"
+        },
+        "swapRollover3Days": {
+          "type": "string",
+          "description": "day of week to charge 3 days swap rollover",
+          "enum": [
+            "SUNDAY",
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURDAY",
+            "FRIDAY",
+            "SATURDAY",
+            "NONE"
+          ]
+        },
+        "allowedExpirationModes": {
+          "description": "allowed order expiration modes. See https://www.mql5.com/en/docs/constants/environment_state/marketinfoconstants#symbol_expiration_mode",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "SYMBOL_EXPIRATION_GTC",
+              "SYMBOL_EXPIRATION_DAY",
+              "SYMBOL_EXPIRATION_SPECIFIED",
+              "SYMBOL_EXPIRATION_SPECIFIED_DAY"
+            ]
+          }
+        },
+        "allowedOrderTypes": {
+          "description": "allowed order types. See https://www.mql5.com/en/docs/constants/environment_state/marketinfoconstants#symbol_order_mode",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "SYMBOL_ORDER_MARKET",
+              "SYMBOL_ORDER_LIMIT",
+              "SYMBOL_ORDER_STOP",
+              "SYMBOL_ORDER_STOP_LIMIT",
+              "SYMBOL_ORDER_SL",
+              "SYMBOL_ORDER_TP",
+              "SYMBOL_ORDER_CLOSEBY"
+            ]
+          }
+        },
+        "orderGTCMode": {
+          "type": "string",
+          "enum": [
+            "SYMBOL_ORDERS_GTC",
+            "SYMBOL_ORDERS_DAILY",
+            "SYMBOL_ORDERS_DAILY_EXCLUDING_STOPS"
+          ],
+          "description": "if the expirationMode property is set to SYMBOL_EXPIRATION_GTC (good till canceled), the expiration of pending orders, as well as of Stop Loss/Take Profit orders should be additionally set using this enumeration. See https://www.mql5.com/en/docs/constants/environment_state/marketinfoconstants#enum_symbol_order_gtc_mode"
+        },
+        "digits": {
+          "type": "number",
+          "description": "digits after a decimal point"
+        },
+        "point": {
+          "type": "number",
+          "description": "point size"
+        },
+        "path": {
+          "type": "string",
+          "description": "path in the symbol tree"
+        },
+        "description": {
+          "type": "string",
+          "description": "symbol description"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "date of the symbol trade beginning (usually used for futures)"
+        },
+        "expirationTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "date of the symbol trade end (usually used for futures)"
+        },
+        "pipSize": {
+          "type": "number",
+          "description": "size of a pip. Pip size is defined for spot and CFD symbols only"
+        },
+        "stopsLevel": {
+          "type": "number",
+          "description": "minimal indention in points from the current close price to place Stop orders"
+        },
+        "freezeLevel": {
+          "type": "number",
+          "description": "distance to freeze trade operations in points"
+        }
+      }
+    },
+    "MetatraderSessions": {
+      "type": "object",
+      "properties": {
+        "SUNDAY": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetatraderSession"
+          },
+          "description": "array of sessions for SUNDAY"
+        },
+        "MONDAY": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetatraderSession"
+          },
+          "description": "array of sessions for MONDAY"
+        },
+        "TUESDAY": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetatraderSession"
+          },
+          "description": "array of sessions for TUESDAY"
+        },
+        "WEDNESDAY": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetatraderSession"
+          },
+          "description": "array of sessions for WEDNESDAY"
+        },
+        "THURSDAY": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetatraderSession"
+          },
+          "description": "array of sessions for THURSDAY"
+        },
+        "FRIDAY": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetatraderSession"
+          },
+          "description": "array of sessions for FRIDAY"
+        },
+        "SATURDAY": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetatraderSession"
+          },
+          "description": "array of sessions for SATURDAY"
+        }
+      }
+    },
+    "MetatraderSession": {
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "session start time, in hh.mm.ss.SSS format"
+        },
+        "to": {
+          "type": "string",
+          "description": "session end time, in hh.mm.ss.SSS format"
+        }
+      }
+    },
+    "MetatraderSymbolPrice": {
+      "type": "object",
+      "required": [
+        "symbol",
+        "bid",
+        "ask",
+        "profitTickValue",
+        "lossTickValue",
+        "time",
+        "brokerTime"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "symbol (e.g. currency pair or an index)"
+        },
+        "bid": {
+          "type": "number",
+          "description": "bid price"
+        },
+        "ask": {
+          "type": "number",
+          "description": "ask price"
+        },
+        "profitTickValue": {
+          "type": "number",
+          "description": "tick value for a profitable position"
+        },
+        "lossTickValue": {
+          "type": "number",
+          "description": "tick value for a loosing position"
+        },
+        "accountCurrencyExchangeRate": {
+          "type": "number",
+          "description": "current exchange rate of account currency into USD"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "quote time, in ISO format"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "quote time, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        }
+      }
+    },
+    "MetatraderCandle": {
+      "type": "object",
+      "required": [
+        "symbol",
+        "timeframe",
+        "time",
+        "brokerTime",
+        "open",
+        "high",
+        "low",
+        "close",
+        "tickVolume",
+        "spread",
+        "volume"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "symbol (e.g. currency pair or an index)"
+        },
+        "timeframe": {
+          "type": "string",
+          "enum": [
+            "1m",
+            "2m",
+            "3m",
+            "4m",
+            "5m",
+            "6m",
+            "10m",
+            "12m",
+            "15m",
+            "20m",
+            "30m",
+            "1h",
+            "2h",
+            "3h",
+            "4h",
+            "6h",
+            "8h",
+            "12h",
+            "1d",
+            "1w",
+            "1mn"
+          ],
+          "description": "timeframe candle was generated for, e.g. 1h"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "candle opening time, in [ISO format](https://en.wikipedia.org/wiki/ISO_8601)"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "candle opening time, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "open": {
+          "type": "number",
+          "description": "open price"
+        },
+        "high": {
+          "type": "number",
+          "description": "high price"
+        },
+        "low": {
+          "type": "number",
+          "description": "low price"
+        },
+        "close": {
+          "type": "number",
+          "description": "close price"
+        },
+        "tickVolume": {
+          "type": "integer",
+          "description": "tick volume, i.e. number of ticks inside the candle"
+        },
+        "spread": {
+          "type": "integer",
+          "description": "spread in points"
+        },
+        "volume": {
+          "type": "integer",
+          "description": "trade volume"
+        }
+      }
+    },
+    "MetatraderTick": {
+      "type": "object",
+      "required": [
+        "symbol",
+        "time",
+        "brokerTime"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "symbol (e.g. currency pair or an index)"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "time, in [ISO format](https://en.wikipedia.org/wiki/ISO_8601)"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "time, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "bid": {
+          "type": "number",
+          "description": "bid price"
+        },
+        "ask": {
+          "type": "number",
+          "description": "ask price"
+        },
+        "last": {
+          "type": "number",
+          "description": "last deal price"
+        },
+        "volume": {
+          "type": "number",
+          "description": "volume for the current last deal price"
+        },
+        "side": {
+          "type": "string",
+          "enum": [
+            "buy",
+            "sell"
+          ],
+          "description": "is tick a result of buy or sell deal"
+        }
+      }
+    },
+    "MetatraderBook": {
+      "type": "object",
+      "required": [
+        "symbol",
+        "book"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "symbol (e.g. currency pair or an index)"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "time, in [ISO format](https://en.wikipedia.org/wiki/ISO_8601)"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "time, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "book": {
+          "description": "list of order book entries",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetatraderBookEntry"
+          }
+        }
+      }
+    },
+    "MetatraderBookEntry": {
+      "type": "object",
+      "required": [
+        "type",
+        "price",
+        "volume"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "BOOK_TYPE_SELL",
+            "BOOK_TYPE_BUY",
+            "BOOK_TYPE_SELL_MARKET",
+            "BOOK_TYPE_BUY_MARKET"
+          ],
+          "description": "entry type"
+        },
+        "price": {
+          "type": "number",
+          "description": "price"
+        },
+        "volume": {
+          "type": "number",
+          "description": "volume"
+        }
+      }
+    },
+    "LastActivity": {
+      "type": "object",
+      "required": [
+        "lastActivity"
+      ],
+      "properties": {
+        "lastActivity": {
+          "description": "New lastActivity field value",
+          "type": "string"
+        }
+      }
+    },
+    "ArrayOfCreditsByPeriod": {
+      "type": "object",
+      "required": [
+        "perUser",
+        "perAccount",
+        "perServer"
+      ],
+      "properties": {
+        "perUser": {
+          "type": "array",
+          "description": "The number of credits used from credits available to all deployed accounts",
+          "items": {
+            "$ref": "#/definitions/CreditsAndPeriod"
+          }
+        },
+        "perAccount": {
+          "type": "array",
+          "description": "The number of credits used from credits available for one account",
+          "items": {
+            "$ref": "#/definitions/CreditsAndPeriod"
+          }
+        },
+        "perServer": {
+          "type": "array",
+          "description": "The number of credits used from credits available on this server",
+          "items": {
+            "$ref": "#/definitions/CreditsAndPeriod"
+          }
+        }
+      }
+    },
+    "CreditsAndPeriod": {
+      "type": "object",
+      "required": [
+        "period",
+        "available",
+        "total"
+      ],
+      "properties": {
+        "period": {
+          "type": "string",
+          "description": "rate limiting period"
+        },
+        "available": {
+          "type": "number",
+          "description": "the number of available credits for the period"
+        },
+        "total": {
+          "type": "number",
+          "description": "total number of credits for the period"
+        }
+      }
+    },
+    "SynchronizationStatus": {
+      "type": "object",
+      "required": [
+        "synchronized"
+      ],
+      "properties": {
+        "synchronized": {
+          "type": "boolean",
+          "description": "flag indicating if synchronization have completed"
+        }
+      }
+    },
+    "HashingIgnoredFieldLists": {
+      "type": "object",
+      "description": "Ignored fields for hash calculation",
+      "required": [
+        "g1",
+        "g2"
+      ],
+      "properties": {
+        "g1": {
+          "description": "Ignored fields for hash calculation for G1 accounts",
+          "$ref": "#/definitions/HashingIgnoredFields"
+        },
+        "g2": {
+          "description": "Ignored fields for hash calculation for G2 accounts",
+          "$ref": "#/definitions/HashingIgnoredFields"
+        }
+      }
+    },
+    "HashingIgnoredFields": {
+      "type": "object",
+      "description": "Ignored fields for SDK hash calculation",
+      "required": [
+        "specification",
+        "position",
+        "order"
+      ],
+      "properties": {
+        "specification": {
+          "description": "Specification fields not included into hash calculation",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "position": {
+          "description": "Position fields not included into hash calculation",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "order": {
+          "description": "Order fields not included into hash calculation",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ServerTime": {
+      "type": "object",
+      "description": "server time for an account",
+      "required": [
+        "time",
+        "brokerTime"
+      ],
+      "properties": {
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "current time, in ISO format"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "current broker time, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "lastQuoteTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "last quote time, in ISO format"
+        },
+        "lastQuoteBrokerTime": {
+          "type": "string",
+          "description": "last quote time, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        }
+      }
+    },
+    "MarginOrder": {
+      "type": "object",
+      "description": "Order to calculate margin for",
+      "required": [
+        "symbol",
+        "type",
+        "volume",
+        "openPrice"
+      ],
+      "properties": {
+        "symbol": {
+          "description": "order symbol",
+          "type": "string"
+        },
+        "type": {
+          "description": "order type",
+          "type": "string",
+          "enum": [
+            "ORDER_TYPE_BUY",
+            "ORDER_TYPE_SELL"
+          ]
+        },
+        "volume": {
+          "description": "order volume, must be greater than 0",
+          "type": "number"
+        },
+        "openPrice": {
+          "description": "order open price, must be greater than 0",
+          "type": "number"
+        }
+      }
+    },
+    "Margin": {
+      "type": "object",
+      "description": "Margin required to open a trade",
+      "properties": {
+        "margin": {
+          "description": "margin required to open a trade. If margin can not be calculated, then this field is not defined",
+          "type": "number"
+        }
+      }
+    },
+    "SchedulerTask": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "$ref": "#/definitions/TaskStatus"
+        }
+      }
+    },
+    "TaskStatus": {
+      "type": "object",
+      "required": [
+        "status",
+        "startedAt",
+        "completedAt",
+        "progress"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "type": "string"
+        },
+        "startedAt": {
+          "description": "Task started date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "description": "Task completed date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "progress": {
+          "description": "Task progress",
+          "type": "object"
+        }
+      }
+    },
+    "DataSet": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "data set id",
+          "type": "string"
+        },
+        "description": {
+          "description": "human-readable description",
+          "type": "string"
+        }
+      }
+    },
+    "DataSetParams": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "HealthCheckResult": {
+      "type": "object",
+      "required": [
+        "id",
+        "output"
+      ],
+      "properties": {
+        "check": {
+          "description": "id of the health check",
+          "type": "string"
+        },
+        "output": {
+          "description": "health check output",
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "id",
+        "error",
+        "message"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "error": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional information about error",
+          "type": "object"
+        },
+        "code": {
+          "description": "Error code, used for i18n",
+          "type": "string"
+        },
+        "arguments": {
+          "description": "Error message arguments, used for i18n",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "TooManyRequestsError": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "message",
+        "metadata"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "period",
+            "requestsPerPeriodAllowed",
+            "recommendedRetryTime"
+          ],
+          "properties": {
+            "periodInMinutes": {
+              "description": "rate limiting period in minutes",
+              "type": "number"
+            },
+            "requestsPerPeriodAllowed": {
+              "description": "allowed number of requests per period",
+              "type": "number"
+            },
+            "recommendedRetryTime": {
+              "description": "recommended time to retry request",
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1797 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "AgiliumTrade MetaApi risk management API",
+    "version": "1.0.0"
+  },
+  "basePath": "/api/mt/management",
+  "paths": {
+    "/users/current/tracker-events/by-broker-time": {
+      "get": {
+        "summary": "Returns tracker events by broker time range",
+        "description": "Returns tracker events by broker time range. Requires access to risk-management-api:rest:public:drawdown-tracking:getTrackerEvents method which is included into reader role. Requires access to account, tracker resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:getTrackerEvents",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "tracker"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "startBrokerTime",
+            "description": "Value of the event time in broker timezone to start loading data from, inclusive, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "endBrokerTime",
+            "description": "Value of the event time in broker timezone to end loading data at, inclusive, in YYYY-MM-DD HH:mm:ss.SSS format",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "accountId",
+            "description": "Id of the MetaApi account",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "trackerId",
+            "description": "Id of the tracker",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tracker events returned",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TrackerEvent"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:getTrackerEvents method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/tracker-events/stream": {
+      "get": {
+        "summary": "Returns tracker events stream",
+        "description": "Returns tracker events stream. If there are no new events yet, the response will not be sent until a timeout expires or new event arrives. It is recommended to invoke this API in an infinite cycle constantly polling for new events to receive events in real time. Requires access to risk-management-api:rest:public:drawdown-tracking:streamTrackerEvents method which is included into reader role. Requires access to account, tracker resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:streamTrackerEvents",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "tracker"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "previousSequenceNumber",
+            "description": "Value of the last consumed sequence number to start streaming from",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 0
+          },
+          {
+            "name": "accountId",
+            "description": "Id of the MetaApi account",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "trackerId",
+            "description": "Id of the tracker",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tracker events returned",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TrackerEvent"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:streamTrackerEvents method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/trackers": {
+      "get": {
+        "summary": "Returns trackers defined for an account",
+        "description": "Returns trackers defined for an account. Requires access to risk-management-api:rest:public:drawdown-tracking:getTrackers method which is included into reader role. Requires access to account, tracker resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:getTrackers",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "tracker"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Id of the MetaApi account",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account tracker definitions returned",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tracker"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:getTrackers method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaApi account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates a profit/drawdown tracker",
+        "description": "Creates a profit/drawdown tracker. Requires access to risk-management-api:rest:public:drawdown-tracking:createTracker method which is included into writer role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:createTracker",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Id of the MetaApi account",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "tracker",
+            "description": "Profit/drawdown tracker to be added",
+            "schema": {
+              "$ref": "#/definitions/NewTracker"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Profit/drawdown tracker created and tracker id returned",
+            "schema": {
+              "$ref": "#/definitions/TrackerId"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:createTracker method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaApi account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/trackers/{id}": {
+      "get": {
+        "summary": "Retrieves profit/drawdown tracker by id",
+        "description": "Retrieves profit/drawdown tracker by id. Requires access to risk-management-api:rest:public:drawdown-tracking:getTrackerById method which is included into reader role. Requires access to account, tracker resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:getTrackerById",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "tracker"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token or account access token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Id of the MetaApi account",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "id",
+            "description": "Id of the tracker",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profit/drawdown tracker retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Tracker"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:getTrackerById method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaApi account not found or the tracker does not belong to the MetaApi account",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates profit/drawdown tracker",
+        "description": "Updates profit/drawdown tracker. Requires access to risk-management-api:rest:public:drawdown-tracking:updateTracker method which is included into writer role. Requires access to account, tracker resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:updateTracker",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "tracker"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Id of the MetaApi account",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "id",
+            "description": "Id of the tracker",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "update",
+            "description": "Tracker update",
+            "schema": {
+              "$ref": "#/definitions/TrackerUpdate"
+            },
+            "in": "body",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Profit/drawdown tracker updated"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:updateTracker method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaApi account not found or the tracker does not belong to the MetaApi account",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Removes profit/drawdown tracker",
+        "description": "Removes profit/drawdown tracker. Requires access to risk-management-api:rest:public:drawdown-tracking:removeTracker method which is included into writer role. Requires access to account, tracker resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:removeTracker",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "tracker"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Id of the MetaApi account",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "id",
+            "description": "Id of the tracker",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Profit/drawdown tracker removed"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:removeTracker method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Tracker not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/trackers/name/{name}": {
+      "get": {
+        "summary": "Retrieves profit/drawdown tracker by name",
+        "description": "Retrieves profit/drawdown tracker by name. Requires access to risk-management-api:rest:public:drawdown-tracking:getTrackerByName method which is included into reader role. Requires access to account, tracker resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:getTrackerByName",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "tracker"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token or account access token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Id of the MetaApi account",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "name",
+            "description": "name of the tracker",
+            "type": "string",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profit/drawdown tracker retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/Tracker"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:getTrackerByName method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaApi account not found or the tracker does not belong to the MetaApi account",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/trackers/{id}/statistics": {
+      "get": {
+        "summary": "Returns account profit and drawdown tracking statistics by tracker id",
+        "description": "Returns account profit and drawdown tracking statistics by tracker id. Requires access to risk-management-api:rest:public:drawdown-tracking:getPeriodStatistics method which is included into reader role. Requires access to account, tracker resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:drawdown-tracking:getPeriodStatistics",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "tracker"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "Id of MetaAPI account",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "id",
+            "description": "Id of the tracker",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "startTime",
+            "description": "Time to start loading stats from in broker timezone, in YYYY-MM-DD HH:mm:ss.SSS format. Default is current time. Note that stats is loaded in backwards direction",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Number of records to load. Default is 1",
+            "type": "number",
+            "default": 1,
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "realTime",
+            "description": "If true, real-time data will be requested",
+            "type": "boolean",
+            "default": false,
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profit and drawdown statistics returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PeriodStatistics"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:drawdown-tracking:getPeriodStatistics method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Profit and drawdown statistics for MetaApi account not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/equity-chart": {
+      "get": {
+        "summary": "Returns equity chart by account id",
+        "description": "Returns equity chart by account id. Requires access to risk-management-api:rest:public:equity-chart:getEquityChart method which is included into reader role. Requires access to account, equity-chart resources.",
+        "x-authorization": {
+          "method": "risk-management-api:rest:public:equity-chart:getEquityChart",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "equity-chart"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "accountId",
+            "description": "MetaApi account id",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "startTime",
+            "description": "Starting broker time in YYYY-MM-DD HH:mm:ss format",
+            "required": false,
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "endTime",
+            "description": "Ending broker time in YYYY-MM-DD HH:mm:ss format",
+            "required": false,
+            "type": "string",
+            "in": "query"
+          },
+          {
+            "name": "realTime",
+            "description": "If true, real-time data will be requested",
+            "type": "boolean",
+            "default": false,
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Equity chart returned",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EquityChartItem"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to risk-management-api:rest:public:equity-chart:getEquityChart method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "No drawdown trackers for specified MetaApi account id was found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/adm/tasks": {
+      "get": {
+        "summary": "Returns a list of scheduled and recent tasks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response with tasks",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SchedulerTask"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets": {
+      "get": {
+        "summary": "Returns a list of registered UAT data sets",
+        "description": "Returns a list of registered UAT data sets",
+        "x-authorization": {
+          "custom": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result contains UAT data sets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DataSet"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets/{id}/apply": {
+      "post": {
+        "summary": "Applies a registered UAT data set with an id specified",
+        "description": "Applies a registered UAT data set with an id specified",
+        "x-authorization": {
+          "custom": true
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "data set id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "params",
+            "description": "optional data set parameters",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DataSetParams"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "data set successfully applied"
+          },
+          "404": {
+            "description": "data set not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/redis/statistics": {
+      "get": {
+        "summary": "Returns redis traffic statistics",
+        "description": "Returns redis traffic statistics. Requires access to express-microservice:rest:private:default:getRedisStatistics method.",
+        "x-authorization": {
+          "method": "express-microservice:rest:private:default:getRedisStatistics"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token required if authorization is enabled",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Redis traffic statistics",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to express-microservice:rest:private:default:getRedisStatistics method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Executes health checks",
+        "description": "Executes health checks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "health checks passed",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HealthCheckResult"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DrawdownTracker": {
+      "description": "Drawdown tracker configuration",
+      "type": "object",
+      "required": [
+        "_id",
+        "userId",
+        "name",
+        "period"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "Unique drawdown tracker id"
+        },
+        "name": {
+          "type": "string",
+          "description": "Drawdown tracker name"
+        },
+        "startBrokerTime": {
+          "type": "string",
+          "description": "Time to start tracking from in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "endBrokerTime": {
+          "type": "string",
+          "description": "Time to end tracking at in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "period": {
+          "type": "string",
+          "description": "Period to track drawdown for",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "relativeDrawdownThreshold": {
+          "type": "number",
+          "description": "Relative drawdown threshold after which drawdown event is generated. A fraction of 1"
+        },
+        "absoluteDrawdownThreshold": {
+          "type": "number",
+          "description": "Absolute drawdown threshold after which drawdown event is generated. Absolute drawdown is expressed in account currency. Should be greater than 0"
+        },
+        "copyFactorySubscriptionPath": {
+          "type": "string",
+          "description": "Path of the CopyFactory subscription to track the drawdown for"
+        }
+      }
+    },
+    "Tracker": {
+      "description": "Profit/drawdown tracker configuration",
+      "type": "object",
+      "required": [
+        "_id",
+        "userId",
+        "name",
+        "period"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "Unique tracker id"
+        },
+        "name": {
+          "type": "string",
+          "description": "Unique tracker name"
+        },
+        "startBrokerTime": {
+          "type": "string",
+          "description": "Time to start tracking from in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "endBrokerTime": {
+          "type": "string",
+          "description": "Time to end tracking at in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "period": {
+          "type": "string",
+          "description": "Period to track profit and drawdown for",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "relativeDrawdownThreshold": {
+          "type": "number",
+          "description": "Relative drawdown threshold after which tracker event is generated. A fraction of 1"
+        },
+        "absoluteDrawdownThreshold": {
+          "type": "number",
+          "description": "Absolute drawdown threshold after which tracker event is generated. Absolute drawdown is expressed in account currency. Should be greater than 0"
+        },
+        "relativeProfitThreshold": {
+          "type": "number",
+          "description": "Relative profit threshold after which tracker event is generated. A fraction of 1"
+        },
+        "absoluteProfitThreshold": {
+          "type": "number",
+          "description": "Absolute profit threshold after which tracker event is generated. Absolute profit is expressed in account currency. Should be greater than 0"
+        },
+        "copyFactorySubscriptionPath": {
+          "type": "string",
+          "description": "Path of the CopyFactory subscription to track the profit and drawdown for"
+        }
+      }
+    },
+    "NewDrawdownTracker": {
+      "description": "New drawdown tracker configuration",
+      "type": "object",
+      "required": [
+        "name",
+        "period"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Drawdown tracker name"
+        },
+        "startBrokerTime": {
+          "type": "string",
+          "description": "Time to start tracking from in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "endBrokerTime": {
+          "type": "string",
+          "description": "Time to end tracking at in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "period": {
+          "type": "string",
+          "description": "Period length to track drawdown for",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "relativeDrawdownThreshold": {
+          "type": "number",
+          "description": "Relative drawdown threshold after which drawdown event is generated. A fraction of 1"
+        },
+        "absoluteDrawdownThreshold": {
+          "type": "number",
+          "description": "Absolute drawdown threshold after which drawdown event is generated. Absolute drawdown is expressed in account currency. Should be greater than 0"
+        },
+        "copyFactorySubscriptionPath": {
+          "type": "string",
+          "description": "Path of the CopyFactory subscription to trackdrawdown for"
+        }
+      }
+    },
+    "NewTracker": {
+      "description": "New profit/drawdown tracker configuration",
+      "type": "object",
+      "required": [
+        "name",
+        "period"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique tracker name"
+        },
+        "startBrokerTime": {
+          "type": "string",
+          "description": "Time to start tracking from in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "endBrokerTime": {
+          "type": "string",
+          "description": "Time to end tracking at in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "period": {
+          "type": "string",
+          "description": "Period length to track profit and drawdown for",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "relativeDrawdownThreshold": {
+          "type": "number",
+          "description": "Relative drawdown threshold after which tracker event is generated. A fraction of 1"
+        },
+        "absoluteDrawdownThreshold": {
+          "type": "number",
+          "description": "Absolute drawdown threshold after which tracker event is generated. Absolute drawdown is expressed in account currency. Should be greater than 0"
+        },
+        "relativeProfitThreshold": {
+          "type": "number",
+          "description": "Relative profit threshold after which tracker event is generated. A fraction of 1"
+        },
+        "absoluteProfitThreshold": {
+          "type": "number",
+          "description": "Absolute profit threshold after which tracker event is generated. Absolute profit is expressed in account currency. Should be greater than 0"
+        },
+        "copyFactorySubscriptionPath": {
+          "type": "string",
+          "description": "Path of the CopyFactory subscription to track profit and drawdown for"
+        }
+      }
+    },
+    "DrawdownTrackerId": {
+      "description": "Drawdown tracker id",
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Drawdown tracker id"
+        }
+      }
+    },
+    "TrackerId": {
+      "description": "Profit/drawdown tracker id",
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique tracker id"
+        }
+      }
+    },
+    "DrawdownTrackerUpdate": {
+      "description": "Drawdown tracker configuration update",
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Drawdown tracker name"
+        }
+      }
+    },
+    "TrackerUpdate": {
+      "description": "Profit/drawdown tracker configuration update",
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique tracker name"
+        }
+      }
+    },
+    "DrawdownPeriodStatistics": {
+      "description": "Drawdown period statistics",
+      "type": "object",
+      "required": [
+        "startBrokerTime",
+        "period",
+        "initialBalance",
+        "thresholdExceeded"
+      ],
+      "properties": {
+        "startBrokerTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Period start time in broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "endBrokerTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Period end time in broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "period": {
+          "type": "string",
+          "description": "Period length",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "initialBalance": {
+          "type": "number",
+          "description": "Balance at period start time"
+        },
+        "maxDrawdownTime": {
+          "type": "string",
+          "description": "Time max drawdown was observed at in broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "maxAbsoluteDrawdown": {
+          "type": "number",
+          "description": "The value of maximum absolute drawdown observed. Absolute drawdown is expressed in account currency"
+        },
+        "maxRelativeDrawdown": {
+          "type": "number",
+          "description": "The value of maximum relative drawdown observed. A fraction of 1"
+        },
+        "thresholdExceeded": {
+          "type": "boolean",
+          "description": "The flag indicating that max allowed total drawdown was exceeded"
+        },
+        "balanceAdjustment": {
+          "type": "number",
+          "description": "Balance adjustment when calculating equity. Usually this is the sum of deposits and withdrawals"
+        },
+        "tradeDayCount": {
+          "type": "number",
+          "description": "Count of days when trades were performed during the period"
+        }
+      }
+    },
+    "PeriodStatistics": {
+      "description": "Profit/dwawdown period statistics",
+      "type": "object",
+      "required": [
+        "startBrokerTime",
+        "period",
+        "initialBalance",
+        "thresholdExceeded"
+      ],
+      "properties": {
+        "startBrokerTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Period start time in broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "endBrokerTime": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Period end time in broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "period": {
+          "type": "string",
+          "description": "Period length",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "initialBalance": {
+          "type": "number",
+          "description": "Balance at period start time"
+        },
+        "maxDrawdownTime": {
+          "type": "string",
+          "description": "Time max drawdown was observed at in broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "maxAbsoluteDrawdown": {
+          "type": "number",
+          "description": "The value of maximum absolute drawdown observed. Absolute drawdown is expressed in account currency"
+        },
+        "maxRelativeDrawdown": {
+          "type": "number",
+          "description": "The value of maximum relative drawdown observed. A fraction of 1"
+        },
+        "maxProfitTime": {
+          "type": "string",
+          "description": "Time max profit was observed at in broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "maxAbsoluteProfit": {
+          "type": "number",
+          "description": "The value of maximum absolute profit observed. Absolute profit is expressed in account currency"
+        },
+        "maxRelativeProfit": {
+          "type": "number",
+          "description": "The value of maximum relative profit observed. A fraction of 1"
+        },
+        "thresholdExceeded": {
+          "type": "boolean",
+          "description": "The flag indicating that max allowed total profit was exceeded"
+        },
+        "exceededThresholdType": {
+          "type": "string",
+          "enum": [
+            "profit",
+            "drawdown"
+          ],
+          "description": "Type of the exceeded threshold"
+        },
+        "balanceAdjustment": {
+          "type": "number",
+          "description": "Balance adjustment when calculating equity. Usually this is the sum of deposits and withdrawals"
+        },
+        "tradeDayCount": {
+          "type": "number",
+          "description": "Count of days when trades were performed during the period"
+        }
+      }
+    },
+    "EquityChartItem": {
+      "description": "Equity chart item",
+      "type": "object",
+      "required": [
+        "startBrokerTime",
+        "endBrokerTime",
+        "averageBalance",
+        "minBalance",
+        "maxBalance",
+        "averageEquity",
+        "minEquity",
+        "maxEquity",
+        "lastBalance",
+        "lastEquity"
+      ],
+      "properties": {
+        "startBrokerTime": {
+          "type": "string",
+          "description": "Start time of a chart item as per broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "endBrokerTime": {
+          "type": "string",
+          "description": "End time of a chart item as per broker timezone, in YYYY-MM-DD HH:mm:ss format"
+        },
+        "averageBalance": {
+          "type": "number",
+          "description": "Average balance value during the period"
+        },
+        "minBalance": {
+          "type": "number",
+          "description": "Minimum balance value during the period"
+        },
+        "maxBalance": {
+          "type": "number",
+          "description": "Maximum balance value during the period"
+        },
+        "averageEquity": {
+          "type": "number",
+          "description": "Average equity value during the period"
+        },
+        "minEquity": {
+          "type": "number",
+          "description": "Minimum equity value during the period"
+        },
+        "maxEquity": {
+          "type": "number",
+          "description": "Maximum equity value during the period"
+        },
+        "lastBalance": {
+          "type": "number",
+          "description": "Last balance value observed on the account"
+        },
+        "lastEquity": {
+          "type": "number",
+          "description": "Last equity value observed on the account"
+        }
+      }
+    },
+    "DrawdownEvent": {
+      "description": "Drawdown threshold exceeded event model",
+      "type": "object",
+      "required": [
+        "sequenceNumber",
+        "accountId",
+        "trackerId",
+        "startBrokerTime",
+        "period",
+        "brokerTime",
+        "absoluteDrawdown",
+        "relativeDrawdown"
+      ],
+      "properties": {
+        "sequenceNumber": {
+          "description": "Event unique sequence number",
+          "type": "number"
+        },
+        "accountId": {
+          "description": "MetaApi account id",
+          "type": "string"
+        },
+        "trackerId": {
+          "description": "Drawdown tracker id",
+          "type": "string"
+        },
+        "startBrokerTime": {
+          "description": "Drawdown tracking period start time in broker timezone, in YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "endBrokerTime": {
+          "description": "Drawdown tracking period end time in broker timezone, in YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "period": {
+          "description": "Drawdown tracking period",
+          "type": "string",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "brokerTime": {
+          "description": "Drawdown threshold exceeded event time in broker timezone, in YYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "absoluteDrawdown": {
+          "description": "Absolute drawdown value which was observed when the drawdown threshold was exceeded. Absolute drawdown is expressed in account currency",
+          "type": "number"
+        },
+        "relativeDrawdown": {
+          "description": "Relative drawdown value which was observed when the drawdown threshold was exceeded. Relative drawdown is expressed as a fraction of 1",
+          "type": "number"
+        }
+      }
+    },
+    "TrackerEvent": {
+      "description": "Profit/drawdown threshold exceeded event model",
+      "type": "object",
+      "required": [
+        "sequenceNumber",
+        "accountId",
+        "trackerId",
+        "startBrokerTime",
+        "period",
+        "brokerTime",
+        "absoluteDrawdown",
+        "relativeDrawdown",
+        "absoluteProfit",
+        "relativeProfit",
+        "exceededThresholdType"
+      ],
+      "properties": {
+        "sequenceNumber": {
+          "description": "Event unique sequence number",
+          "type": "number"
+        },
+        "accountId": {
+          "description": "MetaApi account id",
+          "type": "string"
+        },
+        "trackerId": {
+          "description": "Profit/drawdown tracker id",
+          "type": "string"
+        },
+        "startBrokerTime": {
+          "description": "Profit/drawdown tracking period start time in broker timezone, in YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "endBrokerTime": {
+          "description": "Profit/drawdown tracking period end time in broker timezone, in YYYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "period": {
+          "description": "Profit/drawdown tracking period",
+          "type": "string",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "brokerTime": {
+          "description": "Profit/drawdown threshold exceeded event time in broker timezone, in YYY-MM-DD HH:mm:ss.SSS format",
+          "type": "string"
+        },
+        "absoluteDrawdown": {
+          "description": "Absolute drawdown value which was observed when the profit or drawdown threshold was exceeded. Absolute drawdown is expressed in account currency",
+          "type": "number"
+        },
+        "relativeDrawdown": {
+          "description": "Relative drawdown value which was observed when the profit or drawdown threshold was exceeded. Relative drawdown is expressed as a fraction of 1",
+          "type": "number"
+        },
+        "absoluteProfit": {
+          "description": "Absolute profit value which was observed when the profit or drawdown threshold was exceeded. Absolute profit is expressed in account currency",
+          "type": "number"
+        },
+        "relativeProfit": {
+          "description": "Relative profit value which was observed when the profit or drawdown threshold was exceeded. Relative profit is expressed as a fraction of 1",
+          "type": "number"
+        },
+        "exceededThresholdType": {
+          "type": "string",
+          "enum": [
+            "profit",
+            "drawdown"
+          ],
+          "description": "Type of the exceeded threshold"
+        }
+      }
+    },
+    "SchedulerTask": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "$ref": "#/definitions/TaskStatus"
+        }
+      }
+    },
+    "TaskStatus": {
+      "type": "object",
+      "required": [
+        "status",
+        "startedAt",
+        "completedAt",
+        "progress"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "type": "string"
+        },
+        "startedAt": {
+          "description": "Task started date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "description": "Task completed date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "progress": {
+          "description": "Task progress",
+          "type": "object"
+        }
+      }
+    },
+    "DataSet": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "data set id",
+          "type": "string"
+        },
+        "description": {
+          "description": "human-readable description",
+          "type": "string"
+        }
+      }
+    },
+    "DataSetParams": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "HealthCheckResult": {
+      "type": "object",
+      "required": [
+        "id",
+        "output"
+      ],
+      "properties": {
+        "check": {
+          "description": "id of the health check",
+          "type": "string"
+        },
+        "output": {
+          "description": "health check output",
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "id",
+        "error",
+        "message"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "error": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional information about error",
+          "type": "object"
+        },
+        "code": {
+          "description": "Error code, used for i18n",
+          "type": "string"
+        },
+        "arguments": {
+          "description": "Error message arguments, used for i18n",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "TooManyRequestsError": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "message",
+        "metadata"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "period",
+            "requestsPerPeriodAllowed",
+            "recommendedRetryTime"
+          ],
+          "properties": {
+            "periodInMinutes": {
+              "description": "rate limiting period in minutes",
+              "type": "number"
+            },
+            "requestsPerPeriodAllowed": {
+              "description": "allowed number of requests per period",
+              "type": "number"
+            },
+            "recommendedRetryTime": {
+              "description": "recommended time to retry request",
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      }
+    }
+  }
+}

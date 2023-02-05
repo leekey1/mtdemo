@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.hyun.mtfinace.dao.MetaProfileDao">
+
+    <!--基本字段定义 -->
+    <sql id="base_column">
+        id,
+        broker,
+        server,
+        api_profile_id,
+        api_profile_name,
+        broker_timezone,
+        broker_dst_switch_timezone,
+        type,
+        version,
+        created_at,
+        created_by,
+        updated_at,
+        updated_by
+    </sql>
+
+    <!--按主键进行查询，返回唯一一条记录 对应repository findOne方法 -->
+    <select id="findOne"  resultType="cn.com.hyun.mtfinace.dto.MetaProfileDto">
+        SELECT 
+            <include refid="base_column" />
+        FROM 
+            meta_profile
+        WHERE
+            id = #{id}
+    </select>
+ 
+ 
+
+    <!--无条件全部记录检索 对应repository findAll方法 -->
+    <select id="findAll" resultType="cn.com.hyun.mtfinace.dto.MetaProfileDto">
+        SELECT 
+            <include refid="base_column" />
+        FROM 
+            meta_profile
+    </select>
+
+
+    <!--插入记录 对应repository insert方法 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.com.hyun.mtfinace.entity.MetaProfile">
+        INSERT INTO
+            meta_profile
+        (
+          id,
+          broker,
+          server,
+          api_profile_id,
+          api_profile_name,
+          broker_timezone,
+          broker_dst_switch_timezone,
+          type,
+          version,
+          created_at,
+          created_by,
+          updated_at,
+          updated_by
+        )
+        VALUES
+        (
+          #{id},
+          #{broker},
+          #{server},
+          #{apiProfileId},
+          #{apiProfileName},
+          #{brokerTimezone},
+          #{brokerDstSwitchTimezone},
+          #{type},
+          #{version},
+          #{createdAt},
+          #{createdBy},
+          #{updatedAt},
+          #{updatedBy}
+        )
+    </insert>
+
+    <!--动态更新 对Input来的数据不为空的字段进行更新 对应Dao dynamicUpdate方法 -->
+    <update id="dynamicUpdate" parameterType="cn.com.hyun.mtfinace.entity.MetaProfile">
+        UPDATE
+            meta_profile
+        <set>
+            <if test="broker != null">
+                broker = #{broker},
+            </if>
+            <if test="server != null">
+                server = #{server},
+            </if>
+            <if test="apiProfileId != null">
+                api_profile_id = #{apiProfileId},
+            </if>
+            <if test="apiProfileName != null">
+                api_profile_name = #{apiProfileName},
+            </if>
+            <if test="brokerTimezone != null">
+                broker_timezone = #{brokerTimezone},
+            </if>
+            <if test="brokerDstSwitchTimezone != null">
+                broker_dst_switch_timezone = #{brokerDstSwitchTimezone},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+            <if test="updatedBy != null">
+                updated_by = #{updatedBy}
+            </if>
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <!--动态更新 按照实体的值实际数据进行更新对应Dao update方法 -->
+    <update id="update" parameterType="cn.com.hyun.mtfinace.entity.MetaProfile">
+        UPDATE
+            meta_profile
+        SET
+            broker = #{broker},
+            server = #{server},
+            api_profile_id = #{apiProfileId},
+            api_profile_name = #{apiProfileName},
+            broker_timezone = #{brokerTimezone},
+            broker_dst_switch_timezone = #{brokerDstSwitchTimezone},
+            type = #{type},
+            version = #{version},
+            created_at = #{createdAt},
+            created_by = #{createdBy},
+            updated_at = #{updatedAt},
+            updated_by = #{updatedBy}
+        WHERE
+            id = #{id}
+    </update>
+    
+    <!--删除 对应Dao delete方法 -->    
+    <delete id="delete" >
+        DELETE FROM 
+            meta_profile
+        WHERE
+            id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,137 @@
+spring.application.name: commmons-demo
+spring.main.banner-mode: "off"
+
+spring.aop.auto: true
+spring.aop.proxy-target-class: true
+
+#spring.http.encoding.charset: UTF-8
+#spring.http.encoding.enabled: true
+#spring.http.encoding.force: true
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring.mvc.pathmatch.matching-strategy: ant_path_matcher
+
+
+spring.druid.driver-class-name: ${db.driver-class.demo}
+spring.druid.url: ${db.url.demo}
+spring.druid.username: ${db.username.demo}
+spring.druid.password: ${db.password.demo}
+
+spring.druid.initial-size: ${db.init.base}
+spring.druid.min-idle: ${db.init.base}
+spring.druid.max-active: ${db.max.base}
+spring.druid.max-wait: ${db.max-wait}
+
+spring.druid.continue-on-error: ${db.continue-on-error}
+spring.druid.time-between-eviction-runs-millis: ${db.time-between-eviction-runs-millis}
+spring.druid.min-evictable-idle-time-millis: ${db.min-evictable-idle-time-millis}
+spring.druid.validation-query: ${db.validation-query}
+spring.druid.test-on-borrow: ${db.test-on-borrow}
+spring.druid.test-on-return: ${db.test-on-return}
+spring.druid.test-while-idle: ${db.test-while-idle}
+spring.druid.pool-prepared-statements: ${db.pool-prepared-statements}
+spring.druid.filters: ${db.filters}
+spring.druid.connection-properties: ${db.connection-properties}
+spring.druid.use-global-data-source-stat: ${db.use-global-data-source-stat}
+
+server.port: ${port.commons.demo}
+server.error.whitelabel.enabled: true
+server.max-http-header-size: 16384
+server.compression.enabled: true
+server.compression.mime-types: text/html,text/plain,application/json
+server.tomcat.uri-encoding: UTF-8
+server.tomcat.max-threads: 3000
+
+ribbon.ConnectTimeout: 5000
+ribbon.ReadTimeout: 300000
+
+switch.cache: true
+
+#spring.jackson.serialization.write-dates-as-timestamps: true
+#spring.jackson.date-format: yyyy-MM-dd HH:mm:ss
+#spring.jackson.time-zone: GMT+8
+
+spring.jackson.date-format: yyyy-MM-dd
+spring.jackson.time-zone: GMT+8
+
+
+
+
+spring.profiles.active: dev
+
+spring.cloud.config.name: app
+spring.cloud.config.label: main
+
+spring.sleuth.sampler.percentage: 1
+
+eureka.instance.prefer-ip-address: true
+eureka.instance.lease-renewal-interval-in-seconds: 10
+eureka.instance.lease-expiration-duration-in-seconds: 30
+eureka.client.register-with-eureka: true
+eureka.client.fetch-registry: true
+eureka.client.registry-fetch-interval-seconds: 10
+eureka.client.allow-redirects: true
+eureka.client.cache-refresh-executor-thread-pool-size: 100
+eureka.client.heartbeat-executor-thread-pool-size: 100
+eureka.client.eureka-server-total-connections: 3000
+eureka.client.eureka-server-total-connections-per-host: 10000
+
+endpoints.restart.enabled: true
+endpoints.refresh.enabled: true
+endpoints.shutdown.enabled: true
+management.add-application-context-header: false
+
+---
+spring.config.activate.on-profile: local
+spring.cloud.config.profile: local
+spring:
+  config:
+    import: configserver:http://127.0.0.1:10000/config
+eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
+logging.config: classpath:logback-local.xml
+
+app.keys.SYSTEM: http://localhost:8501
+app.keys.FD: http://localhost:8502
+
+---
+spring.config.activate.on-profile: dev
+spring.cloud.config.profile: dev
+spring:
+  config:
+    import: configserver:http://127.0.0.1:10000/config
+eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
+logging.config: classpath:logback-dev.xml
+
+app.keys.SYSTEM: http://localhost:8501
+app.keys.FD: http://localhost:8502
+
+---
+spring.config.activate.on-profile: uat
+spring.cloud.config.profile: uat
+spring:
+  config:
+    import: configserver:http://127.0.0.1:10000/config
+eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
+logging.config: classpath:logback-dev.xml
+app.keys.SYSTEM: http://localhost:8501
+app.keys.FD: http://localhost:8502
+
+
+---
+spring.config.activate.on-profile: prod
+spring.cloud.config.profile: prod
+spring:
+  config:
+    import: configserver:http://127.0.0.1:10000/config
+eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
+logging.config: classpath:logback.xml
+
+app.keys.SYSTEM: http://localhost:8501
+app.keys.FD: http://localhost:8502
+

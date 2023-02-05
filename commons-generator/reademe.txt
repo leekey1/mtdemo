@@ -1,0 +1,11 @@
+
+
+     commons-generator
+        jdk oracle 1.8 不是oracle 没有com.oracle.jrockit.jfr.EventInfo
+        oracle jdk 1.8 以后 com.oracle.jrockit.jfr.EventInfo 这个取消
+        有时间在改进 ^^
+
+     commons-generator 单独选择 oracle jdk 1.8 打包
+
+    terminal target:
+        java -jar commons-generator-1.5.8.RELEASE.jar

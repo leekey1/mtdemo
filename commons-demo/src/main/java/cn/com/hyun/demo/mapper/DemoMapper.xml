@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.hyun.demo.dao.DemoDao">
+
+    <!--基本字段定义 -->
+    <sql id="base_column">
+        id,
+        loan_id,
+        demo_opprator,
+        demo_opprator_type,
+        demo_opprator_time,
+        demo_money,
+        demo_rate,
+        demo_month,
+        created_at,
+        created_by,
+        updated_at,
+        updated_by,
+        version
+    </sql>
+
+    <!--按主键进行查询，返回唯一一条记录 对应repository findOne方法 -->
+    <select id="findOne"  resultType="cn.com.hyun.demo.dto.DemoDto">
+        SELECT 
+            <include refid="base_column" />
+        FROM 
+            demo
+        WHERE
+            id = #{id}
+    </select>
+ 
+ 
+
+    <!--无条件全部记录检索 对应repository findAll方法 -->
+    <select id="findAll" resultType="cn.com.hyun.demo.dto.DemoDto">
+        SELECT 
+            <include refid="base_column" />
+        FROM 
+            demo
+    </select>
+
+
+    <!--插入记录 对应repository insert方法 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.com.hyun.demo.entity.Demo">
+        INSERT INTO
+            demo
+        (
+          id,
+          loan_id,
+          demo_opprator,
+          demo_opprator_type,
+          demo_opprator_time,
+          demo_money,
+          demo_rate,
+          demo_month,
+          created_at,
+          created_by,
+          updated_at,
+          updated_by,
+          version
+        )
+        VALUES
+        (
+          #{id},
+          #{loanId},
+          #{demoOpprator},
+          #{demoOppratorType},
+          #{demoOppratorTime},
+          #{demoMoney},
+          #{demoRate},
+          #{demoMonth},
+          #{createdAt},
+          #{createdBy},
+          #{updatedAt},
+          #{updatedBy},
+          #{version}
+        )
+    </insert>
+
+    <!--动态更新 对Input来的数据不为空的字段进行更新 对应Dao dynamicUpdate方法 -->
+    <update id="dynamicUpdate" parameterType="cn.com.hyun.demo.entity.Demo">
+        UPDATE
+            demo
+        <set>
+            <if test="loanId != null">
+                loan_id = #{loanId},
+            </if>
+            <if test="demoOpprator != null">
+                demo_opprator = #{demoOpprator},
+            </if>
+            <if test="demoOppratorType != null">
+                demo_opprator_type = #{demoOppratorType},
+            </if>
+            <if test="demoOppratorTime != null">
+                demo_opprator_time = #{demoOppratorTime},
+            </if>
+            <if test="demoMoney != null">
+                demo_money = #{demoMoney},
+            </if>
+            <if test="demoRate != null">
+                demo_rate = #{demoRate},
+            </if>
+            <if test="demoMonth != null">
+                demo_month = #{demoMonth},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+            <if test="updatedBy != null">
+                updated_by = #{updatedBy},
+            </if>
+            <if test="version != null">
+                version = #{version}
+            </if>
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <!--动态更新 按照实体的值实际数据进行更新对应Dao update方法 -->
+    <update id="update" parameterType="cn.com.hyun.demo.entity.Demo">
+        UPDATE
+            demo
+        SET
+            loan_id = #{loanId},
+            demo_opprator = #{demoOpprator},
+            demo_opprator_type = #{demoOppratorType},
+            demo_opprator_time = #{demoOppratorTime},
+            demo_money = #{demoMoney},
+            demo_rate = #{demoRate},
+            demo_month = #{demoMonth},
+            created_at = #{createdAt},
+            created_by = #{createdBy},
+            updated_at = #{updatedAt},
+            updated_by = #{updatedBy},
+            version = #{version}
+        WHERE
+            id = #{id}
+    </update>
+    
+    <!--删除 对应Dao delete方法 -->    
+    <delete id="delete" >
+        DELETE FROM 
+            demo
+        WHERE
+            id = #{id}
+    </delete>
+</mapper>

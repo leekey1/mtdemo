@@ -1,0 +1,37 @@
+/* ---------------------------------------------------------------------------------------------------
+ * Copyright (C) 2014-2015 hyun.com.cn
+ *
+ * Title:        {EventName}.java
+ * Description:       实体{EventName}类定义
+ *
+ * Dependencies:
+ * 
+ * History:
+ *     Date                   Modifier              Log
+ *     {date}             hyun auto             Created
+ *
+ * ---------------------------------------------------------------------------------------------------
+ */
+package {PACKAGE_NAME}{DOMAIN}.entity;
+
+import java.io.Serializable;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import java.util.Date;
+import java.math.BigDecimal;
+//--Import
+
+@Data
+public class {EventName} implements Serializable {
+
+    /**
+     * SVU
+     */
+    private static final long serialVersionUID = 1L;
+
+//--Field|Primitive:private {FIELDTYPE} {FIELDNAME};
+
+    public {EventName}() {
+
+    }
+}

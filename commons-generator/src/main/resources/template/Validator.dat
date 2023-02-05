@@ -1,0 +1,53 @@
+/* ---------------------------------------------------------------------------------------------------
+ * Copyright (C) 2014-2015 hyun.com.cn
+ *
+ * Title:        {EventName}Validator.java
+ * Description:       校验{EventName}Validator类定义
+ *
+ * Dependencies:
+ *
+ * History:
+ *     Date                   Modifier              Log
+ *     {date}             hyun auto             Created
+ *
+ * ---------------------------------------------------------------------------------------------------
+ */
+package {PACKAGE_NAME}{DOMAIN}.validator;
+
+import {PACKAGE_NAME}{DOMAIN}.dto.{EventName}Dto;
+import {PACKAGE_NAME}framework.utils.AssertUtils;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
+import static {PACKAGE_NAME}configuration.ApplicationMessage.*;
+//--Import
+
+ /**
+  * SVU
+  */
+public class {EventName}Validator implements Validator {
+
+    public static void validate({EventName}Dto {EventNameVar}Dto) {
+        new {EventName}Validator().validate({EventNameVar}Dto, null);
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return {EventName}Dto.class.equals(clazz);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
+    AssertUtils.notNull(target);
+    {EventName}Dto {EventNameVar}Dto = ({EventName}Dto) target;
+ /*
+//--Field|Validator:{EMPTY}AssertUtils.notNull({EventNameVar}Dto.get{FIELDSHORTNAME}(),"{COLUMNNAME}不能为空!");
+*/
+
+    }
+
+
+
+
+}

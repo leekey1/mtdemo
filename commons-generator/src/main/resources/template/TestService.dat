@@ -1,0 +1,88 @@
+/* ---------------------------------------------------------------------------------------------------
+ * Copyright (C) 2014-2015 hyun.com.cn
+ *
+ * Title:        {EventName}ServiceTest.java
+ * Description:       {EventName}ServiceTest类定义
+ *         {EventName}的单元测试控制层
+ * Dependencies:
+ *        {PACKAGE_NAME}{DOMAIN}.Service.{EventName}Service
+ * History:
+ *     Date                 Modifier             Log
+ *     {date}             hyun auto          Created
+ *
+ * ---------------------------------------------------------------------------------------------------
+ */
+package {PACKAGE_NAME}{DOMAIN_SERVICE_TEST};
+
+import {PACKAGE_NAME}common.BaseTest;
+import {PACKAGE_NAME}backend.auth.common.CurrentEmployee;
+import {PACKAGE_NAME}{DOMAIN}.service.{EventName}Service;
+import {PACKAGE_NAME}{DOMAIN}.dto.{EventName}Dto;
+import {PACKAGE_NAME}{DOMAIN}.entity.{EventName};
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+
+import java.util.Map;
+
+/**
+ * {EventName}Test定义.
+ * <p>
+ *
+ *
+ * @author hyun auto
+ */
+
+public class {EventName}ServiceTest  extends BaseTest {
+
+
+    @Autowired
+    {EventName}Service {EventNameVar}Service;
+
+    @Test
+    @Rollback
+    public void save{EventName}ServiceTest() throws Exception {
+        CurrentEmployee currentEmployee = new CurrentEmployee();
+        currentEmployee.setEmpName("test");
+        {EventName}Dto {EventNameVar}Dto = new {EventName}Dto();
+        //{EventNameVar}Dto.setClassifyingLabel("personage");
+        Map<String,Object> result =  {EventNameVar}Service.save{EventName}({EventNameVar}Dto,currentEmployee);
+        Assert.assertTrue("添加成功",(boolean)result.get("success"));
+
+    }
+
+    @Test
+    public void update{EventName}ServiceTest() throws Exception {
+        CurrentEmployee currentEmployee = new CurrentEmployee();
+        currentEmployee.setEmpName("test");
+        {EventName}Dto {EventNameVar}Dto = new {EventName}Dto();
+        //{EventNameVar}Dto.setClassifyingLabel("personage");
+        {EventNameVar}Dto.setId("ef01d86b141a40cfa7eeeb916f45831d");
+        Map<String,Object> result =  {EventNameVar}Service.update{EventName}({EventNameVar}Dto,currentEmployee);
+        Assert.assertTrue("更新成功",(boolean)result.get("success"));
+
+    }
+
+    @Test
+    public void get{EventName}InfoServiceTest() throws Exception {
+        String id = "ef01d86b141a40cfa7eeeb916f45831d";
+        {EventName}Dto {EventNameVar}Dto = {EventNameVar}Service.get{EventName}(id);
+
+        //Assert.assertTrue("查询成功",{EventNameVar}Dto.getClassifyingLabel().equals("personage1"));
+
+    }
+
+    @Test
+    public void get{EventName}InfoListServiceTest() throws Exception {
+
+    }
+
+    @Test
+    public void delete{EventName}ServiceTest() throws Exception {
+
+    }
+
+
+}
+

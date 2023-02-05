@@ -1,0 +1,58 @@
+spring.application.name: commons-center
+spring.main.banner-mode: "off"
+spring.profiles.active: native
+
+server.port: 10000
+server.error.whitelabel.enabled: true
+
+logging:
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'INFO'
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: file:///Users/anjung-geun/zhg/workspace_java/mtdemo/commons-center/src/main/resources/config
+          basedir: target/config
+          default-label: main  # master or main  old: master new: main
+
+
+spring.cloud.config.server.git.search-paths: config
+spring.cloud.config.server.prefix: config
+spring.cloud.config.enabled: true
+spring.cloud.config.discovery.enabled: true
+
+eureka.environment: ${spring.profiles.active}
+eureka.datacenter: internal
+
+eureka.instance.hostname: localhost
+eureka.instance.lease-renewal-interval-in-seconds: 10
+eureka.instance.lease-expiration-duration-in-seconds: 30
+eureka.client.serviceUrl.defaultZone: http://localhost:${server.port}/eureka/
+eureka.client.register-with-eureka: false
+eureka.client.fetch-registry: false
+eureka.client.allow-redirects: true
+eureka.client.cache-refresh-executor-thread-pool-size: 100
+eureka.client.heartbeat-executor-thread-pool-size: 100
+eureka.client.eureka-server-total-connections: 3000
+eureka.client.eureka-server-total-connections-per-host: 10000
+eureka.server.max-threads-for-peer-replication: 100
+eureka.server.max-threads-for-status-replication: 10
+eureka.server.peer-node-total-connections: 3000
+eureka.server.peer-node-total-connections-per-host: 10000
+eureka.server.enable-self-preservation: true
+eureka.server.response-cache-update-interval-ms: 10000
+eureka.server.response-cache-auto-expiration-in-seconds: 30
+eureka.server.eviction-interval-timer-in-ms: 30000
+
+
+#server.port: 10000
+#server.error.whitelabel.enabled: true
+#logging.config: classpath:logback-dev.xml
+
+endpoints.restart.enabled: true
+endpoints.refresh.enabled: true
+endpoints.shutdown.enabled: true

@@ -1,0 +1,4938 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "AgiliumTrade CopyFactory copy trading REST API",
+    "version": "1.0.0"
+  },
+  "basePath": "/api/mt/copyfactory",
+  "paths": {
+    "/users/current/configuration/strategies": {
+      "get": {
+        "summary": "Returns provider strategies the user has configured",
+        "description": "Returns provider strategies the user has configured. Requires access to copyfactory-api:rest:public:configuration:getStrategies method which is included into reader role. Requires access to account, strategy resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:getStrategies",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "strategy"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "includeRemoved",
+            "description": "flag instructing to include removed strategies in results",
+            "in": "query",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "limit",
+            "description": "pagination limit",
+            "in": "query",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 1000
+          },
+          {
+            "name": "offset",
+            "description": "pagination offset",
+            "in": "query",
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Strategies returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Strategy"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:getStrategies method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/configuration/strategies/{strategyId}": {
+      "get": {
+        "summary": "Returns provider strategy by id",
+        "description": "Returns provider strategy by id. Requires access to copyfactory-api:rest:public:configuration:getStrategy method which is included into reader role. Requires access to account, strategy resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:getStrategy",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "strategy"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Strategy returned successfully",
+            "schema": {
+              "$ref": "#/definitions/Strategy"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:getStrategy method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Strategy not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates provider strategy",
+        "description": "Updates provider strategy. Requires access to copyfactory-api:rest:public:configuration:updateStrategy method which is included into writer role. Requires access to account, strategy resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:updateStrategy",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "strategy"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategy",
+            "description": "strategy payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatedStrategy"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Strategy saved successfully"
+          },
+          "400": {
+            "description": "Strategy payload validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:updateStrategy method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Removes provider strategy",
+        "description": "Removes provider strategy. Requires access to copyfactory-api:rest:public:configuration:removeStrategy method which is included into writer role. Requires access to account, strategy resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:removeStrategy",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "strategy"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "closeInstructions",
+            "description": "close instructions",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CloseInstructions"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Strategy deleted successfully"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:removeStrategy method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Strategy not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/configuration/portfolio-strategies": {
+      "get": {
+        "summary": "Returns provider portfolio strategies the user has configured",
+        "description": "Returns provider portfolio strategies the user has configured. Requires access to copyfactory-api:rest:public:configuration:getPortfolios method which is included into reader role. Requires access to portfolio resource.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:getPortfolios",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "portfolio"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "includeRemoved",
+            "description": "flag instructing to include removed portfolio strategies in results",
+            "in": "query",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "limit",
+            "description": "pagination limit",
+            "in": "query",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 1000
+          },
+          {
+            "name": "offset",
+            "description": "pagination offset",
+            "in": "query",
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolios returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PortfolioStrategy"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:getPortfolios method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/configuration/portfolio-strategies/{portfolioId}": {
+      "get": {
+        "summary": "Returns provider portfolio strategy by id",
+        "description": "Returns provider portfolio strategy by id. Requires access to copyfactory-api:rest:public:configuration:getPortfolio method which is included into reader role. Requires access to portfolio resource.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:getPortfolio",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "portfolio"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolioId",
+            "description": "Portfolio strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portfolio returned successfully",
+            "schema": {
+              "$ref": "#/definitions/PortfolioStrategy"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:getPortfolio method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Portfolio strategy not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates provider portfolio strategy",
+        "description": "Updates provider portfolio strategy. Requires access to copyfactory-api:rest:public:configuration:updatePortfolio method which is included into writer role. Requires access to portfolio resource.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:updatePortfolio",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "portfolio"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolioId",
+            "description": "portfolio id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolio",
+            "description": "portfolio payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatedPortfolioStrategy"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "PortfolioStrategy saved successfully"
+          },
+          "400": {
+            "description": "PortfolioStrategy payload validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:updatePortfolio method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Removes provider portfolio",
+        "description": "Removes provider portfolio. Requires access to copyfactory-api:rest:public:configuration:removePortfolio method which is included into writer role. Requires access to portfolio resource.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:removePortfolio",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "portfolio"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolioId",
+            "description": "portfolio id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "closeInstructions",
+            "description": "close instructions",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CloseInstructions"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "PortfolioStrategy deleted successfully"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:removePortfolio method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "PortfolioStrategy not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/configuration/portfolio-strategies/{portfolioId}/members/{strategyId}": {
+      "delete": {
+        "summary": "Removes a portfolio strategy member",
+        "description": "Removes a portfolio strategy member. Requires access to copyfactory-api:rest:public:configuration:removePortfolioMember method which is included into writer role. Requires access to portfolio resource.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:removePortfolioMember",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "portfolio"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "portfolioId",
+            "description": "portfolio strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "id of the strategy to delete member for",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "closeInstructions",
+            "description": "close instructions",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CloseInstructions"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Portfolio strategy member deleted successfully"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:removePortfolioMember method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber or subscription not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/configuration/subscribers": {
+      "get": {
+        "summary": "Returns CopyFactory subscribers the user have configured",
+        "description": "Returns CopyFactory subscribers the user have configured. Requires access to copyfactory-api:rest:public:configuration:getSubscribers method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:getSubscribers",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "includeRemoved",
+            "description": "flag instructing to include removed subscribers in results",
+            "in": "query",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "limit",
+            "description": "pagination limit",
+            "in": "query",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 1000
+          },
+          {
+            "name": "offset",
+            "description": "pagination offset",
+            "in": "query",
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscribers returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Subscriber"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:getSubscribers method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/configuration/subscribers/{subscriberId}": {
+      "get": {
+        "summary": "Returns CopyFactory subscriber by id",
+        "description": "Returns CopyFactory subscriber by id. Requires access to copyfactory-api:rest:public:configuration:getSubscriber method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:getSubscriber",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscriber returned successfully",
+            "schema": {
+              "$ref": "#/definitions/Subscriber"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:getSubscriber method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates subscriber configuration",
+        "description": "Updates subscriber configuration. Requires access to copyfactory-api:rest:public:configuration:updateSubscriber method which is included into writer role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:updateSubscriber",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriber",
+            "description": "subscriber payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatedSubscriber"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Subscriber saved successfully"
+          },
+          "400": {
+            "description": "Subscriber payload validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:updateSubscriber method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove subscriber configuration",
+        "description": "Remove subscriber configuration. Requires access to copyfactory-api:rest:public:configuration:removeSubscriber method which is included into writer role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:removeSubscriber",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "closeInstructions",
+            "description": "close instructions",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CloseInstructions"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Subscriber deleted successfully"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:removeSubscriber method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/configuration/subscribers/{subscriberId}/subscriptions/{strategyId}": {
+      "delete": {
+        "summary": "Removes a subscription",
+        "description": "Removes a subscription. Requires access to copyfactory-api:rest:public:configuration:removeSubscription method which is included into writer role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:removeSubscription",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "id of the strategy to delete subscription for",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "closeInstructions",
+            "description": "close instructions",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CloseInstructions"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Subscription deleted successfully"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:removeSubscription method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber or subscription not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/configuration/unused-strategy-id": {
+      "get": {
+        "summary": "Generates a new strategy id",
+        "description": "Generates a new strategy id. Requires access to copyfactory-api:rest:public:configuration:generateStrategyId method which is included into reader role.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:configuration:generateStrategyId",
+          "roles": [
+            "reader"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Strategy id generated successfully",
+            "schema": {
+              "$ref": "#/definitions/StrategyId"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:configuration:generateStrategyId method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Failed to generate strategy id",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/provided-transactions": {
+      "get": {
+        "summary": "Returns transactions for the strategies the current user provides to other users",
+        "description": "Returns transactions for the strategies the current user provides to other users. Requires access to copyfactory-api:rest:public:history:getProvidedTransactions method which is included into reader role. Requires access to account, strategy, portfolio resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:history:getProvidedTransactions",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "strategy",
+            "portfolio"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "from",
+            "description": "the time to return transaction starting from",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "till",
+            "description": "the time to return transaction ending at",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "strategyId",
+            "description": "the list of strategies to filter by",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subscriberId",
+            "description": "the list of CopyFactory subscriber ids to filter by",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "index of the first record to retrieve. Used for pagination.",
+            "in": "query",
+            "required": false,
+            "default": 0,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "description": "number of records to retrieve. Used for pagination. Maximum value is 1000.",
+            "in": "query",
+            "required": false,
+            "default": 1000,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Transaction"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:history:getProvidedTransactions method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/subscription-transactions": {
+      "get": {
+        "summary": "Returns transactions for the strategies the current user is subscribed to",
+        "description": "Returns transactions for the strategies the current user is subscribed to. Requires access to copyfactory-api:rest:public:history:getSubscriptionTransactions method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:history:getSubscriptionTransactions",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "from",
+            "description": "the time to return transaction starting from",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "till",
+            "description": "the time to return transaction ending at",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "strategyId",
+            "description": "the list of strategies to filter by",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subscriberId",
+            "description": "the list of CopyFactory subscriber ids to filter by",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "index of the first record to retrieve. Used for pagination.",
+            "in": "query",
+            "required": false,
+            "default": 0,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "description": "number of records to retrieve. Used for pagination. Maximum value is 1000.",
+            "in": "query",
+            "required": false,
+            "default": 1000,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Transaction"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:history:getSubscriptionTransactions method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/subscribers/{subscriberId}/transactions/stream": {
+      "get": {
+        "summary": "Returns transaction stream for a CopyFactory subscriber",
+        "description": "Returns transaction stream for a CopyFactory subscriber. If there are no new recors yet, the response will not be sent until a timeout expires or new record arrives. It is recommended to invoke this API in an infinite cycle constantly polling for new records to receive records in real time. Requires access to copyfactory-api:rest:public:history:streamSubscriberTransactions method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:history:streamSubscriberTransactions",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "startTime",
+            "description": "Time to start streaming from, inclusive. This time will be compared to updatedAt transaction field",
+            "type": "string",
+            "format": "datetime",
+            "in": "query",
+            "required": false,
+            "default": 0
+          },
+          {
+            "name": "subscriberId",
+            "description": "Id of the CopyFactory subscriber",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Transaction"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:history:streamSubscriberTransactions method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/strategies/{strategyId}/transactions/stream": {
+      "get": {
+        "summary": "Returns transaction stream for a CopyFactory strategy",
+        "description": "Returns transaction stream for a CopyFactory strategy. If there are no new recors yet, the response will not be sent until a timeout expires or new record arrives. It is recommended to invoke this API in an infinite cycle constantly polling for new records to receive records in real time. Requires access to copyfactory-api:rest:public:history:streamStrategyTransactions method which is included into reader role. Requires access to account, strategy, portfolio resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:history:streamStrategyTransactions",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "strategy",
+            "portfolio"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "startTime",
+            "description": "Time to start streaming from, inclusive. This time will be compared to updatedAt transaction field",
+            "type": "string",
+            "format": "datetime",
+            "in": "query",
+            "required": false,
+            "default": 0
+          },
+          {
+            "name": "strategyId",
+            "description": "Id of the CopyFactory strategy",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Transaction"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:history:streamStrategyTransactions method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/strategies/{strategyId}/external-signals": {
+      "get": {
+        "summary": "Returns active external signals of a strategy",
+        "description": "Returns active external signals of a strategy. Requires access to copyfactory-api:rest:public:external-signals:getSignals method which is included into reader role. Requires access to strategy, account resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:external-signals:getSignals",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "strategy",
+            "account"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "External signals returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ExternalSignal"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:external-signals:getSignals method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Strategy not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/strategies/{strategyId}/external-signals/{id}": {
+      "put": {
+        "summary": "Submits an external signal to a strategy",
+        "description": "Submits an external signal to a strategy. Requires access to copyfactory-api:rest:public:external-signals:updateSignal method which is included into writer role. Requires access to strategy, account resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:external-signals:updateSignal",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "strategy",
+            "account"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "external signal id. Must consist of 8 alphanumeric characters.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "signal",
+            "description": "external signal payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ExternalSignalUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "External signal saved successfully"
+          },
+          "400": {
+            "description": "External signal payload validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:external-signals:updateSignal method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/strategies/{strategyId}/external-signals/{id}/remove": {
+      "post": {
+        "summary": "Removes (closes) external signal for a strategy",
+        "description": "Removes (closes) external signal for a strategy. Requires access to copyfactory-api:rest:public:external-signals:removeSignal method which is included into writer role. Requires access to strategy, account resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:external-signals:removeSignal",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "strategy",
+            "account"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "external signal id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "signal",
+            "description": "external signal removal payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ExternalSignalRemoval"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "External signal removed successfully"
+          },
+          "400": {
+            "description": "External signal removal payload validation failed",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:external-signals:removeSignal method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Signal not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/strategies/{strategyId}/user-log": {
+      "get": {
+        "summary": "Returns event log for a CopyFactory strategy, sorted in reverse chronological order",
+        "description": "Returns event log for a CopyFactory strategy, sorted in revere chronological order. Requires access to copyfactory-api:rest:public:strategy-log:getStrategyTradingLog method which is included into reader role. Requires access to strategy, account resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:strategy-log:getStrategyTradingLog",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "strategy",
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "Strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "description": "The time to start loading data from",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "endTime",
+            "description": "The time to end loading data at",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "positionId",
+            "description": "Position id filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "description": "Minimum severity level",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEBUG",
+              "INFO",
+              "WARN",
+              "ERROR"
+            ]
+          },
+          {
+            "name": "offset",
+            "description": "Pagination offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Log messages returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserLogMessage"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:strategy-log:getStrategyTradingLog method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/strategies/{strategyId}/user-log/stream": {
+      "get": {
+        "summary": "Returns event log stream for a CopyFactory strategy",
+        "description": "Returns event log stream for a CopyFactory strategy. If there are no new recors yet, the response will not be sent until a timeout expires or new record arrives. It is recommended to invoke this API in an infinite cycle constantly polling for new records to receive records in real time. Requires access to copyfactory-api:rest:public:strategy-log:streamStrategyTradingLog method which is included into reader role. Requires access to strategy, account resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:strategy-log:streamStrategyTradingLog",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "strategy",
+            "account"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "startTime",
+            "description": "Time to start streaming from, inclusive",
+            "type": "string",
+            "format": "datetime",
+            "in": "query",
+            "required": false,
+            "default": 0
+          },
+          {
+            "name": "positionId",
+            "description": "Position id filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "description": "Minimum severity level",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEBUG",
+              "INFO",
+              "WARN",
+              "ERROR"
+            ]
+          },
+          {
+            "name": "strategyId",
+            "description": "Strategy id",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Log messages returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserLogMessage"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:strategy-log:streamStrategyTradingLog method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/subscribers/{subscriberId}/user-log": {
+      "get": {
+        "summary": "Returns event log for a CopyFactory subscriber, sorted in reverse chronological order",
+        "description": "Returns event log for a CopyFactory subscriber, sorted in revere chronological order. Requires access to copyfactory-api:rest:public:subscriber-log:getSubscriberTradingLog method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:subscriber-log:getSubscriberTradingLog",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "Subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "description": "The time to start loading data from",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "endTime",
+            "description": "The time to end loading data at",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "strategyId",
+            "description": "Strategy id filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "positionId",
+            "description": "Position id filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "description": "Minimum severity level",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEBUG",
+              "INFO",
+              "WARN",
+              "ERROR"
+            ]
+          },
+          {
+            "name": "offset",
+            "description": "Pagination offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Log messages returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserLogMessage"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:subscriber-log:getSubscriberTradingLog method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/subscribers/{subscriberId}/resynchronize": {
+      "post": {
+        "summary": "Resynchronizes a subscriber according to the strategy provider",
+        "description": "Resynchronizes a subscriber according to the strategy provider. User must be an subscriber owner in order to invoke this endpoint. Requires access to copyfactory-api:rest:public:subscriber-management:resynchronizeSubscriber method which is included into writer role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:subscriber-management:resynchronizeSubscriber",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "strategy ids to perform synchronization for",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "positionId",
+            "description": "position ids to perform synchronization for",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Subscriber synchronization performed successfully"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:subscriber-management:resynchronizeSubscriber method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/subscribers/{subscriberId}/signals": {
+      "get": {
+        "summary": "Returns trading signals the subscriber is subscribed to",
+        "description": "Returns trading signals the subscriber is subscribed to. Requires access to copyfactory-api:rest:public:subscriber-management:getTradingSignals method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:subscriber-management:getTradingSignals",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "Subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trading signals returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TradingSignal"
+              }
+            }
+          },
+          "400": {
+            "description": "Subscriber account not yet connected to CopyFactory application",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:subscriber-management:getTradingSignals method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/subscribers/{subscriberId}/user-log/stream": {
+      "get": {
+        "summary": "Returns event log stream for a CopyFactory subscriber",
+        "description": "Returns event log stream for a CopyFactory subscriber. If there are no new recors yet, the response will not be sent until a timeout expires or new record arrives. It is recommended to invoke this API in an infinite cycle constantly polling for new records to receive records in real time. Requires access to copyfactory-api:rest:public:subscriber-log:streamSubscriberTradingLog method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:subscriber-log:streamSubscriberTradingLog",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "startTime",
+            "description": "Time to start streaming from, inclusive",
+            "type": "string",
+            "format": "datetime",
+            "in": "query",
+            "required": false,
+            "default": 0
+          },
+          {
+            "name": "strategyId",
+            "description": "Strategy id filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "positionId",
+            "description": "Position id filter",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "description": "Minimum severity level",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "DEBUG",
+              "INFO",
+              "WARN",
+              "ERROR"
+            ]
+          },
+          {
+            "name": "subscriberId",
+            "description": "Id of the CopyFactory subscriber",
+            "type": "string",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Log messages returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserLogMessage"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:subscriber-log:streamSubscriberTradingLog method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/subscribers/{subscriberId}/stopouts": {
+      "get": {
+        "summary": "Returns subscription stopouts by subscriber id",
+        "description": "Returns subscription stopouts by subscriber id. Requires access to copyfactory-api:rest:public:stopout:getStopoutsBySybscriberId method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:stopout:getStopoutsBySybscriberId",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscriber stopouts returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SubscriberStrategyStopout"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:stopout:getStopoutsBySybscriberId method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Susbscriber not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/subscribers/{subscriberId}/subscription-strategies/{strategyId}/stopouts/{reason}/reset": {
+      "post": {
+        "summary": "Resets subscription stopouts by subscriber, strategy and reason",
+        "description": "Resets subscription stopouts by subscriber, strategy and reason. Requires access to copyfactory-api:rest:public:stopout:resetStopouts method which is included into writer role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:stopout:resetStopouts",
+          "roles": [
+            "writer"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "strategyId",
+            "description": "strategy id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "subscriberId",
+            "description": "subscriber id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "reason",
+            "description": "reason of a stopout to reset. Formed by concatenation of risk limit type and apply to values",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "day-balance-difference",
+              "date-balance-difference",
+              "week-balance-difference",
+              "week-to-date-balance-difference",
+              "month-balance-difference",
+              "month-to-date-balance-difference",
+              "quarter-balance-difference",
+              "quarter-to-date-balance-difference",
+              "year-balance-difference",
+              "year-to-date-balance-difference",
+              "lifetime-balance-difference",
+              "day-balance-minus-equity",
+              "date-balance-minus-equity",
+              "week-balance-minus-equity",
+              "week-to-date-balance-minus-equity",
+              "month-balance-minus-equity",
+              "month-to-date-balance-minus-equity",
+              "quarter-balance-minus-equity",
+              "quarter-to-date-balance-minus-equity",
+              "year-balance-minus-equity",
+              "year-to-date-balance-minus-equity",
+              "lifetime-balance-minus-equity",
+              "day-equity-difference",
+              "date-equity-difference",
+              "week-equity-difference",
+              "week-to-date-equity-difference",
+              "month-equity-difference",
+              "month-to-date-equity-difference",
+              "quarter-equity-difference",
+              "quarter-to-date-equity-difference",
+              "year-equity-difference",
+              "year-to-date-equity-difference",
+              "lifetime-equity-difference"
+            ]
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Stopouts were reset successfully"
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:stopout:resetStopouts method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Subscriber not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/stopouts/stream": {
+      "get": {
+        "summary": "Returns subscription stopout events stream",
+        "description": "Returns subscription stopout events stream. If there are no new events yet, the response will not be sent until a timeout expires or new event arrives. It is recommended to invoke this API in an infinite cycle constantly polling for new events to receive events in real time. Requires access to copyfactory-api:rest:public:stopout:streamStopouts method which is included into reader role. Requires access to account, subscriber resources.",
+        "x-authorization": {
+          "method": "copyfactory-api:rest:public:stopout:streamStopouts",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account",
+            "subscriber"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "Authorization token",
+            "type": "string",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "previousSequenceNumber",
+            "description": "Value of the last consumed sequence number to start streaming from",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 0
+          },
+          {
+            "name": "subscriberId",
+            "description": "Id of the CopyFactory subscriber",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "strategyId",
+            "description": "Id of the strategy",
+            "type": "string",
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "description": "Pagination limit",
+            "type": "number",
+            "in": "query",
+            "required": false,
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stopout events returned",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SubscriberStrategyStopout"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to copyfactory-api:rest:public:stopout:streamStopouts method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/adm/tasks": {
+      "get": {
+        "summary": "Returns a list of scheduled and recent tasks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response with tasks",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SchedulerTask"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets": {
+      "get": {
+        "summary": "Returns a list of registered UAT data sets",
+        "description": "Returns a list of registered UAT data sets",
+        "x-authorization": {
+          "custom": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result contains UAT data sets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DataSet"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets/{id}/apply": {
+      "post": {
+        "summary": "Applies a registered UAT data set with an id specified",
+        "description": "Applies a registered UAT data set with an id specified",
+        "x-authorization": {
+          "custom": true
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "data set id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "params",
+            "description": "optional data set parameters",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DataSetParams"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "data set successfully applied"
+          },
+          "404": {
+            "description": "data set not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/redis/statistics": {
+      "get": {
+        "summary": "Returns redis traffic statistics",
+        "description": "Returns redis traffic statistics. Requires access to express-microservice:rest:private:default:getRedisStatistics method.",
+        "x-authorization": {
+          "method": "express-microservice:rest:private:default:getRedisStatistics"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token required if authorization is enabled",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Redis traffic statistics",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to express-microservice:rest:private:default:getRedisStatistics method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Executes health checks",
+        "description": "Executes health checks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "health checks passed",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HealthCheckResult"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PortfolioStrategy": {
+      "type": "object",
+      "required": [
+        "_id",
+        "members",
+        "platformCommissionRate",
+        "name",
+        "description"
+      ],
+      "properties": {
+        "_id": {
+          "description": "strategy id, unique across the platform",
+          "type": "string"
+        },
+        "name": {
+          "description": "strategy human-readable name",
+          "type": "string"
+        },
+        "description": {
+          "description": "longer strategy human-readable description",
+          "type": "string"
+        },
+        "members": {
+          "description": "array of portfolio memebers",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortfolioStrategyMember"
+          }
+        },
+        "commissionScheme": {
+          "description": "Commission scheme allowed by this strategy",
+          "$ref": "#/definitions/CommissionScheme"
+        },
+        "skipPendingOrders": {
+          "type": "boolean",
+          "description": "Flag indicating that pending orders should not be copied. Default is to copy pending orders"
+        },
+        "maxTradeRisk": {
+          "description": "Max risk per trade, expressed as a fraction of 1. If trade has a SL, the trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk limit",
+          "type": "number"
+        },
+        "reverse": {
+          "description": "flag indicating that the strategy should be copied in a reverse direction",
+          "type": "boolean"
+        },
+        "reduceCorrelations": {
+          "description": "Setting indicating whether to enable automatic trade correlation reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit correlations on strategy level) or by-account (limit correlations on account level)",
+          "type": "string",
+          "enum": [
+            "by-strategy",
+            "by-account"
+          ]
+        },
+        "symbolFilter": {
+          "description": "Symbol filter which can be used to copy only specific symbols or exclude some symbols from copying",
+          "$ref": "#/definitions/StrategySymbolFilter"
+        },
+        "newsFilter": {
+          "description": "News risk filter configuration. Experimental feature",
+          "$ref": "#/definitions/StrategyNewsFilter"
+        },
+        "riskLimits": {
+          "description": "Strategy risk limits. You can configure trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or equity drawdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyRiskLimit"
+          }
+        },
+        "maxLeverage": {
+          "description": "Max leverage risk restriction. All trades resulting in a leverage value higher than specified will be skipped",
+          "type": "number"
+        },
+        "symbolMapping": {
+          "description": "Defines how symbol name should be changed when trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the trades are copied using signal source symbol name",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SymbolMapping"
+          }
+        },
+        "tradeSizeScaling": {
+          "$ref": "#/definitions/StrategyTradeSizeScaling",
+          "description": "Trade size scaling settings. By default the trade size on strategy subscriber side will be scaled according to balance to preserve risk."
+        },
+        "copyStopLoss": {
+          "type": "boolean",
+          "description": "Flag indicating whether stop loss should be copied. Default is to copy stop loss"
+        },
+        "copyTakeProfit": {
+          "type": "boolean",
+          "description": "Flag indicating whether take profit should be copied. Default is to copy take profit"
+        },
+        "allowedSides": {
+          "description": "Trade sides which will be copied. Buy trades only, sell trades only or all trades. Default is to copy all trades.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ]
+          }
+        },
+        "minTradeVolume": {
+          "type": "number",
+          "description": "Minimum trade volume to copy. Trade signals with a smaller volume will not be copied"
+        },
+        "maxTradeVolume": {
+          "type": "number",
+          "description": "Maximum trade volume to copy. Trade signals with a larger volume will be copied with maximum volume instead"
+        },
+        "signalDelay": {
+          "$ref": "#/definitions/StrategySignalDelay",
+          "description": "Extra trade copying delay introduced by trade copier before applying the trade signal. You can configure either a fixed or a random delay"
+        },
+        "platformCommissionRate": {
+          "description": "Commission rate the platform charges for strategy copying, applied to commissions charged by provider. This commission applies only to accounts not managed directly by provider. Should be fraction of 1",
+          "type": "number"
+        },
+        "removed": {
+          "type": "boolean",
+          "description": "Flag indicating whether a portfolio strategy is removed"
+        },
+        "removedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Removal time"
+        },
+        "closeOnRemovalMode": {
+          "description": "position close mode on strategy or subscription removal. Preserve means that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means that positions will continue to be managed by CopyFactory, but only close signals will be copied. close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close signals will be copied or signals to open positions for the symbols which already have positions opened. close-immediately means that all positions will be closed immediately. Default is close-immediately.",
+          "type": "string",
+          "enum": [
+            "preserve",
+            "close-gracefully-by-position",
+            "close-gracefully-by-symbol",
+            "close-immediately"
+          ]
+        }
+      }
+    },
+    "StrategySignalDelay": {
+      "description": "Defines extra trading signal delay which will be introduced by trade copier prior to copying the signal. The delay can be configured either as a fixed delay or a random delay.",
+      "type": "object",
+      "required": [
+        "minInSeconds",
+        "maxInSeconds"
+      ],
+      "properties": {
+        "minInSeconds": {
+          "type": "number",
+          "description": "Min extra trading signal delay value expressed in seconds"
+        },
+        "maxInSeconds": {
+          "type": "number",
+          "description": "Max extra trading signal delay value expressed in seconds"
+        }
+      }
+    },
+    "StrategyTradeSizeScaling": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "If set to balance, the trade size on strategy subscriber will be scaled according to balance to preserve risk. If set to equity, the trade size on strategy subscriber will be scaled according to subscriber equity. If value is none, then trade size will be preserved irregardless of the subscriber balance. If value is contractSize, then trade size will be scaled according to contract size. If fixedVolume is set, then trade will be copied with a fixed volume of traceVolume setting. If fixedRisk is set, then each trade will be copied with a trade volume set to risk specific fraction of balance as configured by riskFraction setting. Note, that in fixedRisk mode trades without a SL are not copied. If expression is set, then trade volume will be calculated using a user-defined expression. Note, that expression trade size scaling mode is intended for advanced users and we DO NOT RECOMMEND using it unless you understand what are you doing, as mistakes in expression can result in loss. Default is balance.",
+          "enum": [
+            "none",
+            "contractSize",
+            "balance",
+            "equity",
+            "fixedVolume",
+            "fixedRisk",
+            "expression"
+          ]
+        },
+        "tradeVolume": {
+          "type": "number",
+          "description": "Fixed trade volume for use with fixedVolume trade size scaling mode"
+        },
+        "riskFraction": {
+          "type": "number",
+          "description": "Fixed risk fraction for use with fixedRisk trade size scaling mode"
+        },
+        "forceTinyTrades": {
+          "type": "boolean",
+          "description": "If set to true, that trades smaller than minVolume - 0.5 * volumeStep will be placed with minVolume volume, in spite that they will result in increased trade risk, as long as risk increase is in line with maxRiskCoefficient configuration. Othersite such trades will be skipped to avoid taking excessive trade risk. Default is false."
+        },
+        "maxRiskCoefficient": {
+          "type": "number",
+          "description": "Sometimes when placing a small trade, the risk taken can exceed the subscription expectation due to volume rounding or forcefully placing tiny trades in accordance with forceTinyTrades setting. The maxRiskCoefficient setting will act as an extra line of protection to restrict trades if actual risk exceeds the value of expected subscription risk multiplied by maxRiskCoefficient. As a result trade volume will be decreased correspondingly or trade will be skipped if resulting volume is less than minVolume. Default value is 5, minimum value is 1."
+        },
+        "expression": {
+          "type": "string",
+          "description": "math.js expression which will be used to calculate trade volume (see https://mathjs.org/docs/expressions/syntax.html). Following variables are available in expression scope: providerVolume - provider signal trade size; providerTradeAmount - provider signal trade value in trade copier base curency; multiplier - subscription multiplier value; providerBalance - provider balance value in trade copier base currency; balance - subscriber balance value in trade copier base currency; quoteOrOpenPrice - current asset price (for market orders) or open price (for pending orders) on subscriber side; tickValue - current asset tick value on subscriber side expressed in trade copier base currency; tickSize - tick size on subscriber side; providerScaledVolume - provider trade volume multiplied by provider contract size; contractSize - subscriber contract size; providerStopLoss - provider signal stop loss price; providerTakeProfit - provider signal take profit price; accountCurrencyExchangeRate - subscriber exchange rate of account currency to trade copier base currency"
+        }
+      }
+    },
+    "PortfolioStrategyMember": {
+      "type": "object",
+      "required": [
+        "strategyId"
+      ],
+      "properties": {
+        "strategyId": {
+          "description": "id of the portfolio member. Either a strategy or portfolio id",
+          "type": "string"
+        },
+        "multiplier": {
+          "description": "member copy ratio in this portfolio",
+          "type": "number"
+        },
+        "skipPendingOrders": {
+          "type": "boolean",
+          "description": "Flag indicating that pending orders should not be copied. Default is to copy pending orders"
+        },
+        "maxTradeRisk": {
+          "description": "Max risk per trade, expressed as a fraction of 1. If trade has a SL, the trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk limit",
+          "type": "number"
+        },
+        "reverse": {
+          "description": "Flag indicating that the strategy should be copied in a reverse direction",
+          "type": "boolean"
+        },
+        "reduceCorrelations": {
+          "description": "Setting indicating whether to enable automatic trade correlation reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit correlations on strategy level) or by-account (limit correlations on account level)",
+          "type": "string",
+          "enum": [
+            "by-strategy",
+            "by-account"
+          ]
+        },
+        "symbolFilter": {
+          "description": "Symbol filter which can be used to copy only specific symbols or exclude some symbols from copying",
+          "$ref": "#/definitions/StrategySymbolFilter"
+        },
+        "newsFilter": {
+          "description": "News risk filter configuration. Experimental feature",
+          "$ref": "#/definitions/StrategyNewsFilter"
+        },
+        "riskLimits": {
+          "description": "Strategy risk limits. You can configure trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or equity drawdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyRiskLimit"
+          }
+        },
+        "maxLeverage": {
+          "description": "Max leverage risk restriction. All trades resulting in a leverage value higher than specified will be skipped",
+          "type": "number"
+        },
+        "symbolMapping": {
+          "description": "Defines how symbol name should be changed when trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the trades are copied using signal source symbol name",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SymbolMapping"
+          }
+        },
+        "tradeSizeScaling": {
+          "$ref": "#/definitions/StrategyTradeSizeScaling",
+          "description": "Trade size scaling settings. By default the trade size on strategy subscriber side will be scaled according to balance to preserve risk."
+        },
+        "copyStopLoss": {
+          "type": "boolean",
+          "description": "Flag indicating whether stop loss should be copied. Default is to copy stop loss"
+        },
+        "copyTakeProfit": {
+          "type": "boolean",
+          "description": "Flag indicating whether take profit should be copied. Default is to copy take profit"
+        },
+        "allowedSides": {
+          "description": "Trade sides which will be copied. Buy trades only, sell trades only or all trades. Default is to copy all trades.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ]
+          }
+        },
+        "minTradeVolume": {
+          "type": "number",
+          "description": "Minimum trade volume to copy. Trade signals with a smaller volume will not be copied"
+        },
+        "maxTradeVolume": {
+          "type": "number",
+          "description": "Maximum trade volume to copy. Trade signals with a larger volume will be copied with maximum volume instead"
+        },
+        "signalDelay": {
+          "$ref": "#/definitions/StrategySignalDelay",
+          "description": "Extra trade copying delay introduced by trade copier before applying the trade signal. You can configure either a fixed or a random delay"
+        },
+        "removed": {
+          "type": "boolean",
+          "description": "Flag indicating whether a portfolio strategy member is removed"
+        },
+        "removedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Removal time"
+        },
+        "closeOnRemovalMode": {
+          "description": "position close mode on strategy or subscription removal. Preserve means that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means that positions will continue to be managed by CopyFactory, but only close signals will be copied. close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close signals will be copied or signals to open positions for the symbols which already have positions opened. close-immediately means that all positions will be closed immediately. Default is close-immediately.",
+          "type": "string",
+          "enum": [
+            "preserve",
+            "close-gracefully-by-position",
+            "close-gracefully-by-symbol",
+            "close-immediately"
+          ]
+        }
+      }
+    },
+    "UpdatedPortfolioStrategy": {
+      "type": "object",
+      "required": [
+        "name",
+        "description"
+      ],
+      "properties": {
+        "name": {
+          "description": "strategy human-readable name",
+          "type": "string"
+        },
+        "description": {
+          "description": "longer strategy human-readable description",
+          "type": "string"
+        },
+        "members": {
+          "description": "array of portfolio memebers",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortfolioStrategyMember"
+          }
+        },
+        "commissionScheme": {
+          "description": "Commission scheme allowed by this strategy. By default monthly billing period with no commission is being used",
+          "$ref": "#/definitions/CommissionScheme"
+        },
+        "skipPendingOrders": {
+          "type": "boolean",
+          "description": "Flag indicating that pending orders should not be copied. Default is to copy pending orders"
+        },
+        "maxTradeRisk": {
+          "description": "Max risk per trade, expressed as a fraction of 1. If trade has a SL, the trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk limit",
+          "type": "number"
+        },
+        "reverse": {
+          "description": "flag indicating that the strategy should be copied in a reverse direction",
+          "type": "boolean"
+        },
+        "reduceCorrelations": {
+          "description": "Setting indicating whether to enable automatic trade correlation reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit correlations on strategy level) or by-account (limit correlations on account level)",
+          "type": "string",
+          "enum": [
+            "by-strategy",
+            "by-account"
+          ]
+        },
+        "symbolFilter": {
+          "description": "Symbol filter which can be used to copy only specific symbols or exclude some symbols from copying",
+          "$ref": "#/definitions/StrategySymbolFilter"
+        },
+        "newsFilter": {
+          "description": "News risk filter configuration. Experimental feature",
+          "$ref": "#/definitions/StrategyNewsFilter"
+        },
+        "riskLimits": {
+          "description": "Strategy risk limits. You can configure trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or equity drawdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyRiskLimit"
+          }
+        },
+        "maxLeverage": {
+          "description": "Max leverage risk restriction. All trades resulting in a leverage value higher than specified will be skipped",
+          "type": "number"
+        },
+        "symbolMapping": {
+          "description": "Defines how symbol name should be changed when trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the trades are copied using signal source symbol name",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SymbolMapping"
+          }
+        },
+        "tradeSizeScaling": {
+          "$ref": "#/definitions/StrategyTradeSizeScaling",
+          "description": "Trade size scaling settings. By default the trade size on strategy subscriber side will be scaled according to balance to preserve risk."
+        },
+        "copyStopLoss": {
+          "type": "boolean",
+          "description": "Flag indicating whether stop loss should be copied. Default is to copy stop loss"
+        },
+        "copyTakeProfit": {
+          "type": "boolean",
+          "description": "Flag indicating whether take profit should be copied. Default is to copy take profit"
+        },
+        "allowedSides": {
+          "description": "Trade sides which will be copied. Buy trades only, sell trades only or all trades. Default is to copy all trades.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ]
+          }
+        },
+        "minTradeVolume": {
+          "type": "number",
+          "description": "Minimum trade volume to copy. Trade signals with a smaller volume will not be copied"
+        },
+        "maxTradeVolume": {
+          "type": "number",
+          "description": "Maximum trade volume to copy. Trade signals with a larger volume will be copied with maximum volume instead"
+        },
+        "signalDelay": {
+          "$ref": "#/definitions/StrategySignalDelay",
+          "description": "Extra trade copying delay introduced by trade copier before applying the trade signal. You can configure either a fixed or a random delay"
+        }
+      }
+    },
+    "Strategy": {
+      "type": "object",
+      "required": [
+        "_id",
+        "accountId",
+        "platformCommissionRate",
+        "name",
+        "description"
+      ],
+      "properties": {
+        "_id": {
+          "description": "strategy id, unique across the platform",
+          "type": "string"
+        },
+        "name": {
+          "description": "strategy human-readable name",
+          "type": "string"
+        },
+        "description": {
+          "description": "longer strategy human-readable description",
+          "type": "string"
+        },
+        "skipPendingOrders": {
+          "type": "boolean",
+          "description": "Flag indicating that pending orders should not be copied. Default is to copy pending orders"
+        },
+        "accountId": {
+          "description": "Id of the MetaApi account providing the strategy",
+          "type": "string"
+        },
+        "commissionScheme": {
+          "description": "Commission scheme allowed by this strategy",
+          "$ref": "#/definitions/CommissionScheme"
+        },
+        "platformCommissionRate": {
+          "description": "Commission rate the platform charges for strategy copying, applied to commissions charged by provider. This commission applies only to accounts not managed directly by provider. Should be fraction of 1",
+          "type": "number"
+        },
+        "maxTradeRisk": {
+          "description": "Max risk per trade, expressed as a fraction of 1. If trade has a SL, the trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk limit",
+          "type": "number"
+        },
+        "reverse": {
+          "description": "Flag indicating that the strategy should be copied in a reverse direction",
+          "type": "boolean"
+        },
+        "reduceCorrelations": {
+          "description": "Setting indicating whether to enable automatic trade correlation reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit correlations on strategy level) or by-account (limit correlations on account level)",
+          "type": "string",
+          "enum": [
+            "by-strategy",
+            "by-account"
+          ]
+        },
+        "symbolFilter": {
+          "description": "Symbol filters which can be used to copy only specific symbols or exclude some symbols from copying",
+          "$ref": "#/definitions/StrategySymbolFilter"
+        },
+        "newsFilter": {
+          "description": "News risk filter configuration",
+          "$ref": "#/definitions/StrategyNewsFilter"
+        },
+        "riskLimits": {
+          "description": "optional strategy risk limits. You can configure trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or equity drawdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyRiskLimit"
+          }
+        },
+        "maxLeverage": {
+          "description": "Max leverage risk restriction. All trades resulting in a leverage value higher than specified will be skipped",
+          "type": "number"
+        },
+        "symbolMapping": {
+          "description": "Defines how symbol name should be changed when trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the trades are copied using signal source symbol name",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SymbolMapping"
+          }
+        },
+        "tradeSizeScaling": {
+          "$ref": "#/definitions/StrategyTradeSizeScaling",
+          "description": "Trade size scaling settings. By default the trade size on strategy subscriber side will be scaled according to balance to preserve risk."
+        },
+        "copyStopLoss": {
+          "type": "boolean",
+          "description": "Flag indicating whether stop loss should be copied. Default is to copy stop loss"
+        },
+        "copyTakeProfit": {
+          "type": "boolean",
+          "description": "Flag indicating whether take profit should be copied. Default is to copy take profit"
+        },
+        "allowedSides": {
+          "description": "Trade sides which will be copied. Buy trades only, sell trades only or all trades. Default is to copy all trades.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ]
+          }
+        },
+        "minTradeVolume": {
+          "type": "number",
+          "description": "Minimum trade volume to copy. Trade signals with a smaller volume will not be copied"
+        },
+        "maxTradeVolume": {
+          "type": "number",
+          "description": "Maximum trade volume to copy. Trade signals with a larger volume will be copied with maximum volume instead"
+        },
+        "signalDelay": {
+          "$ref": "#/definitions/StrategySignalDelay",
+          "description": "Extra trade copying delay introduced by trade copier before applying the trade signal. You can configure either a fixed or a random delay"
+        },
+        "magicFilter": {
+          "description": "Magic (expert id) filter",
+          "$ref": "#/definitions/StrategyMagicFilter"
+        },
+        "equityCurveFilter": {
+          "description": "Filter which permits the trades only if account equity is greater than balance moving average",
+          "$ref": "#/definitions/StrategyEquityCurveFilter"
+        },
+        "drawdownFilter": {
+          "description": "Master account strategy drawdown filter",
+          "$ref": "#/definitions/StrategyDrawdownFilter"
+        },
+        "symbolsTraded": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Symbols traded by this strategy. Specifying the symbols will improve trade latency on first trades made by strategy. If you do not specify this setting the application will monitor the strategy trades and detect the symbols automatically over time"
+        },
+        "timeSettings": {
+          "description": "Settings to manage copying timeframe and position lifetime. Default is to copy position within 1 minute from being opened at source and let the position to live for up to 90 days",
+          "$ref": "#/definitions/StrategyTimeSettings"
+        },
+        "removed": {
+          "type": "boolean",
+          "description": "Flag indicating whether a strategy is removed. This field is read-only. This field can be changed via remove potfolio member API only"
+        },
+        "removedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Removal time. This field can be changed via remove potfolio member API only"
+        },
+        "closeOnRemovalMode": {
+          "description": "position close mode on strategy or subscription removal. Preserve means that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means that positions will continue to be managed by CopyFactory, but only close signals will be copied. close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close signals will be copied or signals to open positions for the symbols which already have positions opened. close-immediately means that all positions will be closed immediately. Default is close-immediately. This field can be changed via remove potfolio member API only",
+          "type": "string",
+          "enum": [
+            "preserve",
+            "close-gracefully-by-position",
+            "close-gracefully-by-symbol",
+            "close-immediately"
+          ]
+        },
+        "telegram": {
+          "$ref": "#/definitions/StrategyTelegramSettings",
+          "description": "Telegram integration settings"
+        }
+      }
+    },
+    "StrategyTelegramSettings": {
+      "type": "object",
+      "description": "Strategy Telegram integration settings",
+      "required": [
+        "publishing"
+      ],
+      "properties": {
+        "publishing": {
+          "$ref": "#/definitions/StrategyTelegramPublishingSettings",
+          "description": "Telegarm publishing settings"
+        }
+      }
+    },
+    "StrategyTelegramPublishingSettings": {
+      "type": "object",
+      "description": "Strategy Telegram publishing settings",
+      "required": [
+        "token",
+        "chatId",
+        "template"
+      ],
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Telegram bot API token"
+        },
+        "chatId": {
+          "type": "string",
+          "description": "Telegram chatId to publish signals to. It can reference either a public channel (e.g. @myChannel), private channel (works by chat id only) or a user (works by chatId only). Note that in order to publish signals to a channel bot must be an admin of the channel"
+        },
+        "template": {
+          "type": "string",
+          "description": "Telegram message template. A substring of `${description}` will be replaced with a signal description. Other variables you can use: ${operation}, ${orderId}, ${side}, ${type}, ${volume}, ${symbol}, ${openPrice}, ${stopLoss}, ${takeProfit}."
+        }
+      }
+    },
+    "CommissionScheme": {
+      "type": "object",
+      "required": [
+        "type",
+        "billingPeriod",
+        "commissionRate"
+      ],
+      "properties": {
+        "type": {
+          "description": "commission type",
+          "type": "string",
+          "enum": [
+            "flat-fee",
+            "lots-traded",
+            "lots-won",
+            "amount-traded",
+            "amount-won",
+            "high-water-mark"
+          ]
+        },
+        "billingPeriod": {
+          "description": "billing period",
+          "type": "string",
+          "enum": [
+            "week",
+            "month",
+            "quarter"
+          ]
+        },
+        "commissionRate": {
+          "description": "commission rate. Should be greater than or equal to zero if commission type is flat-fee, lots-traded or lots-won, should be greater than or equal to zero and less than or equal to 1 if commission type is amount-traded, amount-won, high-water-mark.",
+          "type": "number"
+        }
+      }
+    },
+    "UpdatedStrategy": {
+      "type": "object",
+      "required": [
+        "accountId",
+        "name",
+        "description"
+      ],
+      "properties": {
+        "name": {
+          "description": "strategy human-readable name",
+          "type": "string"
+        },
+        "description": {
+          "description": "longer strategy human-readable description",
+          "type": "string"
+        },
+        "skipPendingOrders": {
+          "type": "boolean",
+          "description": "Flag indicating that pending orders should not be copied. Default is to copy pending orders"
+        },
+        "accountId": {
+          "description": "Id of the MetaApi account providing the strategy",
+          "type": "string"
+        },
+        "commissionScheme": {
+          "description": "Commission scheme allowed by this strategy. By default monthly billing period with no commission is being used",
+          "$ref": "#/definitions/CommissionScheme"
+        },
+        "maxTradeRisk": {
+          "description": "Max risk per trade, expressed as a fraction of 1. If trade has a SL, the trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk limit",
+          "type": "number"
+        },
+        "reverse": {
+          "description": "flag indicating that the strategy should be copied in a reverse direction",
+          "type": "boolean"
+        },
+        "reduceCorrelations": {
+          "description": "Setting indicating whether to enable automatic trade correlation reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit correlations on strategy level) or by-account (limit correlations on account level)",
+          "type": "string",
+          "enum": [
+            "by-strategy",
+            "by-account"
+          ]
+        },
+        "symbolFilter": {
+          "description": "Symbol filter which can be used to copy only specific symbols or exclude some symbols from copying",
+          "$ref": "#/definitions/StrategySymbolFilter"
+        },
+        "newsFilter": {
+          "description": "News risk filter configuration. Experimental feature",
+          "$ref": "#/definitions/StrategyNewsFilter"
+        },
+        "riskLimits": {
+          "description": "Strategy risk limits. You can configure trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or equity drawdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyRiskLimit"
+          }
+        },
+        "maxLeverage": {
+          "description": "Max leverage risk restriction. All trades resulting in a leverage value higher than specified will be skipped",
+          "type": "number"
+        },
+        "symbolMapping": {
+          "description": "Defines how symbol name should be changed when trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the trades are copied using signal source symbol name",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SymbolMapping"
+          }
+        },
+        "tradeSizeScaling": {
+          "$ref": "#/definitions/StrategyTradeSizeScaling",
+          "description": "Trade size scaling settings. By default the trade size on strategy subscriber side will be scaled according to balance to preserve risk."
+        },
+        "copyStopLoss": {
+          "type": "boolean",
+          "description": "Flag indicating whether stop loss should be copied. Default is to copy stop loss"
+        },
+        "copyTakeProfit": {
+          "type": "boolean",
+          "description": "Flag indicating whether take profit should be copied. Default is to copy take profit"
+        },
+        "allowedSides": {
+          "description": "Trade sides which will be copied. Buy trades only, sell trades only or all trades. Default is to copy all trades.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ]
+          }
+        },
+        "minTradeVolume": {
+          "type": "number",
+          "description": "Minimum trade volume to copy. Trade signals with a smaller volume will not be copied"
+        },
+        "maxTradeVolume": {
+          "type": "number",
+          "description": "Maximum trade volume to copy. Trade signals with a larger volume will be copied with maximum volume instead"
+        },
+        "signalDelay": {
+          "$ref": "#/definitions/StrategySignalDelay",
+          "description": "Extra trade copying delay introduced by trade copier before applying the trade signal. You can configure either a fixed or a random delay"
+        },
+        "equityCurveFilter": {
+          "description": "Filter which permits the trades only if account equity is greater than balance moving average",
+          "$ref": "#/definitions/StrategyEquityCurveFilter"
+        },
+        "drawdownFilter": {
+          "description": "Master account strategy drawdown filter",
+          "$ref": "#/definitions/StrategyDrawdownFilter"
+        },
+        "symbolsTraded": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Symbols traded by this strategy. Specifying the symbols will improve trade latency on first trades made by strategy. If you do not specify this setting the application will monitor the strategy trades and detect the symbols automatically over time"
+        },
+        "magicFilter": {
+          "description": "Magic (expert id) filter",
+          "$ref": "#/definitions/StrategyMagicFilter"
+        },
+        "timeSettings": {
+          "description": "Settings to manage copying timeframe and position lifetime. Default is to copy position within 1 minute from being opened at source and let the position to live for up to 90 days",
+          "$ref": "#/definitions/StrategyTimeSettings"
+        },
+        "telegram": {
+          "$ref": "#/definitions/StrategyTelegramSettings",
+          "description": "Telegram integration settings"
+        }
+      }
+    },
+    "StrategyEquityCurveFilter": {
+      "type": "object",
+      "required": [
+        "period",
+        "timeframe"
+      ],
+      "properties": {
+        "period": {
+          "type": "integer",
+          "description": "moving average period, must be greater or equal to 1"
+        },
+        "timeframe": {
+          "type": "string",
+          "description": "moving average timeframe, a positive integer followed by time unit, e.g. 2h. Allowed units are s, m, h, d and w."
+        }
+      }
+    },
+    "StrategyDrawdownFilter": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "maxRelativeDrawdown": {
+          "description": "Maximum relative drawdown value after which action is executed. Drawdown should be configured as a fraction of 1, i.e. 0.15 means 15% drawdown value",
+          "type": "number"
+        },
+        "maxAbsoluteDrawdown": {
+          "description": "Maximum absolute drawdown value after which action is executed. Drawdown should be expressed in provider account currency",
+          "type": "number"
+        },
+        "action": {
+          "description": "Action to take when drawdown exceeds maxRelativeDrawdown or maxAbsoluteDrawdown value. include means the trading signal will be transmitted only if dd is greater than maxRelativeDrawdown or maxAbsoluteDrawdown value. exclude means the trading signal will be transmitted only if dd is less than maxRelativeDrawdown or maxAbsoluteDrawdown value.",
+          "type": "string",
+          "enum": [
+            "include",
+            "exclude"
+          ]
+        }
+      }
+    },
+    "StrategySymbolFilter": {
+      "type": "object",
+      "required": [
+        "included",
+        "excluded"
+      ],
+      "properties": {
+        "included": {
+          "description": "List of symbols copied. Leave the value empty to copy all symbols",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excluded": {
+          "description": "List of symbols excluded from copying. Leave the value empty to copy all symbols",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "StrategyNewsFilter": {
+      "type": "object",
+      "properties": {
+        "breakingNewsFilter": {
+          "description": "optional breaking news filter",
+          "type": "object",
+          "required": [
+            "priorities"
+          ],
+          "properties": {
+            "priorities": {
+              "description": "List of breaking news priorities to stop trading on, leave empty to disable breaking news filter",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ]
+              }
+            },
+            "closePositionTimeGapInMinutes": {
+              "description": "Time interval specifying when to force close an already open position after breaking news. Default value is 60 minutes",
+              "type": "number"
+            },
+            "openPositionFollowingTimeGapInMinutes": {
+              "description": "Time interval specifying when it is allowed to open position after calendar news. Default value is 60 minutes",
+              "type": "number"
+            }
+          }
+        },
+        "calendarNewsFilter": {
+          "description": "optional calendar news filter",
+          "type": "object",
+          "required": [
+            "priorities"
+          ],
+          "properties": {
+            "priorities": {
+              "description": "List of calendar news priorities to stop trading on, leave empty to disable calendar news filter",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "election",
+                  "high",
+                  "medium",
+                  "low"
+                ]
+              }
+            },
+            "closePositionTimeGapInMinutes": {
+              "description": "Time interval specifying when to force close an already open position before calendar news. Default value is 60 minutes",
+              "type": "number"
+            },
+            "openPositionPrecedingTimeGapInMinutes": {
+              "description": "Time interval specifying when it is still allowed to open position before calendar news. Default value is 120 minutes",
+              "type": "number"
+            },
+            "openPositionFollowingTimeGapInMinutes": {
+              "description": "Time interval specifying when it is allowed to open position after calendar news. Default value is 60 minutes",
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "StrategyRiskLimit": {
+      "type": "object",
+      "required": [
+        "type",
+        "applyTo",
+        "closePositions"
+      ],
+      "properties": {
+        "type": {
+          "description": "restriction type",
+          "type": "string",
+          "enum": [
+            "day",
+            "date",
+            "week",
+            "week-to-date",
+            "month",
+            "month-to-date",
+            "quarter",
+            "quarter-to-date",
+            "year",
+            "year-to-date",
+            "lifetime"
+          ]
+        },
+        "applyTo": {
+          "description": "account metric to apply limit to. Note that in order to use equity-difference you will need to enable risk management API on subscriber accounts",
+          "type": "string",
+          "enum": [
+            "balance-difference",
+            "balance-minus-equity",
+            "equity-difference"
+          ]
+        },
+        "maxAbsoluteRisk": {
+          "description": "Max drawdown allowed, measured in account currency",
+          "type": "number"
+        },
+        "maxRelativeRisk": {
+          "description": "Max drawdown allowed, expressed as a fraction of 1",
+          "type": "number"
+        },
+        "closePositions": {
+          "description": "Whether to force close positions when the risk is reached. If value is false then only the new trades will be halted, but existing ones will not be closed",
+          "type": "boolean"
+        },
+        "startTime": {
+          "description": "Time to start risk tracking from. All previous trades will be ignored. You can use this value to reset the filter after stopout event",
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    },
+    "StrategyMagicFilter": {
+      "type": "object",
+      "required": [
+        "included",
+        "excluded"
+      ],
+      "properties": {
+        "included": {
+          "description": "List of magics (expert ids) or magic ranges copied. Leave the value empty to copy all magics",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excluded": {
+          "description": "List of magics (expert ids) or magic ranges excluded from copying. Leave the value empty to copy all magics",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "StrategyTimeSettings": {
+      "type": "object",
+      "properties": {
+        "lifetimeInHours": {
+          "description": "Position lifetime. Default is to keep positions open up to 90 days",
+          "type": "number"
+        },
+        "openingIntervalInMinutes": {
+          "description": "Time interval to copy new positions. Default is to let 1 minute for the position to get copied. If position were not copied during this time, the copying will not be retried anymore.",
+          "type": "number"
+        },
+        "expirePendingOrderSignals": {
+          "type": "boolean",
+          "description": "If set to true, the openingIntervalInMinutes setting will be applied to pending order signals as well. By default pending order signals do not expire"
+        }
+      }
+    },
+    "SymbolMapping": {
+      "type": "object",
+      "required": [
+        "to",
+        "from"
+      ],
+      "properties": {
+        "to": {
+          "type": "string",
+          "description": "Symbol name to convert to"
+        },
+        "from": {
+          "type": "string",
+          "description": "Symbol name to convert from"
+        }
+      }
+    },
+    "Subscriber": {
+      "type": "object",
+      "required": [
+        "_id",
+        "subscriptions",
+        "name"
+      ],
+      "properties": {
+        "_id": {
+          "description": "Id of the MetaApi account to copy trades to",
+          "type": "string"
+        },
+        "name": {
+          "description": "account human-readable name",
+          "type": "string"
+        },
+        "reservedMarginFraction": {
+          "description": "Fraction of reserved margin to reduce a risk of margin call. Default is to reserve no margin. We recommend using maxLeverage setting instead. Specified as a fraction of balance thus the value is usually greater than 1",
+          "type": "number"
+        },
+        "phoneNumbers": {
+          "description": "Phone numbers to send sms notifications to. Leave empty to receive no sms notifications",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "minTradeAmount": {
+          "description": "Value of minimal trade size allowed, expressed in amount of account currency. Can be useful if your broker charges a fixed fee per transaction so that you can skip small trades with high broker commission rates. Default is 0",
+          "type": "number"
+        },
+        "closeOnly": {
+          "description": "Setting wich instructs the application not to open new positions. by-symbol means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades per symbol). immediately means to close all positions immediately",
+          "type": "string",
+          "enum": [
+            "by-position",
+            "by-symbol",
+            "immediately"
+          ]
+        },
+        "riskLimits": {
+          "description": "Account risk limits. You can configure trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or equity drawdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyRiskLimit"
+          }
+        },
+        "maxLeverage": {
+          "description": "Setting indicating maxumum leverage allowed when opening a new positions. Any trade which results in a higher leverage will be discarded",
+          "type": "number"
+        },
+        "copyStopLoss": {
+          "type": "boolean",
+          "description": "Flag indicating whether stop loss should be copied. Default is to copy stop loss"
+        },
+        "copyTakeProfit": {
+          "type": "boolean",
+          "description": "Flag indicating whether take profit should be copied. Default is to copy take profit"
+        },
+        "allowedSides": {
+          "description": "Trade sides which will be copied. Buy trades only, sell trades only or all trades. Default is to copy all trades.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ]
+          }
+        },
+        "minTradeVolume": {
+          "type": "number",
+          "description": "Minimum trade volume to copy. Trade signals with a smaller volume will not be copied"
+        },
+        "maxTradeVolume": {
+          "type": "number",
+          "description": "Maximum trade volume to copy. Trade signals with a larger volume will be copied with maximum volume instead"
+        },
+        "signalDelay": {
+          "$ref": "#/definitions/StrategySignalDelay",
+          "description": "Extra trade copying delay introduced by trade copier before applying the trade signal. You can configure either a fixed or a random delay"
+        },
+        "subscriptions": {
+          "description": "Strategy subscriptions",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategySubscription"
+          }
+        },
+        "removed": {
+          "type": "boolean",
+          "description": "Flag indicating whether a subscriber is removed"
+        },
+        "removedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Removal time"
+        }
+      }
+    },
+    "UpdatedSubscriber": {
+      "type": "object",
+      "required": [
+        "subscriptions",
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "description": "Subscriber human-readable name",
+          "type": "string"
+        },
+        "reservedMarginFraction": {
+          "description": "Fraction of reserved margin to reduce a risk of margin call. Default is to reserve no margin. We recommend using maxLeverage setting instead. Specified as a fraction of balance thus the value is usually greater than 1",
+          "type": "number"
+        },
+        "phoneNumbers": {
+          "description": "Phone numbers to send sms notifications to. Leave empty to receive no sms notifications",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "minTradeAmount": {
+          "description": "Value of minimal trade size allowed, expressed in amount of account currency. Can be useful if your broker charges a fixed fee per transaction so that you can skip small trades with high broker commission rates. Default is 0",
+          "type": "number"
+        },
+        "closeOnly": {
+          "description": "Setting wich instructs the application not to open new positions. by-symbol means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades per symbol). immediately means to close all positions immediately",
+          "type": "string",
+          "enum": [
+            "by-position",
+            "by-symbol",
+            "immediately"
+          ]
+        },
+        "riskLimits": {
+          "description": "Account risk limits. You can configure trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or equity drawdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyRiskLimit"
+          }
+        },
+        "maxLeverage": {
+          "description": "Setting indicating maxumum leverage allowed when opening a new positions. Any trade which results in a higher leverage will be discarded",
+          "type": "number"
+        },
+        "copyStopLoss": {
+          "type": "boolean",
+          "description": "Flag indicating whether stop loss should be copied. Default is to copy stop loss"
+        },
+        "copyTakeProfit": {
+          "type": "boolean",
+          "description": "Flag indicating whether take profit should be copied. Default is to copy take profit"
+        },
+        "allowedSides": {
+          "description": "Trade sides which will be copied. Buy trades only, sell trades only or all trades. Default is to copy all trades.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ]
+          }
+        },
+        "minTradeVolume": {
+          "type": "number",
+          "description": "Minimum trade volume to copy. Trade signals with a smaller volume will not be copied"
+        },
+        "maxTradeVolume": {
+          "type": "number",
+          "description": "Maximum trade volume to copy. Trade signals with a larger volume will be copied with maximum volume instead"
+        },
+        "signalDelay": {
+          "$ref": "#/definitions/StrategySignalDelay",
+          "description": "Extra trade copying delay introduced by trade copier before applying the trade signal. You can configure either a fixed or a random delay"
+        },
+        "subscriptions": {
+          "description": "Strategy subscriptions",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategySubscription"
+          }
+        }
+      }
+    },
+    "StrategySubscription": {
+      "type": "object",
+      "required": [
+        "strategyId"
+      ],
+      "properties": {
+        "strategyId": {
+          "description": "id of the strategy to subscribe to",
+          "type": "string"
+        },
+        "multiplier": {
+          "description": "subscription multiplier, default is 1x",
+          "type": "number"
+        },
+        "skipPendingOrders": {
+          "type": "boolean",
+          "description": "flag indicating that pending orders should not be copied. Default is to copy pending orders"
+        },
+        "closeOnly": {
+          "description": "setting wich instructs the application not to open new positions. by-symbol means that it is still allowed to open new positions with a symbol equal to the symbol of an existing strategy position (can be used to gracefuly exit strategies trading in netting mode or placing a series of related trades per symbol). immediately means to close all positions immediately",
+          "type": "string",
+          "enum": [
+            "by-strategy",
+            "by-symbol",
+            "immediately"
+          ]
+        },
+        "maxTradeRisk": {
+          "description": "max risk per trade, expressed as a fraction of 1. If trade has a SL, the trade size will be adjusted to match the risk limit. If not, the trade SL will be applied according to the risk limit",
+          "type": "number"
+        },
+        "reverse": {
+          "description": "flag indicating that the strategy should be copied in a reverse direction",
+          "type": "boolean"
+        },
+        "reduceCorrelations": {
+          "description": "setting indicating whether to enable automatic trade correlation reduction. Possible settings are not specified (disable correlation risk restrictions), by-strategy (limit correlations on strategy level) or by-account (limit correlations on account level)",
+          "type": "string",
+          "enum": [
+            "by-strategy",
+            "by-account"
+          ]
+        },
+        "symbolFilter": {
+          "description": "symbol filter which can be used to copy only specific symbols or exclude some symbols from copying",
+          "$ref": "#/definitions/StrategySymbolFilter"
+        },
+        "newsFilter": {
+          "description": "news risk filter configuration",
+          "$ref": "#/definitions/StrategyNewsFilter"
+        },
+        "riskLimits": {
+          "description": "strategy risk limits. You can configure trading to be stopped once total drawdown generated during specific period is exceeded. Can be specified either for balance or equity drawdown",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyRiskLimit"
+          }
+        },
+        "maxLeverage": {
+          "description": "setting indicating maxumum leverage allowed when opening a new positions. Any trade which results in a higher leverage will be discarded",
+          "type": "number"
+        },
+        "symbolMapping": {
+          "description": "Defines how symbol name should be changed when trading (e.g. when broker uses symbol names with unusual suffixes). By default this setting is disabled and the trades are copied using signal source symbol name",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SymbolMapping"
+          }
+        },
+        "tradeSizeScaling": {
+          "$ref": "#/definitions/StrategyTradeSizeScaling",
+          "description": "Trade size scaling settings. By default the trade size on strategy subscriber side will be scaled according to balance to preserve risk."
+        },
+        "copyStopLoss": {
+          "type": "boolean",
+          "description": "Flag indicating whether stop loss should be copied. Default is to copy stop loss"
+        },
+        "copyTakeProfit": {
+          "type": "boolean",
+          "description": "Flag indicating whether take profit should be copied. Default is to copy take profit"
+        },
+        "allowedSides": {
+          "description": "Trade sides which will be copied. Buy trades only, sell trades only or all trades. Default is to copy all trades.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "buy",
+              "sell"
+            ]
+          }
+        },
+        "minTradeVolume": {
+          "type": "number",
+          "description": "Minimum trade volume to copy. Trade signals with a smaller volume will not be copied"
+        },
+        "maxTradeVolume": {
+          "type": "number",
+          "description": "Maximum trade volume to copy. Trade signals with a larger volume will be copied with maximum volume instead"
+        },
+        "signalDelay": {
+          "$ref": "#/definitions/StrategySignalDelay",
+          "description": "Extra trade copying delay introduced by trade copier before applying the trade signal. You can configure either a fixed or a random delay"
+        },
+        "removed": {
+          "type": "boolean",
+          "description": "flag indicating that the subscription was scheduled for removal once all subscription positions will be closed"
+        },
+        "closeOnRemovalMode": {
+          "description": "position close mode on strategy or subscription removal. Preserve means that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means that positions will continue to be managed by CopyFactory, but only close signals will be copied. close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close signals will be copied or signals to open positions for the symbols which already have positions opened. close-immediately means that all positions will be closed immediately. Default is close-immediately.",
+          "type": "string",
+          "enum": [
+            "preserve",
+            "close-gracefully-by-position",
+            "close-gracefully-by-symbol",
+            "close-immediately"
+          ]
+        }
+      }
+    },
+    "StrategyId": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "value which can be used as a strategy id",
+          "type": "string"
+        }
+      }
+    },
+    "CloseInstructions": {
+      "type": "object",
+      "description": "position close instructions",
+      "required": [
+        "mode",
+        "removeAfter"
+      ],
+      "properties": {
+        "mode": {
+          "description": "position close mode on strategy or subscription removal. Preserve means that positions will not be closed and will not be managed by CopyFactory. close-gracefully-by-position means that positions will continue to be managed by CopyFactory, but only close signals will be copied. close-gracefully-by-symbol means that positions will continue to be managed by CopyFactory, but only close signals will be copied or signals to open positions for the symbols which already have positions opened. close-immediately means that all positions will be closed immediately. Default is close-immediately.",
+          "type": "string",
+          "enum": [
+            "preserve",
+            "close-gracefully-by-position",
+            "close-gracefully-by-symbol",
+            "close-immediately"
+          ]
+        },
+        "removeAfter": {
+          "description": "time to force remove object after. The object will be removed after this time, even if positions are not yet closed fully. Default is current date plus 30 days. Can not be less than 30 days or greater than current date plus 90 days. The setting is ignored when a subscription is being removed",
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "time",
+        "accountId",
+        "subscriber",
+        "provider",
+        "demo",
+        "strategy",
+        "improvement",
+        "fee",
+        "payout",
+        "profit",
+        "providerCommission",
+        "platformCommission"
+      ],
+      "properties": {
+        "id": {
+          "description": "transaction id",
+          "type": "string"
+        },
+        "type": {
+          "description": "transaction type. See https://www.mql5.com/en/docs/constants/tradingconstants/dealproperties#enum_deal_type",
+          "type": "string",
+          "enum": [
+            "DEAL_TYPE_BUY",
+            "DEAL_TYPE_SELL"
+          ]
+        },
+        "time": {
+          "description": "transaction time",
+          "type": "string",
+          "format": "datetime"
+        },
+        "subscriberId": {
+          "description": "CopyFactory subscriber id",
+          "type": "string"
+        },
+        "symbol": {
+          "description": "optional symbol traded",
+          "type": "string"
+        },
+        "subscriberUser": {
+          "description": "strategy subscriber",
+          "$ref": "#/definitions/SubscriberOrProviderUser"
+        },
+        "demo": {
+          "description": "demo account flag",
+          "type": "boolean"
+        },
+        "providerUser": {
+          "description": "strategy provider",
+          "$ref": "#/definitions/SubscriberOrProviderUser"
+        },
+        "strategy": {
+          "description": "strategy",
+          "$ref": "#/definitions/StrategyIdAndName"
+        },
+        "positionId": {
+          "description": "source position id",
+          "type": "string"
+        },
+        "slavePositionId": {
+          "description": "slave position id",
+          "type": "string"
+        },
+        "improvement": {
+          "description": "high-water mark strategy balance improvement",
+          "type": "number"
+        },
+        "providerCommission": {
+          "description": "provider commission",
+          "type": "number"
+        },
+        "platformCommission": {
+          "description": "platform commission",
+          "type": "number"
+        },
+        "incomingProviderCommission": {
+          "description": "commission paid by provider to underlying providers",
+          "type": "number"
+        },
+        "incomingPlatformCommission": {
+          "description": "platform commission paid by provider to underlying providers",
+          "type": "number"
+        },
+        "quantity": {
+          "description": "trade volume",
+          "type": "number"
+        },
+        "lotPrice": {
+          "description": "trade lot price",
+          "type": "number"
+        },
+        "tickPrice": {
+          "description": "trade tick price",
+          "type": "number"
+        },
+        "amount": {
+          "description": "trade amount",
+          "type": "number"
+        },
+        "commission": {
+          "description": "trade commission",
+          "type": "number"
+        },
+        "swap": {
+          "description": "trade swap",
+          "type": "number"
+        },
+        "profit": {
+          "description": "trade profit",
+          "type": "number"
+        },
+        "metrics": {
+          "description": "trade copying metrics such as slippage and latencies. Measured selectively for copied trades",
+          "$ref": "#/definitions/TransactionMetrics"
+        },
+        "updatedAt": {
+          "description": "time the transaction was recorded into db. This value should be used with the transaction streaming API",
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    },
+    "TransactionMetrics": {
+      "type": "object",
+      "properties": {
+        "tradeCopyingLatency": {
+          "description": "trade copying latency, measured in milliseconds based on transaction time provided by broker",
+          "type": "number"
+        },
+        "tradeCopyingSlippageInBasisPoints": {
+          "description": "trade copying slippage, measured in basis points (0.01 percent) based on transaction price provided by broker",
+          "type": "number"
+        },
+        "tradeCopyingSlippageInAccountCurrency": {
+          "description": "trade copying slippage, measured in account currency based on transaction price provided by broker",
+          "type": "number"
+        },
+        "mtAndBrokerSignalLatency": {
+          "description": "trade signal latency introduced by broker and MT platform, measured in milliseconds",
+          "type": "number"
+        },
+        "tradeAlgorithmLatency": {
+          "description": "trade algorithm latency introduced by CopyFactory servers, measured in milliseconds",
+          "type": "number"
+        },
+        "mtAndBrokerTradeLatency": {
+          "description": "trade latency for a copied trade introduced by broker and MT platform, measured in milliseconds",
+          "type": "number"
+        }
+      }
+    },
+    "SubscriberOrProviderUser": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "description": "profile id",
+          "type": "string"
+        },
+        "name": {
+          "description": "user name",
+          "type": "string"
+        },
+        "strategies": {
+          "description": "array of strategy IDs provided by provider or subscribed to by subscriber",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StrategyIdAndName"
+          }
+        }
+      }
+    },
+    "StrategyIdAndName": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "description": "strategy id, unique across the platform",
+          "type": "string"
+        },
+        "name": {
+          "description": "human-readable name",
+          "type": "string"
+        }
+      }
+    },
+    "ExternalSignal": {
+      "type": "object",
+      "required": [
+        "id",
+        "symbol",
+        "type",
+        "time",
+        "volume"
+      ],
+      "properties": {
+        "id": {
+          "description": "external signal id",
+          "type": "string"
+        },
+        "symbol": {
+          "description": "trade symbol",
+          "type": "string"
+        },
+        "type": {
+          "description": "trade type",
+          "type": "string",
+          "enum": [
+            "POSITION_TYPE_BUY",
+            "POSITION_TYPE_SELL",
+            "ORDER_TYPE_BUY_LIMIT",
+            "ORDER_TYPE_SELL_LIMIT",
+            "ORDER_TYPE_BUY_STOP",
+            "ORDER_TYPE_SELL_STOP"
+          ]
+        },
+        "time": {
+          "description": "time the signal emitted at",
+          "type": "string",
+          "format": "datetime"
+        },
+        "updateTime": {
+          "description": "last time of the signal update",
+          "type": "string",
+          "format": "datetime"
+        },
+        "volume": {
+          "type": "number",
+          "description": "volume traded"
+        },
+        "magic": {
+          "description": "extert advisor id",
+          "type": "number"
+        },
+        "stopLoss": {
+          "description": "stop loss price",
+          "type": "number"
+        },
+        "takeProfit": {
+          "description": "take profit price",
+          "type": "number"
+        },
+        "openPrice": {
+          "description": "pending or market order open price",
+          "type": "number"
+        }
+      }
+    },
+    "ExternalSignalUpdate": {
+      "type": "object",
+      "required": [
+        "symbol",
+        "type",
+        "time",
+        "volume"
+      ],
+      "properties": {
+        "symbol": {
+          "description": "trade symbol",
+          "type": "string"
+        },
+        "type": {
+          "description": "trade type",
+          "type": "string",
+          "enum": [
+            "POSITION_TYPE_BUY",
+            "POSITION_TYPE_SELL",
+            "ORDER_TYPE_BUY_LIMIT",
+            "ORDER_TYPE_SELL_LIMIT",
+            "ORDER_TYPE_BUY_STOP",
+            "ORDER_TYPE_SELL_STOP"
+          ]
+        },
+        "time": {
+          "description": "time the signal emitted at",
+          "type": "string",
+          "format": "datetime"
+        },
+        "updateTime": {
+          "description": "last time of the signal update",
+          "type": "string",
+          "format": "datetime"
+        },
+        "volume": {
+          "type": "number",
+          "description": "volume traded"
+        },
+        "magic": {
+          "description": "extert advisor id",
+          "type": "number"
+        },
+        "stopLoss": {
+          "description": "stop loss price",
+          "type": "number"
+        },
+        "takeProfit": {
+          "description": "take profit price",
+          "type": "number"
+        },
+        "openPrice": {
+          "description": "pending or market order open price",
+          "type": "number"
+        }
+      }
+    },
+    "ExternalSignalRemoval": {
+      "type": "object",
+      "required": [
+        "time"
+      ],
+      "properties": {
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "the time signal was removed (closed) at"
+        }
+      }
+    },
+    "UserLogMessage": {
+      "type": "object",
+      "required": [
+        "time",
+        "level",
+        "message",
+        "sequenceNumber"
+      ],
+      "properties": {
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Event time"
+        },
+        "symbol": {
+          "type": "string",
+          "description": "Symbol traded"
+        },
+        "strategyId": {
+          "type": "string",
+          "description": "Id of the strategy event relates to"
+        },
+        "strategyName": {
+          "type": "string",
+          "description": "Name of the strategy event relates to"
+        },
+        "positionId": {
+          "type": "string",
+          "description": "Position id event relates to"
+        },
+        "side": {
+          "type": "string",
+          "enum": [
+            "buy",
+            "sell",
+            "close"
+          ],
+          "description": "Side of the trade event relates to"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "market",
+            "limit",
+            "stop"
+          ],
+          "description": "Type of the trade event relates to"
+        },
+        "openPrice": {
+          "type": "number",
+          "description": "Open price for limit and stop orders"
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "INFO",
+            "WARN",
+            "ERROR"
+          ],
+          "description": "Log message level"
+        },
+        "message": {
+          "type": "string",
+          "description": "Log message"
+        }
+      }
+    },
+    "TradingSignal": {
+      "type": "object",
+      "required": [
+        "strategy",
+        "positionId",
+        "time",
+        "symbol",
+        "type",
+        "side",
+        "signalVolume",
+        "subscriberVolume",
+        "subscriberProfit",
+        "closeAfter"
+      ],
+      "properties": {
+        "strategy": {
+          "description": "strategy the signal arrived from",
+          "$ref": "#/definitions/StrategyIdAndName"
+        },
+        "positionId": {
+          "description": "id of the position the signal was generated from",
+          "type": "string"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "signal time"
+        },
+        "symbol": {
+          "type": "string",
+          "description": "symbol traded"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "market",
+            "limit",
+            "stop"
+          ],
+          "description": "type of the trade"
+        },
+        "side": {
+          "type": "string",
+          "enum": [
+            "buy",
+            "sell",
+            "close"
+          ],
+          "description": "side of the trade"
+        },
+        "openPrice": {
+          "type": "number",
+          "description": "open price for limit and stop orders"
+        },
+        "stopLoss": {
+          "type": "number",
+          "description": "stop loss price"
+        },
+        "takeProfit": {
+          "type": "number",
+          "description": "take profit price"
+        },
+        "signalVolume": {
+          "description": "the signal volume",
+          "type": "number"
+        },
+        "subscriberVolume": {
+          "description": "the volume already open on subscriber side",
+          "type": "number"
+        },
+        "subscriberProfit": {
+          "description": "the total profit of the position on subscriber side",
+          "type": "number"
+        },
+        "closeAfter": {
+          "description": "the time the signal will be automatically closed at",
+          "type": "string",
+          "format": "datetime"
+        },
+        "closeOnly": {
+          "description": "flag indicating that only closing side of this signal will be copied",
+          "type": "boolean"
+        }
+      }
+    },
+    "SubscriberStrategyStopout": {
+      "type": "object",
+      "required": [
+        "subscriberId",
+        "strategy",
+        "partial",
+        "reason",
+        "reasonDescription",
+        "stoppedAt",
+        "sequenceNumber"
+      ],
+      "properties": {
+        "subscriberId": {
+          "description": "subscriber id",
+          "type": "string"
+        },
+        "strategy": {
+          "description": "strategy which was stopped out",
+          "$ref": "#/definitions/StrategyIdAndName"
+        },
+        "partial": {
+          "description": "flag indicating that stopout is partial",
+          "type": "boolean"
+        },
+        "reason": {
+          "description": "stopout reason. Formed by concatenation of risk limit type and apply to values",
+          "type": "string",
+          "enum": [
+            "day-balance-difference",
+            "date-balance-difference",
+            "week-balance-difference",
+            "week-to-date-balance-difference",
+            "month-balance-difference",
+            "month-to-date-balance-difference",
+            "quarter-balance-difference",
+            "quarter-to-date-balance-difference",
+            "year-balance-difference",
+            "year-to-date-balance-difference",
+            "lifetime-balance-difference",
+            "day-balance-minus-equity",
+            "date-balance-minus-equity",
+            "week-balance-minus-equity",
+            "week-to-date-balance-minus-equity",
+            "month-balance-minus-equity",
+            "month-to-date-balance-minus-equity",
+            "quarter-balance-minus-equity",
+            "quarter-to-date-balance-minus-equity",
+            "year-balance-minus-equity",
+            "year-to-date-balance-minus-equity",
+            "lifetime-balance-minus-equity",
+            "day-equity-difference",
+            "date-equity-difference",
+            "week-equity-difference",
+            "week-to-date-equity-difference",
+            "month-equity-difference",
+            "month-to-date-equity-difference",
+            "quarter-equity-difference",
+            "quarter-to-date-equity-difference",
+            "year-equity-difference",
+            "year-to-date-equity-difference",
+            "lifetime-equity-difference"
+          ]
+        },
+        "reasonDescription": {
+          "description": "human-readable description of the stopout reason",
+          "type": "string"
+        },
+        "closePositions": {
+          "description": "flag indicating if positions should be closed",
+          "type": "boolean"
+        },
+        "stoppedAt": {
+          "description": "time the strategy was stopped at",
+          "type": "string",
+          "format": "datetime"
+        },
+        "stoppedTill": {
+          "description": "time the strategy is stopped till",
+          "type": "string",
+          "format": "datetime"
+        },
+        "sequenceNumber": {
+          "description": "stopout event sequence number",
+          "type": "number"
+        }
+      }
+    },
+    "SchedulerTask": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "$ref": "#/definitions/TaskStatus"
+        }
+      }
+    },
+    "TaskStatus": {
+      "type": "object",
+      "required": [
+        "status",
+        "startedAt",
+        "completedAt",
+        "progress"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "type": "string"
+        },
+        "startedAt": {
+          "description": "Task started date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "description": "Task completed date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "progress": {
+          "description": "Task progress",
+          "type": "object"
+        }
+      }
+    },
+    "DataSet": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "data set id",
+          "type": "string"
+        },
+        "description": {
+          "description": "human-readable description",
+          "type": "string"
+        }
+      }
+    },
+    "DataSetParams": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "HealthCheckResult": {
+      "type": "object",
+      "required": [
+        "id",
+        "output"
+      ],
+      "properties": {
+        "check": {
+          "description": "id of the health check",
+          "type": "string"
+        },
+        "output": {
+          "description": "health check output",
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "id",
+        "error",
+        "message"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "error": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional information about error",
+          "type": "object"
+        },
+        "code": {
+          "description": "Error code, used for i18n",
+          "type": "string"
+        },
+        "arguments": {
+          "description": "Error message arguments, used for i18n",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "TooManyRequestsError": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "message",
+        "metadata"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "period",
+            "requestsPerPeriodAllowed",
+            "recommendedRetryTime"
+          ],
+          "properties": {
+            "periodInMinutes": {
+              "description": "rate limiting period in minutes",
+              "type": "number"
+            },
+            "requestsPerPeriodAllowed": {
+              "description": "allowed number of requests per period",
+              "type": "number"
+            },
+            "recommendedRetryTime": {
+              "description": "recommended time to retry request",
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      }
+    }
+  }
+}

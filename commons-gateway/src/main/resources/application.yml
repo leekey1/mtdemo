@@ -1,0 +1,121 @@
+spring.application.name: commons-gateway
+spring.main.banner-mode: "off"
+
+spring.aop.auto: true
+spring.aop.proxy-target-class: true
+
+#spring.http.encoding.charset: UTF-8
+#spring.http.encoding.enabled: true
+#spring.http.encoding.force: true
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+server.error.whitelabel.enabled: true
+server.max-http-header-size: 16384
+server.compression.enabled: true
+server.compression.mime-types: text/html,text/plain,application/json
+server.tomcat.uri-encoding: UTF-8
+server.tomcat.max-threads: 3000
+server.port: ${port.commons.gateway}
+
+spring.http.multipart.max-file-size: 10Mb
+spring.http.multipart.max-request-size: 50Mb
+
+
+spring.cloud.config.name: app
+spring.cloud.config.label: main
+
+spring.sleuth.sampler.percentage: 1
+
+eureka.instance.prefer-ip-address: true
+eureka.instance.lease-renewal-interval-in-seconds: 10
+eureka.instance.lease-expiration-duration-in-seconds: 30
+eureka.client.register-with-eureka: true
+eureka.client.fetch-registry: true
+eureka.client.registry-fetch-interval-seconds: 10
+eureka.client.allow-redirects: true
+eureka.client.cache-refresh-executor-thread-pool-size: 100
+eureka.client.heartbeat-executor-thread-pool-size: 100
+eureka.client.eureka-server-total-connections: 3000
+eureka.client.eureka-server-total-connections-per-host: 10000
+
+endpoints.restart.enabled: true
+endpoints.refresh.enabled: true
+endpoints.shutdown.enabled: true
+
+management.add-application-context-header: false
+
+zuul.host.max-per-route-connections: 1000
+zuul.host.max-total-connections: 5000
+
+ribbon.ConnectTimeout: 30000
+ribbon.ReadTimeout: 30000
+
+
+zuul.host.socket-timeout-millis: 60000
+zuul.host.connect-timeout-millis: 60000
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+
+
+metaapi.client.uri: ${metaapi.client.uri}
+metaapi.metastats.uri: ${metaapi.metastats.uri}
+metaapi.copyfactory.uri: ${metaapi.copyfactory.uri}
+metaapi.provisioning.uri: ${metaapi.provisioning.uri}
+metaapi.market.uri: ${metaapi.market.uri}
+metaapi.management.uri: ${metaapi.management.uri}
+metaapi.clientvint.uri: ${metaapi.clientvint.uri}
+
+metaapi.apitoken: ${metaapi.apitoken}
+
+
+spring.profiles.active: dev
+
+---
+spring.config.activate.on-profile: dev
+spring.cloud.config.profile: dev
+spring:
+  config:
+    import: configserver:http://127.0.0.1:10000/config
+eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
+#LOG_PATH: "./gen-log"
+
+logging:
+  config: classpath:logback-dev.xml
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'INFO'
+
+---
+spring.config.activate.on-profile: uat
+spring.cloud.config.profile: uat
+spring:
+  config:
+    import: http://127.0.0.1:10000/config/app-dev.yml
+eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
+
+logging:
+  config: classpath:logback-dev.xml
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'WARNNING'
+
+---
+spring.config.activate.on-profile: prod
+spring.cloud.config.profile: prod
+spring:
+  config:
+    import: http://127.0.0.1:10000/config/app-dev.yml
+eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
+
+logging:
+  config: classpath:logback.xml
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'RELEASE'
+
+

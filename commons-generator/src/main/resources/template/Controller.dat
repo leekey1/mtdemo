@@ -1,0 +1,100 @@
+/* ---------------------------------------------------------------------------------------------------
+ * Copyright (C) 2014-2015 hyun.com.cn
+ *
+ * Title:        {EventName}Controller.java
+ * Description:       {EventName}Controller类定义
+ *        实体 {EventName}的控制层处理
+ * Dependencies:
+ *        {PACKAGE_NAME}{DOMAIN}.entity.{EventName}
+ *        {PACKAGE_NAME}{DOMAIN}.mapper.{EventName}mapper.xml
+ * History:
+ *     Date                 Modifier             Log
+ *     {date}             hyun auto          Created
+ *
+ * ---------------------------------------------------------------------------------------------------
+ */
+package {PACKAGE_NAME}{DOMAIN}.controller;
+
+import java.util.List;
+
+
+import {PACKAGE_NAME}configuration.ApplicationMessage;
+import {PACKAGE_NAME}common.HBaseController;
+
+import {PACKAGE_NAME}framework.page.pagehelper.PageHelper;
+import {PACKAGE_NAME}framework.page.pagehelper.PageInfo;
+import {PACKAGE_NAME}framework.web.controller.BaseController;
+import {PACKAGE_NAME}common.JsonResponse;
+
+import {PACKAGE_NAME}framework.web.util.HttpContextUtils;
+import {PACKAGE_NAME}{DOMAIN}.service.{EventName}Service;
+
+
+import {PACKAGE_NAME}{DOMAIN}.entity.{EventName};
+import {PACKAGE_NAME}{DOMAIN}.dto.{EventName}Dto;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * {EventName}Controller定义.
+ * <p>
+ *
+ *
+ * @author hyun auto
+ */
+
+@RestController
+@Api(tags = "{EventJpName}管理")
+public class {EventName}Controller  extends HBaseController {
+
+    @Autowired
+    {EventName}Service {EventNameVar}Service;
+
+    @ApiOperation(value = "新增{EventJpName}", notes = "token必传")
+    @RequestMapping(value = "/v1/{SAVE}" , method = RequestMethod.POST)
+    public JsonResponse {SAVE}(@RequestBody {EventName}Dto {EventNameVar}Dto){
+        log.info(ApplicationMessage.getByLog("{SAVE}","{EventName}Dto" ,{EventNameVar}Dto));
+        Map<String,Object> result = {EventNameVar}Service.{SAVE}({EventNameVar}Dto);
+        return JsonResponse.message(result.get("message").toString());
+    }
+
+    @ApiOperation(value = "修改{EventJpName}", notes = "token必传")
+    @RequestMapping(value = "/v1/{UPDATE}" , method = RequestMethod.PUT)
+    public JsonResponse {UPDATE}(@RequestBody {EventName}Dto {EventNameVar}Dto ){
+        log.info(ApplicationMessage.getByLog("{UPDATE}","{EventName}Dto", {EventNameVar}Dto));
+        Map<String,Object> result = {EventNameVar}Service.{UPDATE}({EventNameVar}Dto);
+        return JsonResponse.message(result.get("message").toString());
+    }
+
+    @ApiOperation(value = "删除{EventJpName}")
+    @RequestMapping(value = "/v1/{DELETE}/{{KEY}}", method = RequestMethod.DELETE)
+    public JsonResponse {DELETE}(@ApiParam(value="主键",required = true)@PathVariable String {KEY}){
+        log.info(ApplicationMessage.getByLog("{DELETE}","主键" ,{KEY}));
+        Map<String,Object> result = {EventNameVar}Service.{DELETE}({KEY});
+        return JsonResponse.message(result.get("message").toString());
+    }
+
+    @ApiOperation(value = "获取{EventJpName}详情", notes = "token必传")
+    @RequestMapping(value = "/v1/{GET}/{{KEY}}" , method = RequestMethod.GET)
+    public JsonResponse<{EventName}Dto> {GET}(@ApiParam(value="主键",required = true)@PathVariable String {KEY}){
+        log.info(ApplicationMessage.getByLog("{GET}","主键" ,{KEY}));
+        return JsonResponse.build(() -> {EventNameVar}Service.{GET}({KEY}));
+    }
+
+    @ApiOperation(value = "获取{EventJpName}列表", notes = "token必传")
+    @RequestMapping(value = "/v1/{LIST}" , method = RequestMethod.GET)
+    public JsonResponse<List<{EventName}Dto>> {LIST}(){
+        return JsonResponse.build(() -> {EventNameVar}Service.{LIST}());
+    }
+
+
+}
+

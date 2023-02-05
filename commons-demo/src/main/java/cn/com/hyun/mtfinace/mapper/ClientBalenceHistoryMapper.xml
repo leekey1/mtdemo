@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.hyun.mtfinace.dao.ClientBalenceHistoryDao">
+
+    <!--基本字段定义 -->
+    <sql id="base_column">
+        id,
+        mt_tickett,
+        price,
+        type,
+        before_balence,
+        after_after,
+        email,
+        login,
+        meta_profile_id,
+        created_at,
+        created_by,
+        updated_at,
+        updated_by,
+        version
+    </sql>
+
+    <!--按主键进行查询，返回唯一一条记录 对应repository findOne方法 -->
+    <select id="findOne"  resultType="cn.com.hyun.mtfinace.dto.ClientBalenceHistoryDto">
+        SELECT 
+            <include refid="base_column" />
+        FROM 
+            client_balence_history
+        WHERE
+            id = #{id}
+    </select>
+ 
+ 
+
+    <!--无条件全部记录检索 对应repository findAll方法 -->
+    <select id="findAll" resultType="cn.com.hyun.mtfinace.dto.ClientBalenceHistoryDto">
+        SELECT 
+            <include refid="base_column" />
+        FROM 
+            client_balence_history
+    </select>
+
+
+    <!--插入记录 对应repository insert方法 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.com.hyun.mtfinace.entity.ClientBalenceHistory">
+        INSERT INTO
+            client_balence_history
+        (
+          id,
+          mt_tickett,
+          price,
+          type,
+          before_balence,
+          after_after,
+          email,
+          login,
+          meta_profile_id,
+          created_at,
+          created_by,
+          updated_at,
+          updated_by,
+          version
+        )
+        VALUES
+        (
+          #{id},
+          #{mtTickett},
+          #{price},
+          #{type},
+          #{beforeBalence},
+          #{afterAfter},
+          #{email},
+          #{login},
+          #{metaProfileId},
+          #{createdAt},
+          #{createdBy},
+          #{updatedAt},
+          #{updatedBy},
+          #{version}
+        )
+    </insert>
+
+    <!--动态更新 对Input来的数据不为空的字段进行更新 对应Dao dynamicUpdate方法 -->
+    <update id="dynamicUpdate" parameterType="cn.com.hyun.mtfinace.entity.ClientBalenceHistory">
+        UPDATE
+            client_balence_history
+        <set>
+            <if test="mtTickett != null">
+                mt_tickett = #{mtTickett},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="beforeBalence != null">
+                before_balence = #{beforeBalence},
+            </if>
+            <if test="afterAfter != null">
+                after_after = #{afterAfter},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="login != null">
+                login = #{login},
+            </if>
+            <if test="metaProfileId != null">
+                meta_profile_id = #{metaProfileId},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+            <if test="updatedBy != null">
+                updated_by = #{updatedBy},
+            </if>
+            <if test="version != null">
+                version = #{version}
+            </if>
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <!--动态更新 按照实体的值实际数据进行更新对应Dao update方法 -->
+    <update id="update" parameterType="cn.com.hyun.mtfinace.entity.ClientBalenceHistory">
+        UPDATE
+            client_balence_history
+        SET
+            mt_tickett = #{mtTickett},
+            price = #{price},
+            type = #{type},
+            before_balence = #{beforeBalence},
+            after_after = #{afterAfter},
+            email = #{email},
+            login = #{login},
+            meta_profile_id = #{metaProfileId},
+            created_at = #{createdAt},
+            created_by = #{createdBy},
+            updated_at = #{updatedAt},
+            updated_by = #{updatedBy},
+            version = #{version}
+        WHERE
+            id = #{id}
+    </update>
+    
+    <!--删除 对应Dao delete方法 -->    
+    <delete id="delete" >
+        DELETE FROM 
+            client_balence_history
+        WHERE
+            id = #{id}
+    </delete>
+</mapper>

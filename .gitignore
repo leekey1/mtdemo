@@ -1,0 +1,16 @@
+*.tar
+*.apk
+*.zip
+*.tar.gz
+*.rar
+*.idea
+*.map
+*.exe
+*.log
+*.class
+**/target/
+**/target/**
+package-lock.json
+**/node_modules/
+**/package-lock
+**/bin/

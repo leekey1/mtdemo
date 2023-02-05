@@ -1,0 +1,783 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "AgiliumTrade MetaTrader market data client REST API",
+    "version": "1.0.0"
+  },
+  "basePath": "/api/mt/market",
+  "paths": {
+    "/usage-statistics": {
+      "get": {
+        "summary": "Returns usage statistics breakdown by account",
+        "description": "Returns usage statistics breakdown by account. Requires access to metaapi-api:rest:usageStatistics:default:getStats method.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:usageStatistics:default:getStats"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns usage statistics breakdown by account",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:usageStatistics:default:getStats method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/historical-market-data/symbols/{symbol}/ticks": {
+      "get": {
+        "summary": "Returns historical ticks for a specific symbol from a MetaTrader account",
+        "description": "Returns historical ticks for a specific symbol from a MetaTrader account. This API is not supported by MT4 accounts. Requires access to metaapi-api:rest:public:historical-market-data:getHistoricalTicks method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:historical-market-data:getHistoricalTicks",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "MetaTrader account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "description": "symbol to retrieve historical data for, e.g. currency pair or index",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "description": "time to start loading ticks from. Note that ticks are loaded in forward direction, so this should be the earliest time. Leave empty to request latest ticks",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "offset",
+            "description": "number of ticks to skip (you can use it to avoid requesting ticks from previous request twice)",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 0
+          },
+          {
+            "name": "limit",
+            "description": "maximum number of ticks to retrieve. Must be less or equal to 1000",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical ticks for a specified symbol and MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderTick"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:historical-market-data:getHistoricalTicks method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/current/accounts/{accountId}/historical-market-data/symbols/{symbol}/timeframes/{timeframe}/candles": {
+      "get": {
+        "summary": "Returns historical candles for a specific symbol and timeframe from a MetaTrader account",
+        "description": "Returns historical candles for a specific symbol and timeframe from a MetaTrader account. Requires access to metaapi-api:rest:public:historical-market-data:getHistoricalTicks method which is included into reader role. Requires access to account resource.",
+        "x-authorization": {
+          "method": "metaapi-api:rest:public:historical-market-data:getHistoricalTicks",
+          "roles": [
+            "reader"
+          ],
+          "resources": [
+            "account"
+          ]
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "accountId",
+            "description": "MetaTrader account id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "description": "symbol to retrieve historical data for, e.g. currency pair or index",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "timeframe",
+            "description": "candle timeframe. Allowed values for MT5 are 1m, 2m, 3m, 4m, 5m, 6m, 10m, 12m, 15m, 20m, 30m, 1h, 2h, 3h, 4h, 6h, 8h, 12h, 1d, 1w, 1mn. Allowed values for MT4 are 1m, 5m, 15m 30m, 1h, 4h, 1d, 1w, 1mn",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "1m",
+              "2m",
+              "3m",
+              "4m",
+              "5m",
+              "6m",
+              "10m",
+              "12m",
+              "15m",
+              "20m",
+              "30m",
+              "1h",
+              "2h",
+              "3h",
+              "4h",
+              "6h",
+              "8h",
+              "12h",
+              "1d",
+              "1w",
+              "1mn"
+            ]
+          },
+          {
+            "name": "startTime",
+            "description": "time to start loading candles from. Note that candles are loaded in backwards direction, so this should be the latest time. Leave empty to request latest candles.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "datetime"
+          },
+          {
+            "name": "limit",
+            "description": "maximum number of candles to retrieve. Must be less or equal to 1000",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 1000
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical candles for a specified symbol, timeframe and MetaTrader account returned successfully",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MetatraderCandle"
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to metaapi-api:rest:public:historical-market-data:getHistoricalTicks method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "MetaTrader account not found or not provisioned yet",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/adm/tasks": {
+      "get": {
+        "summary": "Returns a list of scheduled and recent tasks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response with tasks",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SchedulerTask"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets": {
+      "get": {
+        "summary": "Returns a list of registered UAT data sets",
+        "description": "Returns a list of registered UAT data sets",
+        "x-authorization": {
+          "custom": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result contains UAT data sets",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DataSet"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/uat/data-sets/{id}/apply": {
+      "post": {
+        "summary": "Applies a registered UAT data set with an id specified",
+        "description": "Applies a registered UAT data set with an id specified",
+        "x-authorization": {
+          "custom": true
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "uat-token",
+            "description": "auth token",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "data set id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "params",
+            "description": "optional data set parameters",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DataSetParams"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "data set successfully applied"
+          },
+          "404": {
+            "description": "data set not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/redis/statistics": {
+      "get": {
+        "summary": "Returns redis traffic statistics",
+        "description": "Returns redis traffic statistics. Requires access to express-microservice:rest:private:default:getRedisStatistics method.",
+        "x-authorization": {
+          "method": "express-microservice:rest:private:default:getRedisStatistics"
+        },
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "auth-token",
+            "description": "authorization token required if authorization is enabled",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Redis traffic statistics",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Authorization token has no access to express-microservice:rest:private:default:getRedisStatistics method.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Executes health checks",
+        "description": "Executes health checks",
+        "x-authorization": {
+          "disabled": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "health checks passed",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HealthCheckResult"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected application error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "MetatraderCandle": {
+      "type": "object",
+      "required": [
+        "symbol",
+        "timeframe",
+        "time",
+        "brokerTime",
+        "open",
+        "high",
+        "low",
+        "close",
+        "tickVolume",
+        "spread",
+        "volume"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "symbol (e.g. currency pair or an index)"
+        },
+        "timeframe": {
+          "type": "string",
+          "enum": [
+            "1m",
+            "2m",
+            "3m",
+            "4m",
+            "5m",
+            "6m",
+            "10m",
+            "12m",
+            "15m",
+            "20m",
+            "30m",
+            "1h",
+            "2h",
+            "3h",
+            "4h",
+            "6h",
+            "8h",
+            "12h",
+            "1d",
+            "1w",
+            "1mn"
+          ],
+          "description": "timeframe candle was generated for, e.g. 1h"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "candle opening time, in [ISO format](https://en.wikipedia.org/wiki/ISO_8601)"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "candle opening time, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "open": {
+          "type": "number",
+          "description": "open price"
+        },
+        "high": {
+          "type": "number",
+          "description": "high price"
+        },
+        "low": {
+          "type": "number",
+          "description": "low price"
+        },
+        "close": {
+          "type": "number",
+          "description": "close price"
+        },
+        "tickVolume": {
+          "type": "integer",
+          "description": "tick volume, i.e. number of ticks inside the candle"
+        },
+        "spread": {
+          "type": "integer",
+          "description": "spread in points"
+        },
+        "volume": {
+          "type": "integer",
+          "description": "trade volume"
+        }
+      }
+    },
+    "MetatraderTick": {
+      "type": "object",
+      "required": [
+        "symbol",
+        "time",
+        "brokerTime"
+      ],
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "symbol (e.g. currency pair or an index)"
+        },
+        "time": {
+          "type": "string",
+          "format": "datetime",
+          "description": "time, in [ISO format](https://en.wikipedia.org/wiki/ISO_8601)"
+        },
+        "brokerTime": {
+          "type": "string",
+          "description": "time, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format"
+        },
+        "bid": {
+          "type": "number",
+          "description": "bid price"
+        },
+        "ask": {
+          "type": "number",
+          "description": "ask price"
+        },
+        "last": {
+          "type": "number",
+          "description": "last deal price"
+        },
+        "volume": {
+          "type": "number",
+          "description": "volume for the current last deal price"
+        },
+        "side": {
+          "type": "string",
+          "enum": [
+            "buy",
+            "sell"
+          ],
+          "description": "is tick a result of buy or sell deal"
+        }
+      }
+    },
+    "SchedulerTask": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "$ref": "#/definitions/TaskStatus"
+        }
+      }
+    },
+    "TaskStatus": {
+      "type": "object",
+      "required": [
+        "status",
+        "startedAt",
+        "completedAt",
+        "progress"
+      ],
+      "properties": {
+        "status": {
+          "description": "Task status",
+          "type": "string"
+        },
+        "startedAt": {
+          "description": "Task started date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "description": "Task completed date",
+          "type": "string",
+          "format": "date-time"
+        },
+        "progress": {
+          "description": "Task progress",
+          "type": "object"
+        }
+      }
+    },
+    "DataSet": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "data set id",
+          "type": "string"
+        },
+        "description": {
+          "description": "human-readable description",
+          "type": "string"
+        }
+      }
+    },
+    "DataSetParams": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "HealthCheckResult": {
+      "type": "object",
+      "required": [
+        "id",
+        "output"
+      ],
+      "properties": {
+        "check": {
+          "description": "id of the health check",
+          "type": "string"
+        },
+        "output": {
+          "description": "health check output",
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "id",
+        "error",
+        "message"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "error": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "details": {
+          "description": "Additional information about error",
+          "type": "object"
+        },
+        "code": {
+          "description": "Error code, used for i18n",
+          "type": "string"
+        },
+        "arguments": {
+          "description": "Error message arguments, used for i18n",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "TooManyRequestsError": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "message",
+        "metadata"
+      ],
+      "properties": {
+        "id": {
+          "description": "Error id",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Error name",
+          "type": "string"
+        },
+        "message": {
+          "description": "Error description",
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "period",
+            "requestsPerPeriodAllowed",
+            "recommendedRetryTime"
+          ],
+          "properties": {
+            "periodInMinutes": {
+              "description": "rate limiting period in minutes",
+              "type": "number"
+            },
+            "requestsPerPeriodAllowed": {
+              "description": "allowed number of requests per period",
+              "type": "number"
+            },
+            "recommendedRetryTime": {
+              "description": "recommended time to retry request",
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      }
+    }
+  }
+}

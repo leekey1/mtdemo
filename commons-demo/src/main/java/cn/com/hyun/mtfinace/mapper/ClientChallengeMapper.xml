@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.hyun.mtfinace.dao.ClientChallengeDao">
+
+    <!--基本字段定义 -->
+    <sql id="base_column">
+        id,
+        email,
+        start_dt,
+        end_dt,
+        challenge_level,
+        result,
+        trading_days,
+        daily_max_loss,
+        max_loss,
+        profit_target,
+        created_at,
+        created_by,
+        updated_at,
+        updated_by
+    </sql>
+
+    <!--按主键进行查询，返回唯一一条记录 对应repository findOne方法 -->
+    <select id="findOne"  resultType="cn.com.hyun.mtfinace.dto.ClientChallengeDto">
+        SELECT 
+            <include refid="base_column" />
+        FROM 
+            client_challenge
+        WHERE
+            id = #{id}
+    </select>
+ 
+ 
+
+    <!--无条件全部记录检索 对应repository findAll方法 -->
+    <select id="findAll" resultType="cn.com.hyun.mtfinace.dto.ClientChallengeDto">
+        SELECT 
+            <include refid="base_column" />
+        FROM 
+            client_challenge
+    </select>
+
+
+    <!--插入记录 对应repository insert方法 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.com.hyun.mtfinace.entity.ClientChallenge">
+        INSERT INTO
+            client_challenge
+        (
+          id,
+          email,
+          start_dt,
+          end_dt,
+          challenge_level,
+          result,
+          trading_days,
+          daily_max_loss,
+          max_loss,
+          profit_target,
+          created_at,
+          created_by,
+          updated_at,
+          updated_by
+        )
+        VALUES
+        (
+          #{id},
+          #{email},
+          #{startDt},
+          #{endDt},
+          #{challengeLevel},
+          #{result},
+          #{tradingDays},
+          #{dailyMaxLoss},
+          #{maxLoss},
+          #{profitTarget},
+          #{createdAt},
+          #{createdBy},
+          #{updatedAt},
+          #{updatedBy}
+        )
+    </insert>
+
+    <!--动态更新 对Input来的数据不为空的字段进行更新 对应Dao dynamicUpdate方法 -->
+    <update id="dynamicUpdate" parameterType="cn.com.hyun.mtfinace.entity.ClientChallenge">
+        UPDATE
+            client_challenge
+        <set>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="startDt != null">
+                start_dt = #{startDt},
+            </if>
+            <if test="endDt != null">
+                end_dt = #{endDt},
+            </if>
+            <if test="challengeLevel != null">
+                challenge_level = #{challengeLevel},
+            </if>
+            <if test="result != null">
+                result = #{result},
+            </if>
+            <if test="tradingDays != null">
+                trading_days = #{tradingDays},
+            </if>
+            <if test="dailyMaxLoss != null">
+                daily_max_loss = #{dailyMaxLoss},
+            </if>
+            <if test="maxLoss != null">
+                max_loss = #{maxLoss},
+            </if>
+            <if test="profitTarget != null">
+                profit_target = #{profitTarget},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+            <if test="updatedBy != null">
+                updated_by = #{updatedBy}
+            </if>
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <!--动态更新 按照实体的值实际数据进行更新对应Dao update方法 -->
+    <update id="update" parameterType="cn.com.hyun.mtfinace.entity.ClientChallenge">
+        UPDATE
+            client_challenge
+        SET
+            email = #{email},
+            start_dt = #{startDt},
+            end_dt = #{endDt},
+            challenge_level = #{challengeLevel},
+            result = #{result},
+            trading_days = #{tradingDays},
+            daily_max_loss = #{dailyMaxLoss},
+            max_loss = #{maxLoss},
+            profit_target = #{profitTarget},
+            created_at = #{createdAt},
+            created_by = #{createdBy},
+            updated_at = #{updatedAt},
+            updated_by = #{updatedBy}
+        WHERE
+            id = #{id}
+    </update>
+    
+    <!--删除 对应Dao delete方法 -->    
+    <delete id="delete" >
+        DELETE FROM 
+            client_challenge
+        WHERE
+            id = #{id}
+    </delete>
+</mapper>

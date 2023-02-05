@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <style>
+        .box{ width: 500px;margin: 150px auto;}
+        lable{ display: inline-block;width: 150px;height: 20px;line-height: 20px;padding: 5px;}
+        input{ width: 200px;height: 20px;line-height: 20px;padding: 3px;}
+        button{ width: 100px;height: 30px;}
+    </style>
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/jquery.serialize-object.min.js"></script>
+</head>
+<body>
+    <div class="box">
+        <form id="form">
+
+//--Field|Html:{ANNOTATIONHEAD}<p><lable>{COLUMNNAME}</lable><input type="text" name="{FIELDNAME}"><p>{ANNOTATIONTAIL}
+
+            <p >
+                <button id="insert_btn" type="button">新增</button>
+                <button id="btn" type="button">修改</button>
+            </p>
+        </form>
+    </div>
+    <script>
+        $("#btn").click(function () {
+            var data = $("#form").serializeObject();
+            $.ajax({
+                type : 'PUT',
+                url : '/b//v1/{UPDATE}',
+                data: JSON.stringify(data),
+                dataType: "json",
+                async: true,
+                contentType:'application/json',
+                success : function (result) {
+                      alert(result.message);
+                   },
+                error: function(XmlHttpRequest,textStatus, errorThrown){
+                      alert(result.message);
+                   }
+
+            });
+        });
+
+         $("#insert_btn").click(function () {
+                    var data = $("#form").serializeObject();
+                    $.ajax({
+                        type : 'POST',
+                        url : '/b//v1/{SAVE}',
+                        data: JSON.stringify(data),
+                        dataType: "json",
+                        async: true,
+                        contentType:'application/json',
+                        success : function (result) {
+                              alert(result.message);
+                           },
+                        error: function(XmlHttpRequest,textStatus, errorThrown){
+                              alert(result.message);
+                           }
+
+                    });
+                });
+    </script>
+</body>
+
+</html>

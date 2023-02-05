@@ -96,8 +96,6 @@ spring:
 eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
 logging.config: classpath:logback-local.xml
 
-app.keys.SYSTEM: http://localhost:8501
-app.keys.FD: http://localhost:8502
 
 ---
 spring.config.activate.on-profile: dev
@@ -108,8 +106,6 @@ spring:
 eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
 logging.config: classpath:logback-dev.xml
 
-app.keys.SYSTEM: http://localhost:8501
-app.keys.FD: http://localhost:8502
 
 ---
 spring.config.activate.on-profile: uat
@@ -119,9 +115,7 @@ spring:
     import: configserver:http://127.0.0.1:10000/config
 eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
 logging.config: classpath:logback-dev.xml
-app.keys.SYSTEM: http://localhost:8501
-app.keys.FD: http://localhost:8502
-
+springfox.documentation.enabled: false
 
 ---
 spring.config.activate.on-profile: prod
@@ -131,7 +125,4 @@ spring:
     import: configserver:http://127.0.0.1:10000/config
 eureka.client.serviceUrl.defaultZone: http://127.0.0.1:10000/eureka/
 logging.config: classpath:logback.xml
-
-app.keys.SYSTEM: http://localhost:8501
-app.keys.FD: http://localhost:8502
-
+springfox.documentation.enabled: false

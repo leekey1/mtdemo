@@ -15,7 +15,7 @@ spring:
     config:
       server:
         git:
-          uri: file:///Users/anjung-geun/zhg/workspace_java/mtdemo/commons-center/src/main/resources/config
+          uri: file:///Users/anjung-geun/zhg/workspace_java/mtdemo/commons-center/src/main/resources/config2 # copy config to config2 git init add & commit
           basedir: target/config
           default-label: main  # master or main  old: master new: main
 

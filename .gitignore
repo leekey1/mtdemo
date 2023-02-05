@@ -8,6 +8,8 @@
 *.exe
 *.log
 *.class
+*.DS_Store
+**/*.DS_Store
 **/target/
 **/target/**
 package-lock.json

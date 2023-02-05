@@ -1,0 +1,89 @@
+nodes.zk: 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
+
+cache.nodes: 127.0.0.1:6379
+cache.password: '' #redis$#@!1234
+
+cors.allowed-origins: "*"
+cors.allowed-methods: GET, POST, PUT, DELETE, OPTIONS
+cors.allowed-headers: "*"
+cors.allow-credentials: true
+cors.max-age: 3600
+
+domain.upload: http://localhost:8500
+path.upload.image: "/Users/wndrms/mfs/upload"
+
+port.commons.center: 10000
+port.commons.gateway: 8301
+port.commons.core: 8304
+
+port.commons.demo: 8305
+
+
+db.db-type: mysql
+db.continue-on-error: false
+db.max-wait: 10000
+db.time-between-eviction-runs-millis: 10000
+db.min-evictable-idle-time-millis: 60000
+db.validation-query: select 1
+db.test-on-borrow: true
+db.test-on-return: true
+db.test-while-idle: true
+db.pool-prepared-statements: false
+db.filters: stat, wall
+db.connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=1000
+db.use-global-data-source-stat: true
+db.init.base: 50
+db.max.base: 50
+
+
+db.driver-class.core: com.mysql.cj.jdbc.Driver # com.mysql.jdbc.Driver
+db.url.core: jdbc:mysql://localhost:3306/mtfinance?useUnicode=true&characterEncoding=utf-8
+db.username.core: root
+db.password.core: ""
+
+db.driver-class.demo: com.mysql.cj.jdbc.Driver #com.mysql.jdbc.Driver
+db.url.demo: jdbc:mysql://localhost:3306/mtfinance?useUnicode=true&characterEncoding=utf-8
+db.username.demo: root
+db.password.demo: ""
+
+
+
+mq.message.virtualHost: /base-message
+mq.message.host: 127.0.0.1
+mq.message.port: 5670
+mq.message.username: message
+mq.message.password: message123
+mq.message.channel: message
+mq.message.backendChannel: backendMessage
+
+mq.sms.virtualHost: /base-sms
+mq.sms.host: 127.0.0.1
+mq.sms.port: 5670
+mq.sms.username: sms
+mq.sms.password: sms123
+mq.sms.channel: sms
+
+mq.email.virtualHost: /base-email
+mq.email.host: 127.0.0.1
+mq.email.port: 5670
+mq.email.username: email
+mq.email.password: email123
+mq.email.channel: email
+
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+spring.http.multipart.maxFileSize: 10Mb
+spring.http.multipart.maxRequestSize: 50Mb
+
+api.server.demo.uri: http://localhost:8305
+
+metaapi.client.uri: https://mt-client-api-v1.singapore.agiliumtrade.ai
+metaapi.metastats.uri: https:/metastats-api-v1.singapore.agiliumtrade.ai
+metaapi.copyfactory.uri: https://copyfactory-api-v1.singapore.agiliumtrade.ai
+metaapi.provisioning.uri: https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai
+metaapi.market.uri: https://mt-market-data-client-api-v1.singapore.agiliumtrade.ai
+metaapi.management.uri: https://risk-management-api-v1.singapore.agiliumtrade.ai
+metaapi.clientvint.uri: https://mt-client-api-v1.vint-hill.agiliumtrade.ai
+
+metaapi.apitoken: "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJjMGJhYmVkNWQ4ZmYzYTQwN2Y4NTc3NzA5ZDBiNTQ2ZSIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaW1wZXJzb25hdGVkIjpmYWxzZSwicmVhbFVzZXJJZCI6ImMwYmFiZWQ1ZDhmZjNhNDA3Zjg1Nzc3MDlkMGI1NDZlIiwiaWF0IjoxNjc1MjQ5MzU3fQ.jRLqmYSaBzpFiDalAMUANX8IIKdiIrSdJKKtDMxabo0sx82HBdbXR2KiDEvkBXn19BXXtLQIsbjHw1ignBOtpMPtA7yj-p6uvF8gtCLYwh2Oxsn577JHVKMNDjE8LxYLgjIvM2LFtM_UPzy04XVwX0BewZNzY0AJfvdzbfduXAD4R5jf-IDdTfA2uY6jKu-YAQwaNf-ahzwtSVEeJBCFVmsiO3fouBMtle5_zJdnLVpeQR7kdwMmtXl0NH-Pe6yGiFhi_I8AqJ-ilBXY78nUsWpJZcUeyP2zi0CQtYnuhn5U7Wyn8ZY4fn0FD7xre_iUBbAGUB53FTs-2qCltoQPbOx50IOBKaFKoPGrawJ6vCY4XQCVbngZhubKRydKSFysWooSwDGyFJlwsfpSXg-oAt5K1Ia6aoblw2BBM2m83VCsqNqjjRmSoka39-tQGjpvzpcCLSkUdKONIq4blAgNkdHbmI353GK3GMVW6mICgUJJWhWuRErFrX8AyWGL2GphbMLDavH9IufERxxZSYAh8icd6uaxyn3KusWMryEaElknhd-x1avDKwIsNIlRPQxwkOao5KAaseakqQemzYHbrbdH5ivL3fxY8vB1m9lOFT03KdPeX98mFyyExICeCmRtI9sl9Oph10QA_QyUpiwPxsKSFgqNW-42d4oEsfRaqak"
+
